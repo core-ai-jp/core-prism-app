@@ -133,37 +133,39 @@ console.log('\n[5] 招待ページの個人メッセージ');
   const inviteHtml = read('public/invite.html');
   const script = inviteHtml.match(/<script>([\s\S]*?)<\/script>/)?.[1] || '';
   const runInvite = (href) => {
+    const redirects = [];
     const nodes = {
       'inviter-heading': { textContent: '友達から招待されました' },
       'invite-message': { textContent: '', hidden: true },
-      cta: { href: '/', setAttribute(name, value) { this[name] = value; } },
+      cta: { href: 'https://core-prism-app.vercel.app/', setAttribute(name, value) { this[name] = value; } },
     };
     runInNewContext(script, {
       URL,
       Array,
       document: { getElementById: (id) => nodes[id] || null },
-      window: { location: { href, replace() {} } },
-      setTimeout() {},
+      window: { location: { href, replace(value) { redirects.push(value); } } },
+      setTimeout(fn) { fn(); },
     });
-    return nodes;
+    return { nodes, redirects };
   };
 
   const personalized = runInvite('https://example.test/invite.html?ref=ABC234&from=%E3%81%AA%E3%81%8A%E3%81%8D&msg=%E3%81%93%E3%82%8C%E4%BE%BF%E5%88%A9%E3%81%A0%E3%81%A3%E3%81%9F%E3%82%88');
-  ok('招待者名を受取画面に表示する', personalized['inviter-heading'].textContent === 'なおき さんから招待されました');
-  ok('一言メッセージを受取画面に表示する', personalized['invite-message'].textContent === '「これ便利だったよ」' && personalized['invite-message'].hidden === false);
-  ok('名前と一言を登録先へ引き継ぐ', personalized.cta.href === '/?ref=ABC234&from=%E3%81%AA%E3%81%8A%E3%81%8D&msg=%E3%81%93%E3%82%8C%E4%BE%BF%E5%88%A9%E3%81%A0%E3%81%A3%E3%81%9F%E3%82%88');
+  ok('招待者名を受取画面に表示する', personalized.nodes['inviter-heading'].textContent === 'なおき さんから招待されました');
+  ok('一言メッセージを受取画面に表示する', personalized.nodes['invite-message'].textContent === '「これ便利だったよ」' && personalized.nodes['invite-message'].hidden === false);
+  ok('名前と一言を Prism の登録先へ引き継ぐ', personalized.nodes.cta.href === 'https://core-prism-app.vercel.app/?ref=ABC234&from=%E3%81%AA%E3%81%8A%E3%81%8D&msg=%E3%81%93%E3%82%8C%E4%BE%BF%E5%88%A9%E3%81%A0%E3%81%A3%E3%81%9F%E3%82%88');
+  ok('招待の内容を読む前に自動転送しない', personalized.redirects.length === 0);
 
   const hostile = runInvite('https://example.test/invite.html?ref=ABC234&from=%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E&msg=%3Cscript%3Ealert(1)%3C%2Fscript%3E');
   ok('URL の入力は HTML 化せず文字として扱う',
-    hostile['inviter-heading'].textContent.includes('<img')
-      && hostile['invite-message'].textContent.includes('<script>')
+    hostile.nodes['inviter-heading'].textContent.includes('<img')
+      && hostile.nodes['invite-message'].textContent.includes('<script>')
       && script.includes('.textContent')
       && !script.includes('.innerHTML'));
   const longText = 'A'.repeat(72);
   const longCopy = runInvite(`https://example.test/invite.html?ref=ABC234&from=${longText}&msg=${longText}`);
   ok('長い名前と一言を上限内に切り、モバイルで折り返す',
-    longCopy['inviter-heading'].textContent === `${'A'.repeat(24)} さんから招待されました`
-      && longCopy['invite-message'].textContent === `「${'A'.repeat(60)}」`
+    longCopy.nodes['inviter-heading'].textContent === `${'A'.repeat(24)} さんから招待されました`
+      && longCopy.nodes['invite-message'].textContent === `「${'A'.repeat(60)}」`
       && inviteHtml.includes('overflow-wrap: anywhere'));
 }
 
