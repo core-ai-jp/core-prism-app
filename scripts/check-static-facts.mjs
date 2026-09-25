@@ -169,6 +169,17 @@ console.log('\n[5] 招待ページの個人メッセージ');
       && inviteHtml.includes('overflow-wrap: anywhere'));
 }
 
+console.log('\n[6] 紹介経由の無料日数表示');
+{
+  const checkout = read('src/components/CheckoutModal.tsx');
+  ok('プランカードは紹介分を含む freeDays を表示する',
+    checkout.includes('最初の {freeDays} 日間 ¥0、その後 自動スタート'));
+  ok('選択中サマリーに実際の無料日数を表示する',
+    checkout.includes('{freeDays} 日間 無料トライアル'));
+  ok('ベータ確認モードも紹介分を含む freeDays を表示する',
+    checkout.includes('¥0 で ${freeDays} 日間トライアル開始'));
+}
+
 console.log('');
 if (ng) { console.log(`NG  ${ng}件。クローラーが見る側の数字が、実際とずれています`); process.exit(1); }
 console.log('OK  静的HTMLの数字は、実際のデータと揃っています');
