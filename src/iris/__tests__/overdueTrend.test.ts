@@ -71,7 +71,7 @@ describe('1日以上ほったらかしの予約を数え続ける記録', () => 
   });
 
   it('日付キーはローカル時刻（ISO の slice で前日にずれない）', () => {
-    expect(localDayKey(new Date('2026-08-29T00:30:00+09:00'))).toBe('2026-08-29');
+    expect(localDayKey(new Date(2026, 7, 29, 0, 30))).toBe('2026-08-29');
     expect(formatTrendDay('2026-08-27')).toBe('8月27日');
     expect(formatTrendDay('こわれてる')).toBe('こわれてる');
   });
