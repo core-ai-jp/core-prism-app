@@ -484,7 +484,7 @@ export default function CoreSite() {
           >
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12, lineHeight: 1 }}>
               <img
-                src="/core-logo-mark-v2.webp"
+                src="/core-logo-mark-v3.png"
                 alt="株式会社CORE"
                 width={264}
                 height={160}
@@ -2025,7 +2025,7 @@ export default function CoreSite() {
           <div>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, lineHeight: 1 }}>
               <img
-                src="/core-logo-mark-v2.webp"
+                src="/core-logo-mark-v3.png"
                 alt="CORE"
                 width={264}
                 height={160}
