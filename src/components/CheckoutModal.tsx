@@ -468,7 +468,7 @@ export default function CheckoutModal({ brand: initialBrand, plan: initialPlan, 
                         fontSize: '0.68rem', color: '#10B981', fontWeight: 700, marginBottom: '0.5rem',
                         display: 'flex', alignItems: 'center', gap: 4,
                       }}>
-                        <span>✦</span> 最初の 3 日間 ¥0、その後 自動スタート
+                        <span>✦</span> 最初の {freeDays} 日間 ¥0、その後 自動スタート
                       </div>
                       {cycle === 'yearly' && (
                         <div style={{ fontSize: '0.68rem', color: '#10B981', marginBottom: '0.5rem', fontWeight: 600 }}>
@@ -505,7 +505,10 @@ export default function CheckoutModal({ brand: initialBrand, plan: initialPlan, 
                 background: '#F8F7FA', border: '1px solid rgba(0,0,0,0.06)',
                 fontSize: '0.78rem', color: '#5A5562', lineHeight: 1.7,
               }}>
-                <strong style={{ color: '#1F1A2E' }}>選択中:</strong> {brand === 'iris' ? 'CORE Iris' : 'CORE Prism'} · {plan.name} · ¥{displayPrice.toLocaleString()} / {cycle === 'yearly' ? '年' : '月'}
+                <strong style={{ color: '#1F1A2E' }}>選択中:</strong> {brand === 'iris' ? 'CORE Iris' : 'CORE Prism'} ·{' '}
+                {isFree
+                  ? <>{freeDays} 日間 無料トライアル · ¥0</>
+                  : <>{plan.name} · {freeDays} 日間 無料トライアル · ¥{displayPrice.toLocaleString()} / {cycle === 'yearly' ? '年' : '月'}</>}
                 {cycle === 'yearly' && plan.priceJpy_yearly && (
                   <> ({plan.priceJpy * 12 - plan.priceJpy_yearly > 0 && <>¥{(plan.priceJpy * 12 - plan.priceJpy_yearly).toLocaleString()} お得</>})</>
                 )}
@@ -673,7 +676,7 @@ export default function CheckoutModal({ brand: initialBrand, plan: initialPlan, 
                 }}>
                   <strong>ベータ確認モード</strong><br />
                   {isFree
-                    ? 'カード情報は不要です。¥0 で 3 日間トライアル開始。'
+                    ? `カード情報は不要です。¥0 で ${freeDays} 日間トライアル開始。`
                     : 'いまお支払いのお手続きができません。まず無料トライアルとして登録し、'
                       + '準備ができ次第こちらからお支払い方法をご案内します。'
                       + '（有料プランの機能は、お支払いのあとで開きます）'}

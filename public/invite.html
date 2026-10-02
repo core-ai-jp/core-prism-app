@@ -97,12 +97,11 @@
         AI が事業を回す、すべての事業家の OS。
       </p>
       <p id="invite-message" class="message" hidden></p>
-      <a id="cta" class="cta" href="/">登録して受け取る →</a>
+      <a id="cta" class="cta" href="https://core-prism-app.vercel.app/">登録して受け取る →</a>
       <p class="small">クレジットカード不要 · いつでも解約可</p>
     </main>
     <script>
-      // ?ref=CODE&from=NAME&msg=... を引き継いで / に遷移
-      // (短時間 SNS の OG プレビュー後、人間が踏むと自動で本体へ)
+      // ?ref=CODE&from=NAME&msg=... を引き継いで Prism 本体へ遷移
       // from / msg を落とすと「○○ さんからの招待」+ 一言メッセージが消えるので必ず引き継ぐ
       (function () {
         try {
@@ -127,11 +126,11 @@
           if (ref) qs.push('ref=' + encodeURIComponent(ref));
           if (from) qs.push('from=' + encodeURIComponent(from));
           if (msg) qs.push('msg=' + encodeURIComponent(msg));
-          var target = '/' + (qs.length ? '?' + qs.join('&') : '');
+          // www.core-ai.jp の / は会社サイトへ転送されるため、Prism 本体へ固定する。
+          var target = 'https://core-prism-app.vercel.app/' + (qs.length ? '?' + qs.join('&') : '');
           var a = document.getElementById('cta');
           if (a) a.setAttribute('href', target);
-          // 自動遷移は 1.2 秒後 (SNS Bot は JS を実行しないので OG プレビューは維持される)
-          setTimeout(function () { window.location.replace(target); }, 1200);
+          // 自動遷移しない。招待者の名前・一言・特典を読んでから本人が進む。
         } catch (e) { /* */ }
       })();
     </script>
