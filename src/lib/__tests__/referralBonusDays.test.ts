@@ -17,6 +17,7 @@ const session = new MemStorage();
 const {
   getReferralData, saveReferralData, syncReferralStatus,
   consumePendingBonusDays, markReferredOne, REFERRAL_BONUS_DAYS,
+  getReferralUrl,
 } = await import('../referral');
 
 /** /api/referral/status が「あなたのコードで登録した人数 = n」を返す状態にする */
@@ -79,5 +80,15 @@ describe('紹介ボーナス日数 — 表示と実際の延長が食い違わ�
     expect(getReferralData().bonusDays).toBe(REFERRAL_BONUS_DAYS);
     expect(consumePendingBonusDays()).toBe(REFERRAL_BONUS_DAYS);
     expect(getReferralData().bonusDays).toBe(REFERRAL_BONUS_DAYS);
+  });
+
+  it('Prism の招待リンクは CORE 公式ドメインで、名前と一言を引き継ぐ', () => {
+    const url = getReferralUrl('prism', 'ABC234', {
+      from: 'なおき',
+      msg: '一緒に試そう',
+    });
+    expect(url).toBe(
+      'https://www.core-ai.jp/invite.html?ref=ABC234&from=%E3%81%AA%E3%81%8A%E3%81%8D&msg=%E4%B8%80%E7%B7%92%E3%81%AB%E8%A9%A6%E3%81%9D%E3%81%86',
+    );
   });
 });

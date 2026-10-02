@@ -280,6 +280,9 @@ export default function LandingPage({ onEnterApp }: Props) {
     setPendingMsg(getPendingReferralMessage());
   }, []);
 
+  /** LP 内で約束する無料日数。招待経由なら、バナーだけでなく全 CTA・料金・FAQ まで合計日数に揃える。 */
+  const freeDays = pendingRef ? TRIAL_WITH_REFERRAL_DAYS : TRIAL_BASE_DAYS;
+
   // 「サンプルで触ってみる」: 実物品質のデモデータを投入してから入室
   //
   // 2026-07-27 修正: ここは onEnterApp() を呼んでいたが、未契約の人に対して
@@ -306,7 +309,9 @@ export default function LandingPage({ onEnterApp }: Props) {
           transition={{ duration: 0.5 }}
           style={{
             background: 'linear-gradient(90deg, #15803D, #22C55E, #65A30D)',
-            color: '#fff', textAlign: 'center', padding: '0.85rem 1rem',
+            color: '#fff', textAlign: 'center',
+            // 右上の 44px テーマ切替ボタン用レーン。375px で特典文に重ならない余白を確保する。
+            padding: '0.85rem 4.5rem 0.85rem 1rem', boxSizing: 'border-box',
             fontSize: '0.92rem', fontWeight: 800, letterSpacing: '0.02em',
             position: 'sticky', top: 0, zIndex: 70,
             boxShadow: '0 4px 18px rgba(34,197,94,0.35)',
@@ -351,7 +356,7 @@ export default function LandingPage({ onEnterApp }: Props) {
         borderBottom: `1px solid ${GOLD}44`,
         position: 'relative', zIndex: 60,
       }}>
-        <span style={{ whiteSpace: 'nowrap', color: GOLD, fontWeight: 800 }}>{TRIAL_BASE_DAYS}日間 完全無料</span>
+        <span style={{ whiteSpace: 'nowrap', color: GOLD, fontWeight: 800 }}>{freeDays}日間 完全無料</span>
         <span style={{ color: 'rgba(255,255,255,0.5)' }}>{' / '}</span>
         <span style={{ whiteSpace: 'nowrap' }}>クレカ登録不要</span>
         <span style={{ color: 'rgba(255,255,255,0.5)' }}>{' / '}</span>
@@ -406,13 +411,13 @@ export default function LandingPage({ onEnterApp }: Props) {
               ひとり社長の事務を<strong style={{ color: GOLD, fontWeight: 700 }}>月2,980円</strong>で引き受けるAI参謀。
               指示は<strong style={{ color: A_PURPLE, fontWeight: 700 }}>話すだけ</strong>で、
               売上・経費・請求書・決算書が<strong style={{ color: TXT, fontWeight: 700 }}>1画面</strong>にそろいます。
-              {TRIAL_BASE_DAYS}日間無料・クレカ不要。
+              {freeDays}日間無料・クレカ不要。
             </motion.p>
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.42 }}
               style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
               <button onClick={onEnterApp} style={ctaBtnHero} className="lp-hero-cta-primary">
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                  {TRIAL_BASE_DAYS}日間 無料ではじめる <ArrowRight size={18} strokeWidth={2.6} />
+                  {freeDays}日間 無料ではじめる <ArrowRight size={18} strokeWidth={2.6} />
                 </span>
               </button>
               <a href="#pricing" style={ctaBtnGhost} className="lp-hero-cta-secondary">料金を見る</a>
@@ -566,7 +571,7 @@ export default function LandingPage({ onEnterApp }: Props) {
             <button onClick={onEnterApp} style={{ ...ctaBtnHero, fontSize: '0.96rem', padding: '0.95rem 1.9rem' }}>
               いま、無料ではじめる
             </button>
-            <p style={{ fontSize: '0.76rem', color: TXT_MUTE, marginTop: '0.85rem' }}>{TRIAL_BASE_DAYS}日間無料 · クレカ不要</p>
+            <p style={{ fontSize: '0.76rem', color: TXT_MUTE, marginTop: '0.85rem' }}>{freeDays}日間無料 · クレカ不要</p>
           </div>
         </div>
       </section>
@@ -617,7 +622,7 @@ export default function LandingPage({ onEnterApp }: Props) {
             <p style={eyebrow(A_PINK)}>PRICING</p>
             <h2 style={h2Style}>
               人を1人雇う前に、<br className="prism-sp-br" />
-              <span style={{ background: GRAD, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>まず{TRIAL_BASE_DAYS}日間、無料で。</span>
+              <span style={{ background: GRAD, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>まず{freeDays}日間、無料で。</span>
             </h2>
             <p style={leadStyle}>
               クレジットカードの登録はいりません。合わなければ、そのまま消えて構いません。
@@ -661,7 +666,7 @@ export default function LandingPage({ onEnterApp }: Props) {
                   boxShadow: p.highlight ? `0 12px 32px ${A_PURPLE}55` : 'none',
                   letterSpacing: '0.02em', minHeight: 44,
                 }}>
-                  {p.name} を{TRIAL_BASE_DAYS}日間 無料でためす
+                  {p.name} を{freeDays}日間 無料でためす
                 </button>
                 <p style={{ textAlign: 'center', fontSize: '0.71rem', color: TXT_MUTE, margin: '0.6rem 0 0' }}>クレカ不要 · いつでも解約</p>
               </motion.div>
@@ -687,7 +692,9 @@ export default function LandingPage({ onEnterApp }: Props) {
                   <s.Icon size={18} color={A_GREEN} strokeWidth={2.2} />
                 </div>
                 <h3 style={{ fontSize: '0.96rem', fontWeight: 800, color: TXT, margin: '0 0 0.45rem', lineHeight: 1.55 }}>{s.head}</h3>
-                <p style={{ fontSize: '0.86rem', color: TXT_SUB, lineHeight: 1.8, margin: 0 }}>{s.body}</p>
+                <p style={{ fontSize: '0.86rem', color: TXT_SUB, lineHeight: 1.8, margin: 0 }}>
+                  {s.body.replace(`${TRIAL_BASE_DAYS}日間`, `${freeDays}日間`)}
+                </p>
               </div>
             ))}
           </div>
@@ -702,7 +709,13 @@ export default function LandingPage({ onEnterApp }: Props) {
             <h2 style={h2Style}>よくあるご質問</h2>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {FAQS.map((f) => <FaqItem key={f.q} question={f.q} answer={f.a} />)}
+            {FAQS.map((f) => (
+              <FaqItem
+                key={f.q}
+                question={f.q}
+                answer={f.a.replace(`${TRIAL_BASE_DAYS}日間`, `${freeDays}日間`)}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -717,12 +730,12 @@ export default function LandingPage({ onEnterApp }: Props) {
             <span style={{ background: GRAD, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>最後の夜に。</span>
           </h2>
           <p style={{ color: TXT_SUB, fontSize: '0.98rem', marginBottom: '1.9rem', lineHeight: 1.9 }}>
-            {TRIAL_BASE_DAYS}日間、すべての機能を無料で。<br className="prism-sp-br" />
+            {freeDays}日間、すべての機能を無料で。<br className="prism-sp-br" />
             AI役員たちは、今日から出社できます。
           </p>
           <button onClick={onEnterApp} style={ctaBtnHero}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-              {TRIAL_BASE_DAYS}日間 無料ではじめる <ArrowRight size={18} strokeWidth={2.6} />
+              {freeDays}日間 無料ではじめる <ArrowRight size={18} strokeWidth={2.6} />
             </span>
           </button>
           <p style={{ fontSize: '0.78rem', color: TXT_MUTE, marginTop: '1rem' }}>
