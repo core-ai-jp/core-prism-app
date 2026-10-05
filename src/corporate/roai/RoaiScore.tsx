@@ -174,7 +174,7 @@ function Quiz({ session, saveFailed, onChange, onComplete }: { session: RoaiSess
       </div>
       <div className="rs-nav">
         <button type="button" onClick={back} disabled={idx === 0} className="rs-back" style={{ fontFamily: FONT_JA }}>← 前の質問へ</button>
-        {saveFailed && <span style={{ fontFamily: FONT_JA, fontSize: '0.74rem', color: '#FCA5A5' }}>この端末に途中保存できません（結果は表示できます）</span>}
+        {saveFailed && <span style={{ fontFamily: FONT_JA, fontSize: '0.74rem', color: 'var(--corp-error, #FCA5A5)' }}>この端末に途中保存できません（結果は表示できます）</span>}
       </div>
     </section>
   );
@@ -293,7 +293,7 @@ function Brief({ session, onAnchor, onRestart, onLeadSent }: { session: RoaiSess
         <div className="rs-cap">
           {r.capacity.table.map(t => (
             <div key={t.roai} className={'rs-cap-cell' + (t.roai === r.capacity.targetRoai ? ' is-target' : '')}>
-              <span style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.2em', color: t.roai === r.capacity.targetRoai ? ACCENT_LIGHT : TEXT_MUTED, fontWeight: 700 }}>TARGET ROAI {t.roai}.0x</span>
+              <span style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.2em', color: `var(--corp-accent, ${t.roai === r.capacity.targetRoai ? ACCENT_LIGHT : TEXT_MUTED})`, fontWeight: 700 }}>TARGET ROAI {t.roai}.0x</span>
               <strong style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: "var(--corp-text, #fff)", letterSpacing: '-0.02em' }}>{t.investment > 0 ? formatYen(t.investment) : '—'}</strong>
               <span style={{ fontFamily: FONT_JA, fontSize: '0.74rem', color: "var(--corp-muted, rgba(226,232,240,0.62))" }}>{t.roai === r.capacity.targetRoai ? '基準' : t.roai < r.capacity.targetRoai ? '積極' : '保守'}</span>
             </div>
@@ -535,7 +535,7 @@ function NextAction({ session, r, onAnchor, onLeadSent }: { session: RoaiSession
           <button type="submit" disabled={state === 'sending'} style={{ ...ctaHero, border: 'none', cursor: state === 'sending' ? 'wait' : 'pointer', width: '100%', opacity: state === 'sending' ? 0.7 : 1 }}>
             {state === 'sending' ? '送信しています…' : kind === 'consult' ? 'ROAI戦略相談を申し込む' : '詳細レポートを受け取る'}
           </button>
-          <p ref={resultRef} role="alert" style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: '#FCA5A5', minHeight: '1.2em', margin: '0.6rem 0 0' }}>{state === 'fail' ? failMsg : ''}</p>
+          <p ref={resultRef} role="alert" style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: 'var(--corp-error, #FCA5A5)', minHeight: '1.2em', margin: '0.6rem 0 0' }}>{state === 'fail' ? failMsg : ''}</p>
           <p style={{ fontFamily: FONT_JA, fontSize: '0.72rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", lineHeight: 1.8, margin: '0.4rem 0 0' }}>
             送信すると、診断の回答と連絡先が株式会社COREに届きます。ご連絡とレポート作成の目的にのみ使用し、1年で削除します。第三者に提供しません。
           </p>

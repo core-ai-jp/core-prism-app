@@ -1242,18 +1242,18 @@ export default function CoreSite() {
                   color: "var(--corp-text, #F3F6FB)", position: 'relative',
                 }}
               >
-                <span style={{ fontFamily: FONT_SANS, fontSize: '0.62rem', letterSpacing: '0.18em', fontWeight: 700, color: p.featured ? '#BAE6FD' : 'rgba(226,232,240,0.5)' }}>{p.step}</span>
+                <span style={{ fontFamily: FONT_SANS, fontSize: '0.62rem', letterSpacing: '0.18em', fontWeight: 700, color: `var(--corp-text, ${p.featured ? '#BAE6FD' : 'rgba(226,232,240,0.5)'})` }}>{p.step}</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.2rem' }}>
                   <span style={{
                     width: 46, height: 46, borderRadius: 13, display: 'grid', placeItems: 'center', flexShrink: 0,
-                    background: `radial-gradient(circle at 50% 30%, ${p.accent}26, #0c0a07)`,
+                    background: `radial-gradient(circle at 50% 30%, ${p.accent}26, var(--corp-surface-soft, #0c0a07))`,
                     border: `1px solid ${p.accent}55`, boxShadow: `0 0 18px ${p.accent}26`,
                   }}>
                     <p.Logo size={30} withWordmark={false} />
                   </span>
                   <span style={{ display: 'flex', flexDirection: 'column' }}>
                     <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '1.45rem', fontWeight: 600, letterSpacing: '0.04em', lineHeight: 1.2 }}>{p.name}</span>
-                    <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.62rem', letterSpacing: '0.22em', color: p.accent, textTransform: 'uppercase', marginTop: 3 }}>{p.role}</span>
+                    <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.62rem', letterSpacing: '0.22em', color: `var(--corp-accent, ${p.accent})`, textTransform: 'uppercase', marginTop: 3 }}>{p.role}</span>
                   </span>
                 </span>
                 <span style={{ fontFamily: FONT_SANS, fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.65))", lineHeight: 1.85, minHeight: '3em', marginTop: '0.3rem' }}>{p.copy}</span>
@@ -1261,11 +1261,11 @@ export default function CoreSite() {
                   marginTop: 'auto', paddingTop: '0.9rem', borderTop: "1px solid var(--corp-line, rgba(125,211,252,0.2))",
                   display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '0.6rem',
                 }}>
-                  <span style={{ fontFamily: FONT_SANS, fontWeight: 700, fontSize: '1.26rem', color: p.featured ? '#BAE6FD' : '#F3F6FB', fontVariantNumeric: 'tabular-nums' }}>
+                  <span style={{ fontFamily: FONT_SANS, fontWeight: 700, fontSize: '1.26rem', color: `var(--corp-text, ${p.featured ? '#BAE6FD' : '#F3F6FB'})`, fontVariantNumeric: 'tabular-nums' }}>
                     {p.price}
                     <small style={{ fontSize: '0.72rem', fontWeight: 400, color: "var(--corp-muted, rgba(226,232,240,0.6))", marginLeft: 6 }}>{p.priceNote}</small>
                   </span>
-                  <span style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', fontWeight: 600, color: p.accent, whiteSpace: 'nowrap' }}>詳しく →</span>
+                  <span style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', fontWeight: 600, color: `var(--corp-accent, ${p.accent})`, whiteSpace: 'nowrap' }}>詳しく →</span>
                 </span>
               </a>
             ))}
@@ -1321,7 +1321,7 @@ export default function CoreSite() {
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
                     minHeight: 44, padding: '0 1.05rem', borderRadius: 999,
-                    textDecoration: 'none', color: v.accent,
+                    textDecoration: 'none', color: `var(--corp-accent, ${v.accent})`,
                     background: `${v.accent}14`, border: `1px solid ${v.accent}59`,
                     fontFamily: FONT_SANS, fontSize: '0.84rem', fontWeight: 800, letterSpacing: '0.04em',
                     whiteSpace: 'nowrap', flexShrink: 0,
@@ -1359,7 +1359,7 @@ export default function CoreSite() {
                   <span style={{
                     display: 'flex', alignItems: 'center', gap: '0.55rem',
                     padding: '0.7rem 1.6rem', background: `${v.accent}24`,
-                    borderBottom: `1px solid ${v.accent}40`, color: v.accent,
+                    borderBottom: `1px solid ${v.accent}40`, color: `var(--corp-accent, ${v.accent})`,
                     fontFamily: FONT_SANS, fontSize: '0.86rem', fontWeight: 800, letterSpacing: '0.06em',
                   }}>
                     <VerticalIndustryIcon kind={v.industryIcon} size={18} />
@@ -1370,14 +1370,14 @@ export default function CoreSite() {
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                       <span style={{
                         width: 50, height: 50, borderRadius: 14, display: 'grid', placeItems: 'center', flexShrink: 0,
-                        background: `radial-gradient(circle at 50% 30%, ${v.accent}2E, #0c0a07)`,
+                        background: `radial-gradient(circle at 50% 30%, ${v.accent}2E, var(--corp-surface-soft, #0c0a07))`,
                         border: `1px solid ${v.accent}66`, boxShadow: `0 0 20px ${v.accent}26`,
                       }}>
                         <Logo size={31} withWordmark={false} />
                       </span>
                       <span style={{ display: 'flex', flexDirection: 'column' }}>
                         <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '1.42rem', fontWeight: 600, letterSpacing: '0.06em', lineHeight: 1.2 }}>{v.name}</span>
-                        <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.6rem', letterSpacing: '0.22em', color: v.accent, textTransform: 'uppercase', marginTop: 3 }}>{v.role}</span>
+                        <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.6rem', letterSpacing: '0.22em', color: `var(--corp-accent, ${v.accent})`, textTransform: 'uppercase', marginTop: 3 }}>{v.role}</span>
                       </span>
                     </span>
                     {/* 2026-08-02: 0.45=3.87:1 で AA 落第。10.9px しかない業種名が
@@ -1391,7 +1391,7 @@ export default function CoreSite() {
                     }}>
                       {/* 同上。「本番稼働中 / デモ公開中」は買う前にいちばん確かめたい一行。 */}
                       <span style={{ fontFamily: FONT_SANS, fontSize: '0.7rem', color: "var(--corp-muted, rgba(226,232,240,0.58))" }}>{v.status}</span>
-                      <span style={{ fontFamily: FONT_SANS, fontSize: '0.78rem', fontWeight: 700, color: v.accent, whiteSpace: 'nowrap' }}>
+                      <span style={{ fontFamily: FONT_SANS, fontSize: '0.78rem', fontWeight: 700, color: `var(--corp-accent, ${v.accent})`, whiteSpace: 'nowrap' }}>
                         {v.external ? '見にいく ↗' : '詳しく見る →'}
                       </span>
                     </span>
@@ -1614,7 +1614,7 @@ export default function CoreSite() {
                     fontFamily: FONT_SERIF_EN,
                     fontSize: '0.78rem',
                     letterSpacing: '0.22em',
-                    color: m.accent,
+                    color: `var(--corp-accent, ${m.accent})`,
                     fontWeight: 700,
                     marginBottom: '0.4rem',
                   }}>
@@ -2583,7 +2583,7 @@ function SatCard({ m, size = 44 }: { m: SuiteMember; size?: number }) {
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
       padding: '0.85rem 0.6rem 0.75rem', width: 116,
-      background: `radial-gradient(circle at 50% 30%, ${s.accent}24, #0c0a07)`,
+      background: `radial-gradient(circle at 50% 30%, ${s.accent}24, var(--corp-surface-soft, #0c0a07))`,
       border: `1px solid ${s.accent}66`, borderRadius: 18,
       boxShadow: `0 0 26px ${s.accent}3a, inset 0 0 18px ${s.accent}14`,
       backdropFilter: 'blur(6px)',
@@ -2593,7 +2593,7 @@ function SatCard({ m, size = 44 }: { m: SuiteMember; size?: number }) {
       {/* 部署名 = 製品名を知らない人が最初に読む一行。ここを薄くすると図の意味が消える。
           折り返し禁止: 2行になるとカードが伸びて六角の場からはみ出す（上の SAT_RADIUS の注記）。
           くわしい部署名（「集客 ─ Instagram」）は、図の下の一覧で読める。 */}
-      <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.66rem', color: s.accent, fontWeight: 700, letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>
+      <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.66rem', color: `var(--corp-accent, ${s.accent})`, fontWeight: 700, letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>
         {m.short}
       </span>
     </div>
@@ -2769,7 +2769,7 @@ function ConnectedSuite() {
                   <s.Logo size={36} withWordmark={false} />
                   <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '1rem', color: "var(--corp-text, #F3F6FB)", fontWeight: 600, fontStyle: 'italic' }}>{s.name}</span>
-                    <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.7rem', color: s.accent, fontWeight: 700, letterSpacing: '0.04em' }}>{m.dept}</span>
+                    <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.7rem', color: `var(--corp-accent, ${s.accent})`, fontWeight: 700, letterSpacing: '0.04em' }}>{m.dept}</span>
                   </span>
                 </div>
               );
@@ -2839,14 +2839,14 @@ function SuiteRoster() {
               <span style={{
                 marginLeft: 'auto', flexShrink: 0,
                 fontFamily: FONT_SANS, fontSize: '0.64rem', fontWeight: 800, letterSpacing: '0.08em',
-                color: s.accent, background: `${s.accent}1F`, border: `1px solid ${s.accent}4D`,
+                color: `var(--corp-accent, ${s.accent})`, background: `${s.accent}1F`, border: `1px solid ${s.accent}4D`,
                 borderRadius: 999, padding: '3px 9px', whiteSpace: 'nowrap',
               }}>
                 {roleJa(m.role)}
               </span>
             </div>
             {/* 0.58 未満は黒地で AA 落第。小さい字ほど濃くする（恒久ルール）。 */}
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.8rem', fontWeight: 700, color: s.accent, letterSpacing: '0.04em', margin: 0 }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.8rem', fontWeight: 700, color: `var(--corp-accent, ${s.accent})`, letterSpacing: '0.04em', margin: 0 }}>
               {m.dept}
             </p>
             <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.84rem', color: "var(--corp-body, rgba(226,232,240,0.76))", lineHeight: 1.95, margin: 0 }}>
@@ -2906,7 +2906,7 @@ function SuitePackage({ onAnchor }: { onAnchor: (e: ReactMouseEvent<HTMLAnchorEl
             border: pl.featured ? '1px solid rgba(125,211,252,0.6)' : '1px solid rgba(255,255,255,0.12)',
           }}>
             <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '0.92rem', letterSpacing: '0.08em', color: "var(--corp-text, #EEF2F7)" }}>{pl.name}</span>
-            <span style={{ fontFamily: FONT_SANS, fontVariantNumeric: 'tabular-nums', fontSize: '1.24rem', fontWeight: 800, color: pl.featured ? '#BAE6FD' : '#F4F7FC' }}>
+            <span style={{ fontFamily: FONT_SANS, fontVariantNumeric: 'tabular-nums', fontSize: '1.24rem', fontWeight: 800, color: `var(--corp-text, ${pl.featured ? '#BAE6FD' : '#F4F7FC'})` }}>
               {pl.price}
               <span style={{ fontSize: '0.66rem', fontWeight: 600, color: "var(--corp-muted, rgba(255,255,255,0.55))", marginLeft: 5 }}>/ 月（税込）</span>
             </span>

@@ -76,8 +76,8 @@ function Chip({ on, children, onClick }: { on: boolean; children: React.ReactNod
         fontSize: '0.86rem',
         letterSpacing: '0.06em',
         fontWeight: on ? 700 : 500,
-        color: on ? '#0B1220' : 'rgba(226,232,240,0.82)',
-        background: on ? 'linear-gradient(135deg,#E0F2FE,#BAE6FD 45%,#7DD3FC)' : 'rgba(255,255,255,0.035)',
+        color: on ? 'var(--corp-cta-text, #0B1220)' : 'var(--corp-body, rgba(226,232,240,0.82))',
+        background: on ? 'var(--corp-cta, linear-gradient(135deg,#E0F2FE,#BAE6FD 45%,#7DD3FC))' : 'rgba(255,255,255,0.035)',
         border: on ? '1px solid rgba(125,211,252,0.9)' : '1px solid rgba(125,211,252,0.28)',
         transition: 'background 0.22s, color 0.22s, border-color 0.22s',
       }}
@@ -340,8 +340,8 @@ export default function CorpContactForm() {
           style={{
             width: '100%', maxWidth: 420, minHeight: 56, borderRadius: 999, border: 'none',
             cursor: valid && phase !== 'sending' ? 'pointer' : 'not-allowed',
-            background: valid ? 'linear-gradient(135deg,#E0F2FE,#BAE6FD 45%,#7DD3FC)' : 'rgba(125,211,252,0.18)',
-            color: valid ? '#0B1220' : 'rgba(226,232,240,0.5)',
+            background: valid ? 'var(--corp-cta, linear-gradient(135deg,#E0F2FE,#BAE6FD 45%,#7DD3FC))' : 'rgba(125,211,252,0.18)',
+            color: valid ? 'var(--corp-cta-text, #0B1220)' : 'var(--corp-muted, rgba(226,232,240,0.5))',
             fontFamily: FONT_SERIF_JA, fontSize: '1rem', fontWeight: 800, letterSpacing: '0.1em',
             boxShadow: valid ? '0 14px 42px -8px rgba(125,211,252,0.55)' : 'none',
             transition: 'background 0.25s, color 0.25s',

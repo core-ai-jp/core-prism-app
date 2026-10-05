@@ -223,7 +223,7 @@ export function WhatWeDo({ onAnchor }: { onAnchor?: AnchorHandler }) {
             style={{ ...quietCard, display: 'flex', flexDirection: 'column', gap: '0.9rem' }}
           >
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.9rem', flexWrap: 'wrap' }}>
-              <span style={{ ...stepNumber, color: s.accent, fontSize: '1.05rem' }}>{s.no}</span>
+              <span style={{ ...stepNumber, color: `var(--corp-accent, ${s.accent})`, fontSize: '1.05rem' }}>{s.no}</span>
               {s.soon && (
                 <span style={{
                   fontFamily: FONT_DISPLAY, fontSize: '0.58rem', letterSpacing: '0.24em',
@@ -244,7 +244,7 @@ export function WhatWeDo({ onAnchor }: { onAnchor?: AnchorHandler }) {
             </div>
             <p style={{
               fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.02rem, 1.7vw, 1.22rem)', fontWeight: 700,
-              lineHeight: 1.9, color: s.accent, letterSpacing: '0.02em',
+              lineHeight: 1.9, color: `var(--corp-accent, ${s.accent})`, letterSpacing: '0.02em',
             }}>
               {s.copy}
             </p>
@@ -312,7 +312,7 @@ export function DifferenceSection() {
               fontFamily: r.core ? FONT_DISPLAY : FONT_SERIF_JA,
               fontSize: r.core ? '1.15rem' : '0.95rem',
               letterSpacing: r.core ? '0.24em' : '0.1em',
-              color: r.core ? GOLD_LIGHT : 'rgba(226,232,240,0.6)',
+              color: `var(--corp-text, ${r.core ? GOLD_LIGHT : 'rgba(226,232,240,0.6)'})`,
               fontWeight: 700, marginBottom: '1.6rem',
             }}>
               {r.label}
@@ -325,14 +325,14 @@ export function DifferenceSection() {
                     fontFamily: FONT_SERIF_JA,
                     fontSize: r.core ? 'clamp(1rem, 1.6vw, 1.15rem)' : '0.98rem',
                     fontWeight: r.core ? 700 : 400,
-                    color: r.core ? '#F3F6FB' : 'rgba(226,232,240,0.62)',
+                    color: `var(--corp-text, ${r.core ? '#F3F6FB' : 'rgba(226,232,240,0.62)'})`,
                     letterSpacing: '0.04em',
                   }}>
                     {s}
                   </span>
                   {i < r.steps.length - 1 && (
                     <span aria-hidden style={{
-                      display: 'block', color: r.core ? GOLD : 'rgba(226,232,240,0.28)',
+                      display: 'block', color: `var(--corp-text, ${r.core ? GOLD : 'rgba(226,232,240,0.28)'})`,
                       fontSize: '0.8rem', lineHeight: 1.6, marginTop: 2,
                     }}>
                       ↓
@@ -705,7 +705,7 @@ export function UseCasesSection() {
             style={{ ...quietCard, display: 'flex', flexDirection: 'column', gap: '1.1rem' }}
           >
             <div>
-              <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.95rem', letterSpacing: '0.22em', color: u.accent, fontWeight: 700 }}>
+              <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.95rem', letterSpacing: '0.22em', color: `var(--corp-accent, ${u.accent})`, fontWeight: 700 }}>
                 {u.domainEn}
               </p>
               <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", letterSpacing: '0.14em', marginTop: 3 }}>
@@ -747,19 +747,19 @@ export function ServiceLayersSection() {
             style={{ ...quietCard, padding: 'clamp(1.8rem, 3.4vw, 3rem)' }}
           >
             <div className="corp-layer-head">
-              <span style={{ ...stepNumber, fontSize: 'clamp(2rem, 4.5vw, 3.2rem)', color: s.accent, lineHeight: 1 }}>{s.no}</span>
+              <span style={{ ...stepNumber, fontSize: 'clamp(2rem, 4.5vw, 3.2rem)', color: `var(--corp-accent, ${s.accent})`, lineHeight: 1 }}>{s.no}</span>
               <div>
                 <p style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(1.1rem, 2.1vw, 1.5rem)', letterSpacing: '0.1em', color: "var(--corp-text, #F3F6FB)", fontWeight: 700 }}>
                   {s.titleEn}
                 </p>
                 <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", letterSpacing: '0.14em', marginTop: 5 }}>
-                  {s.titleJa}{s.soon && <span style={{ color: s.accent, marginLeft: '0.8em', letterSpacing: '0.2em', fontFamily: FONT_DISPLAY, fontSize: '0.7rem' }}>COMING SOON</span>}
+                  {s.titleJa}{s.soon && <span style={{ color: `var(--corp-accent, ${s.accent})`, marginLeft: '0.8em', letterSpacing: '0.2em', fontFamily: FONT_DISPLAY, fontSize: '0.7rem' }}>COMING SOON</span>}
                 </p>
               </div>
             </div>
             <p style={{
               fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.15rem, 2.2vw, 1.55rem)', fontWeight: 700,
-              lineHeight: 1.9, color: s.accent, margin: '1.6rem 0 1rem', letterSpacing: '0.03em',
+              lineHeight: 1.9, color: `var(--corp-accent, ${s.accent})`, margin: '1.6rem 0 1rem', letterSpacing: '0.03em',
             }}>
               {s.copy}
             </p>
