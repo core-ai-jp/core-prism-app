@@ -20,8 +20,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { fetchWithTimeout, isAbort } from '../lib/fetchWithTimeout';
 import {
-  FONT_DISPLAY, FONT_SERIF_JA, GOLD, GOLD_LIGHT, TEXT_BODY, TEXT_MUTED,
-  sectionLabel, sectionLabelMain, sectionLabelSub, sectionH2, sectionLead, reveal,
+  FONT_DISPLAY, FONT_SERIF_JA, sectionLabel, sectionLabelMain, sectionLabelSub, sectionH2, sectionLead, reveal,
 } from './corpTheme';
 import { CONTACT_INTERESTS, CONTACT_BUDGETS, CONTACT_SIZES } from './transformData';
 import { peekIntent } from './corpIntent';
@@ -42,7 +41,7 @@ const labelStyle: React.CSSProperties = {
   fontFamily: FONT_SERIF_JA,
   fontSize: '0.82rem',
   letterSpacing: '0.1em',
-  color: 'rgba(226,232,240,0.86)',
+  color: "var(--corp-body, rgba(226,232,240,0.86))",
   marginBottom: '0.5rem',
   fontWeight: 600,
 };
@@ -52,9 +51,9 @@ const fieldStyle: React.CSSProperties = {
   minHeight: 48,
   padding: '0.8rem 1rem',
   borderRadius: 12,
-  border: '1px solid rgba(125,211,252,0.28)',
-  background: 'rgba(255,255,255,0.035)',
-  color: '#F3F6FB',
+  border: "1px solid var(--corp-line, rgba(125,211,252,0.28))",
+  background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.035)",
+  color: "var(--corp-text, #F3F6FB)",
   /* iOS は 16px 未満の入力欄で画面を勝手に拡大する */
   fontSize: '16px',
   fontFamily: FONT_SERIF_JA,
@@ -194,19 +193,19 @@ export default function CorpContactForm() {
         style={{
           maxWidth: 640, margin: '0 auto', textAlign: 'center',
           padding: 'clamp(2.4rem, 5vw, 3.6rem)', borderRadius: 22,
-          border: '1px solid rgba(231,180,120,0.5)',
-          background: 'radial-gradient(140% 120% at 50% -20%, #1a1206 0%, #080B11 65%)',
+          border: "1px solid var(--corp-line, rgba(231,180,120,0.5))",
+          background: "radial-gradient(140% 120% at 50% -20%, var(--corp-surface-soft, #1a1206) 0%, var(--corp-surface, #080B11) 65%)",
         }}
       >
-        <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.3em', color: GOLD, marginBottom: '1.2rem' }}>
+        <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.3em', color: "var(--corp-accent, #7DD3FC)", marginBottom: '1.2rem' }}>
           NOT DELIVERED
         </p>
-        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.15rem, 2.3vw, 1.5rem)', fontWeight: 700, color: '#F3F6FB', lineHeight: 1.9, marginBottom: '1rem' }}>
+        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.15rem, 2.3vw, 1.5rem)', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.9, marginBottom: '1rem' }}>
           内容は記録しましたが、
           <br />
           通知メールが送れませんでした。
         </p>
-        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.92rem', color: TEXT_BODY, lineHeight: 2.1, marginBottom: '1.6rem' }}>
+        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.92rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.1, marginBottom: '1.6rem' }}>
           こちらから気づけない可能性があります。
           <br />
           お手数ですが、下のメールアドレスへ直接お送りください。
@@ -216,7 +215,7 @@ export default function CorpContactForm() {
           style={{
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minHeight: 52,
             padding: '0 1.8rem', borderRadius: 999, textDecoration: 'none',
-            background: 'linear-gradient(135deg,#E0F2FE,#BAE6FD 45%,#7DD3FC)', color: '#0B1220',
+            background: "linear-gradient(135deg,var(--corp-surface-raised, #E0F2FE),#BAE6FD 45%,#7DD3FC)", color: "var(--corp-text, #0B1220)",
             fontFamily: FONT_SERIF_JA, fontWeight: 800, fontSize: '0.95rem', letterSpacing: '0.06em',
           }}
         >
@@ -236,17 +235,17 @@ export default function CorpContactForm() {
         style={{
           maxWidth: 640, margin: '0 auto', textAlign: 'center',
           padding: 'clamp(2.4rem, 5vw, 3.6rem)', borderRadius: 22,
-          border: '1px solid rgba(125,211,252,0.45)',
-          background: 'radial-gradient(140% 120% at 50% -20%, #101826 0%, #080B11 65%)',
+          border: "1px solid var(--corp-line, rgba(125,211,252,0.45))",
+          background: "radial-gradient(140% 120% at 50% -20%, var(--corp-surface-soft, #101826) 0%, var(--corp-surface, #080B11) 65%)",
         }}
       >
-        <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.3em', color: GOLD, marginBottom: '1.2rem' }}>
+        <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.3em', color: "var(--corp-accent, #7DD3FC)", marginBottom: '1.2rem' }}>
           RECEIVED
         </p>
-        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.2rem, 2.4vw, 1.6rem)', fontWeight: 700, color: '#F3F6FB', lineHeight: 1.9, marginBottom: '1rem' }}>
+        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.2rem, 2.4vw, 1.6rem)', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.9, marginBottom: '1rem' }}>
           お預かりしました。
         </p>
-        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.92rem', color: TEXT_BODY, lineHeight: 2.1 }}>
+        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.92rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.1 }}>
           通常24時間以内（土日祝は翌営業日）に、{email} 宛にご返信します。
           <br />
           お急ぎの場合は、下の直通メールへお願いします。
@@ -263,11 +262,11 @@ export default function CorpContactForm() {
           <input id="corp-company" maxLength={MAX.company} style={fieldStyle} value={company} onChange={e => setCompany(e.target.value)} autoComplete="organization" placeholder="株式会社CORE" />
         </div>
         <div>
-          <label style={labelStyle} htmlFor="corp-name">お名前 <span style={{ color: GOLD_LIGHT }}>*</span></label>
+          <label style={labelStyle} htmlFor="corp-name">お名前 <span style={{ color: "var(--corp-accent, #BAE6FD)" }}>*</span></label>
           <input id="corp-name" maxLength={MAX.name} style={fieldStyle} value={name} onChange={e => setName(e.target.value)} autoComplete="name" placeholder="井出 直毅" required />
         </div>
         <div>
-          <label style={labelStyle} htmlFor="corp-email">メールアドレス <span style={{ color: GOLD_LIGHT }}>*</span></label>
+          <label style={labelStyle} htmlFor="corp-email">メールアドレス <span style={{ color: "var(--corp-accent, #BAE6FD)" }}>*</span></label>
           <input id="corp-email" type="email" inputMode="email" maxLength={MAX.email} style={fieldStyle} value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" placeholder="name@company.co.jp" required />
         </div>
         <div>
@@ -301,13 +300,13 @@ export default function CorpContactForm() {
             <Chip key={s} on={budget === s} onClick={() => setBudget(budget === s ? '' : s)}>{s}</Chip>
           ))}
         </div>
-        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: TEXT_MUTED, marginTop: '0.7rem', lineHeight: 1.8 }}>
+        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", marginTop: '0.7rem', lineHeight: 1.8 }}>
           未定のままで構いません。診断だけのご依頼も承っています。
         </p>
       </div>
 
       <div style={{ marginTop: '1.8rem' }}>
-        <label style={labelStyle} htmlFor="corp-message">ご相談内容 <span style={{ color: GOLD_LIGHT }}>*</span></label>
+        <label style={labelStyle} htmlFor="corp-message">ご相談内容 <span style={{ color: "var(--corp-accent, #BAE6FD)" }}>*</span></label>
         <textarea
           id="corp-message"
           maxLength={MAX.message}
@@ -323,8 +322,8 @@ export default function CorpContactForm() {
       <div ref={resultRef} style={{ minHeight: phase === 'error' ? undefined : 0, marginTop: phase === 'error' ? '1.4rem' : 0 }}>
         {phase === 'error' && (
           <p role="alert" style={{
-            fontFamily: FONT_SERIF_JA, fontSize: '0.86rem', color: '#FFD2C4', lineHeight: 1.9,
-            border: '1px solid rgba(255,120,90,0.45)', background: 'rgba(255,90,60,0.08)',
+            fontFamily: FONT_SERIF_JA, fontSize: '0.86rem', color: "var(--corp-text, #FFD2C4)", lineHeight: 1.9,
+            border: "1px solid var(--corp-line, rgba(255,120,90,0.45))", background: 'rgba(255,90,60,0.08)',
             borderRadius: 12, padding: '0.9rem 1rem',
           }}>
             送信できませんでした（{err}）。
@@ -350,7 +349,7 @@ export default function CorpContactForm() {
         >
           {phase === 'sending' ? '送信しています…' : 'この内容で相談する'}
         </button>
-        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: TEXT_MUTED, marginTop: '0.9rem', lineHeight: 1.9 }}>
+        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", marginTop: '0.9rem', lineHeight: 1.9 }}>
           お名前・メール・ご相談内容の3つでお送りいただけます。
           <br />
           しつこい営業はいたしません。
@@ -368,7 +367,7 @@ export function ContactSection({ children }: { children?: React.ReactNode }) {
       className="lp-section-pad"
       style={{
         padding: '7rem 1.5rem',
-        background: 'radial-gradient(ellipse at center, rgba(125,211,252,0.10) 0%, #070A10 72%)',
+        background: "radial-gradient(ellipse at center, rgba(125,211,252,0.10) 0%, var(--corp-surface, #070A10) 72%)",
         position: 'relative',
         scrollMarginTop: 70,
       }}
@@ -386,7 +385,7 @@ export function ContactSection({ children }: { children?: React.ReactNode }) {
             まだ何をすればいいか決まっていない段階で構いません。
             <br />
             現状をうかがって、変えるべき場所からお話しします。
-            <span style={{ display: 'block', fontSize: '0.85rem', color: TEXT_MUTED, marginTop: '0.8rem' }}>
+            <span style={{ display: 'block', fontSize: '0.85rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", marginTop: '0.8rem' }}>
               通常24時間以内にご返信（土日祝は翌営業日）
             </span>
           </p>

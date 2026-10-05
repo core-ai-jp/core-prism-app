@@ -9,7 +9,7 @@
 // ============================================================
 import type { MouseEvent as ReactMouseEvent } from 'react';
 import { motion } from 'framer-motion';
-import { FONT_JA, FONT_EN, ACCENT, ACCENT_LIGHT, PAPER, TEXT_BODY, TEXT_MUTED, INK, INK_2, ctaHero, ctaGhost, sectionH2, sectionLead, reveal } from '../corpTheme';
+import { FONT_JA, FONT_EN, ACCENT, ctaHero, ctaGhost, sectionH2, sectionLead, reveal } from '../corpTheme';
 import { RETURNS, PROCESS_GENERIC, PROCESS_CORE } from './model';
 import { track, rememberSource } from './track';
 
@@ -19,7 +19,7 @@ export function Kick({ children, center }: { children: React.ReactNode; center?:
   return (
     <p style={{
       fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase',
-      color: ACCENT_LIGHT, fontWeight: 600, marginBottom: '1rem', textAlign: center ? 'center' : 'left',
+      color: "var(--corp-accent, #7DD3FC)", fontWeight: 600, marginBottom: '1rem', textAlign: center ? 'center' : 'left',
       display: 'flex', alignItems: 'center', gap: 10, justifyContent: center ? 'center' : 'flex-start',
     }}>
       <span aria-hidden style={{ width: 22, height: 1, background: ACCENT, display: 'inline-block' }} />
@@ -48,7 +48,7 @@ export function RoaiBand({ onAnchor }: { onAnchor: AnchorHandler }) {
     <section id="roai-band" className="ro-band lp-section-pad" aria-labelledby="roai-band-h">
       <div className="ch-wrap">
         <motion.p {...reveal} className="ro-band-en" style={{ fontFamily: FONT_EN }}>
-          AI Investment<br />is not the goal.<br /><span style={{ color: ACCENT_LIGHT }}>Return on AI is.</span>
+          AI Investment<br />is not the goal.<br /><span style={{ color: "var(--corp-accent, #7DD3FC)" }}>Return on AI is.</span>
         </motion.p>
         <div className="ro-band-grid">
           <motion.div {...reveal}>
@@ -80,20 +80,20 @@ export function ExecutiveQuestion({ onAnchor }: { onAnchor: AnchorHandler }) {
       <div className="ch-wrap ro-question-inner">
         <motion.div {...reveal} className="ro-question-head">
           <Kick>A question for the CEO</Kick>
-          <h2 id="question-h" className="ro-question-h" style={{ fontFamily: FONT_JA, color: '#fff' }}>
+          <h2 id="question-h" className="ro-question-h" style={{ fontFamily: FONT_JA, color: "var(--corp-text, #fff)" }}>
             もし今日、<br />あなたの会社を<br />ゼロから作るなら。
           </h2>
         </motion.div>
         <motion.div {...reveal} className="ro-question-body">
-          <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1rem, 1.5vw, 1.15rem)', color: 'rgba(236,242,250,0.9)', lineHeight: 2, margin: '0 0 1.2rem', fontWeight: 500 }}>
+          <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1rem, 1.5vw, 1.15rem)', color: "var(--corp-body, rgba(236,242,250,0.9))", lineHeight: 2, margin: '0 0 1.2rem', fontWeight: 500 }}>
             AIが存在する今、
           </p>
           <ul className="ro-same" style={{ fontFamily: FONT_JA }}>
             {same.map(s => <li key={s}>{s}</li>)}
           </ul>
-          <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1rem, 1.5vw, 1.15rem)', color: 'rgba(236,242,250,0.9)', lineHeight: 2, margin: '1.2rem 0 1.8rem', fontWeight: 500 }}>
+          <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1rem, 1.5vw, 1.15rem)', color: "var(--corp-body, rgba(236,242,250,0.9))", lineHeight: 2, margin: '1.2rem 0 1.8rem', fontWeight: 500 }}>
             同じ会社をつくるでしょうか。<br />
-            <strong style={{ color: '#fff', fontWeight: 800 }}>答えがNOなら、会社を再設計する余地があります。</strong>
+            <strong style={{ color: "var(--corp-text, #fff)", fontWeight: 800 }}>答えがNOなら、会社を再設計する余地があります。</strong>
           </p>
           <ScoreCta onAnchor={onAnchor} where="home-question" label="AI Transformationの余地を診断する" ghost />
         </motion.div>
@@ -105,11 +105,11 @@ export function ExecutiveQuestion({ onAnchor }: { onAnchor: AnchorHandler }) {
 // ── We don't start with AI. We start with business outcomes. ──
 export function Differentiation() {
   return (
-    <section id="difference" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK_2, scrollMarginTop: 70 }} aria-labelledby="difference-h">
+    <section id="difference" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70 }} aria-labelledby="difference-h">
       <div className="ch-wrap">
         <motion.div {...reveal} className="ch-head">
           <Kick>How we work</Kick>
-          <p style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 700, color: ACCENT_LIGHT, margin: '0 0 0.6rem', letterSpacing: '-0.01em' }}>
+          <p style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 700, color: "var(--corp-accent, #7DD3FC)", margin: '0 0 0.6rem', letterSpacing: '-0.01em' }}>
             We don't start with AI.<br />We start with business outcomes.
           </p>
           <h2 id="difference-h" style={{ ...sectionH2 }}>AIから考えない。<br />経営成果から逆算する。</h2>
@@ -124,14 +124,14 @@ export function Differentiation() {
             <ol className="ro-flow-steps">
               {PROCESS_GENERIC.map(s => <li key={s} style={{ fontFamily: FONT_JA }}>{s}</li>)}
             </ol>
-            <p style={{ fontFamily: FONT_JA, fontSize: '0.82rem', color: TEXT_MUTED, margin: '1rem 0 0', lineHeight: 1.8 }}>作って、納めて、終わる。使われたか、返ったかは測られない。</p>
+            <p style={{ fontFamily: FONT_JA, fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '1rem 0 0', lineHeight: 1.8 }}>作って、納めて、終わる。使われたか、返ったかは測られない。</p>
           </motion.div>
           <motion.div {...reveal} className="ro-flow is-core">
-            <p className="ro-flow-label" style={{ fontFamily: FONT_EN, color: ACCENT_LIGHT }}>CORE</p>
+            <p className="ro-flow-label" style={{ fontFamily: FONT_EN, color: "var(--corp-accent, #7DD3FC)" }}>CORE</p>
             <ol className="ro-flow-steps">
               {PROCESS_CORE.map(s => <li key={s} style={{ fontFamily: FONT_JA }}>{s}</li>)}
             </ol>
-            <p style={{ fontFamily: FONT_JA, fontSize: '0.82rem', color: TEXT_BODY, margin: '1rem 0 0', lineHeight: 1.8 }}>Build, Measure and Evolve. 納品はゴールではなく、計測の始まり。</p>
+            <p style={{ fontFamily: FONT_JA, fontSize: '0.82rem', color: "var(--corp-body, rgba(226,232,240,0.78))", margin: '1rem 0 0', lineHeight: 1.8 }}>Build, Measure and Evolve. 納品はゴールではなく、計測の始まり。</p>
           </motion.div>
         </div>
       </div>
@@ -142,7 +142,7 @@ export function Differentiation() {
 // ── CORE ROAI MODEL: 5 つの Return ──
 export function RoaiModelSection({ onAnchor, compact }: { onAnchor: AnchorHandler; compact?: boolean }) {
   return (
-    <section id="roai-model" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, scrollMarginTop: 70 }} aria-labelledby="roai-model-h">
+    <section id="roai-model" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70 }} aria-labelledby="roai-model-h">
       <div className="ch-wrap">
         <motion.div {...reveal} className="ch-head">
           <Kick>CORE ROAI MODEL</Kick>
@@ -155,10 +155,10 @@ export function RoaiModelSection({ onAnchor, compact }: { onAnchor: AnchorHandle
         <div className="ro-returns">
           {RETURNS.map(r => (
             <motion.article key={r.key} {...reveal} className="ro-return">
-              <p style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.24em', color: ACCENT, fontWeight: 700, margin: 0 }}>{r.no}</p>
-              <h3 style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.4rem, 2.2vw, 1.9rem)', fontWeight: 800, color: PAPER, margin: '0.3rem 0 0.2rem', letterSpacing: '-0.01em' }}>{r.en}</h3>
-              <p style={{ fontFamily: FONT_JA, fontSize: '0.98rem', fontWeight: 800, color: '#fff', margin: '0 0 0.7rem' }}>{r.ja}</p>
-              <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', color: TEXT_BODY, lineHeight: 1.85, margin: 0 }}>{r.lead}</p>
+              <p style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.24em', color: "var(--corp-accent, #38BDF8)", fontWeight: 700, margin: 0 }}>{r.no}</p>
+              <h3 style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.4rem, 2.2vw, 1.9rem)', fontWeight: 800, color: "var(--corp-text, #F3F6FB)", margin: '0.3rem 0 0.2rem', letterSpacing: '-0.01em' }}>{r.en}</h3>
+              <p style={{ fontFamily: FONT_JA, fontSize: '0.98rem', fontWeight: 800, color: "var(--corp-text, #fff)", margin: '0 0 0.7rem' }}>{r.ja}</p>
+              <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.85, margin: 0 }}>{r.lead}</p>
               {!compact && (
                 <ul className="ro-return-metrics" style={{ fontFamily: FONT_JA }}>
                   {r.metrics.slice(0, 4).map(m => <li key={m}>{m}</li>)}
@@ -208,7 +208,7 @@ export function ScoreTeaser({ onAnchor }: { onAnchor: AnchorHandler }) {
                 <span style={{ fontFamily: FONT_EN }}>{v}</span>
               </div>
             ))}
-            <p style={{ fontFamily: FONT_JA, fontSize: '0.7rem', color: TEXT_MUTED, margin: '0.8rem 0 0' }}>表示例。実際の数値は回答から計算されます。</p>
+            <p style={{ fontFamily: FONT_JA, fontSize: '0.7rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '0.8rem 0 0' }}>表示例。実際の数値は回答から計算されます。</p>
           </div>
         </motion.div>
       </div>

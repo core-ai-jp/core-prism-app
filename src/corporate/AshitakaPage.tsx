@@ -7,7 +7,7 @@
 // ============================================================
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FONT_JA, FONT_EN, INK, INK_2, INK_3, LINE, ctaHero, ctaGhost, sectionH2, sectionLead, reveal } from './corpTheme';
+import { FONT_JA, FONT_EN, LINE, ctaHero, ctaGhost, sectionH2, sectionLead, reveal } from './corpTheme';
 import { Kick } from './roai/HomeRoaiSections';
 import { rememberSource, track } from './roai/track';
 import { SIZES_FULL, photoSrcSet } from './photoSet';
@@ -70,7 +70,7 @@ function Performer() {
   const reduced = useReducedMotion();
   const active = P.fields.find(f => f.id === field) ?? P.fields[0];
   return (
-    <section id="ashitaka-performer" className="lp-section-pad cs-perf" style={{ padding: '7rem 1.5rem', background: INK_2, scrollMarginTop: 70 }} aria-labelledby="ashitaka-performer-h">
+    <section id="ashitaka-performer" className="lp-section-pad cs-perf" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70 }} aria-labelledby="ashitaka-performer-h">
       <div className="ch-wrap">
         <PageHead id="ashitaka-performer-h" kicker={P.kicker} h2={P.h2} lead={P.lead} />
         <div className="cs-perf-grid">
@@ -157,7 +157,7 @@ export default function AshitakaPage({ onAnchor }: { onAnchor: AnchorHandler }) 
       </section>
 
       {/* 二つの固有名（入口と到達点を分ける） */}
-      <section id="ashitaka-entities" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, scrollMarginTop: 70 }} aria-labelledby="ashitaka-entities-h">
+      <section id="ashitaka-entities" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70 }} aria-labelledby="ashitaka-entities-h">
         <div className="ch-wrap">
           <PageHead id="ashitaka-entities-h" kicker={E.kicker} h2={E.h2} lead={E.lead} />
           <div className="cs-split">
@@ -181,7 +181,7 @@ export default function AshitakaPage({ onAnchor }: { onAnchor: AnchorHandler }) 
       </section>
 
       {/* 引き渡し（2区間の道筋） */}
-      <section id="ashitaka-handoff" className="lp-section-pad" style={{ padding: '6.5rem 1.5rem', background: INK_2, borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="ashitaka-handoff-h">
+      <section id="ashitaka-handoff" className="lp-section-pad" style={{ padding: '6.5rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="ashitaka-handoff-h">
         <div className="ch-wrap">
           <PageHead id="ashitaka-handoff-h" kicker={H.kicker} h2={H.h2} lead={H.lead} />
           <motion.div {...reveal} className="cs-handoff">
@@ -218,7 +218,7 @@ export default function AshitakaPage({ onAnchor }: { onAnchor: AnchorHandler }) 
       </section>
 
       {/* 一日を工程として設計する */}
-      <section id="ashitaka-day" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, scrollMarginTop: 70 }} aria-labelledby="ashitaka-day-h">
+      <section id="ashitaka-day" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70 }} aria-labelledby="ashitaka-day-h">
         <div className="ch-wrap">
           <PageHead id="ashitaka-day-h" kicker={D.kicker} h2={D.h2} lead={D.lead} />
           <motion.ol {...reveal} className="cs-program" style={{ fontFamily: FONT_JA }}>
@@ -234,7 +234,7 @@ export default function AshitakaPage({ onAnchor }: { onAnchor: AnchorHandler }) 
       </section>
 
       {/* REGIONAL OS */}
-      <section id="regional-os" className="lp-section-pad cs-os" style={{ padding: '7rem 1.5rem', background: INK_3, scrollMarginTop: 70 }} aria-labelledby="regional-os-h">
+      <section id="regional-os" className="lp-section-pad cs-os" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #101826)", scrollMarginTop: 70 }} aria-labelledby="regional-os-h">
         <div className="cs-split-grid cs-os-bg" aria-hidden />
         <div className="ch-wrap" style={{ position: 'relative' }}>
           <PageHead id="regional-os-h" kicker={R.kicker} h2={R.h2} lead={R.lead} />
@@ -260,14 +260,14 @@ export default function AshitakaPage({ onAnchor }: { onAnchor: AnchorHandler }) 
       </section>
 
       {/* 自治体・地域事業者へ提供できること */}
-      <section id="ashitaka-offer" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="ashitaka-offer-h">
+      <section id="ashitaka-offer" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="ashitaka-offer-h">
         <div className="ch-wrap">
           <PageHead id="ashitaka-offer-h" kicker={O.kicker} h2={O.h2} />
           <div className="cs-offer">
             <motion.ol {...reveal} className="cs-offer-now" style={{ fontFamily: FONT_JA }}>
               {O.now.map((o, i) => (
                 <li key={o.t}>
-                  <span style={{ fontFamily: FONT_EN, fontSize: '0.78rem', letterSpacing: '0.2em', color: '#38BDF8', fontWeight: 700, paddingTop: 4 }}>{String(i + 1).padStart(2, '0')}</span>
+                  <span style={{ fontFamily: FONT_EN, fontSize: '0.78rem', letterSpacing: '0.2em', color: "var(--corp-accent, #38BDF8)", fontWeight: 700, paddingTop: 4 }}>{String(i + 1).padStart(2, '0')}</span>
                   <div>
                     <p className="cs-offer-t">{o.t}</p>
                     <p className="cs-offer-b">{o.b}</p>
@@ -276,7 +276,7 @@ export default function AshitakaPage({ onAnchor }: { onAnchor: AnchorHandler }) 
               ))}
             </motion.ol>
             <motion.div {...reveal}>
-              <p style={{ fontFamily: FONT_EN, fontSize: '0.7rem', letterSpacing: '0.26em', color: 'rgba(226,232,240,0.6)', fontWeight: 700, margin: '0 0 0.8rem' }}>NEXT — これから</p>
+              <p style={{ fontFamily: FONT_EN, fontSize: '0.7rem', letterSpacing: '0.26em', color: "var(--corp-muted, rgba(226,232,240,0.6))", fontWeight: 700, margin: '0 0 0.8rem' }}>NEXT — これから</p>
               <ul className="cs-offer-next" style={{ fontFamily: FONT_JA }}>
                 {O.next.map(n => <li key={n}>{n}</li>)}
               </ul>
@@ -294,7 +294,7 @@ export default function AshitakaPage({ onAnchor }: { onAnchor: AnchorHandler }) 
       </section>
 
       {/* FAQ */}
-      <section id="ashitaka-faq" className="lp-section-pad" style={{ padding: '6rem 1.5rem', background: INK_2, borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="ashitaka-faq-h">
+      <section id="ashitaka-faq" className="lp-section-pad" style={{ padding: '6rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="ashitaka-faq-h">
         <div className="ch-wrap" style={{ maxWidth: 860 }}>
           <PageHead id="ashitaka-faq-h" kicker="FAQ" h2="よくある質問" />
           <motion.div {...reveal} className="cs-faq" style={{ fontFamily: FONT_JA }}>
@@ -315,7 +315,7 @@ export default function AshitakaPage({ onAnchor }: { onAnchor: AnchorHandler }) 
         <div className="ch-wrap cs-bleed-inner is-center">
           <motion.div {...reveal} style={{ maxWidth: 720, margin: '0 auto' }}>
             <Kick center>Let’s begin</Kick>
-            <h2 id="ashitaka-cta-h" style={{ ...sectionH2, margin: 0, color: '#fff' }}><Lines text={ASHITAKA_PAGE.cta.h2} /></h2>
+            <h2 id="ashitaka-cta-h" style={{ ...sectionH2, margin: 0, color: "var(--corp-text, #fff)" }}><Lines text={ASHITAKA_PAGE.cta.h2} /></h2>
             <div className="ch-cta-row" style={{ justifyContent: 'center', marginTop: '1.8rem' }}>
               <a href="#contact" onClick={e => consult(e, 'ashitaka-cta')} style={ctaHero}>{ASHITAKA_PAGE.cta.primary}</a>
             </div>

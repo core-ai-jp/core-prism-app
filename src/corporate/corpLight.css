@@ -1,0 +1,78 @@
+/* Corporate light palette. Scoped to CoreSite and its mobile CTA;
+   legacy colors remain fallbacks for the separate product/Studio routes. */
+.corp-light {
+  --corp-surface: #fff;
+  --corp-surface-soft: #f5f7fa;
+  --corp-surface-raised: #fff;
+  --corp-surface-rgb: 255, 255, 255;
+  --corp-tint-rgb: 17, 24, 39;
+  --corp-text: #111827;
+  --corp-body: #374151;
+  --corp-muted: #596273;
+  --corp-accent: #09658a;
+  --corp-line: rgba(17, 24, 39, .16);
+  --corp-cta: #111827;
+  --corp-cta-text: #fff;
+  --corp-cta-shadow: none;
+  color-scheme: light;
+  background: var(--corp-surface);
+  color: var(--corp-text);
+}
+.corp-light :is(h1, h2, h3, .ch-hero-line, .cs-bleed-h) { text-shadow: none; }
+.corp-light [style*="background-clip: text"] {
+  background: none !important;
+  -webkit-text-fill-color: var(--corp-text) !important;
+  color: var(--corp-text) !important;
+}
+.corp-light header { background: rgba(255,255,255,.94) !important; }
+.corp-light .lp-tab { color: #596273; }
+.corp-light .lp-tab.is-on { color: #111827; border-bottom-color: #09658a; }
+.corp-light .lp-tab:hover { color: #09658a; }
+.corp-light :is(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid #09658a;
+  outline-offset: 4px;
+}
+.corp-light :is(input, select, textarea, option) { color: #111827; color-scheme: light; }
+.corp-light ::placeholder { color: #596273; opacity: 1; }
+.corp-light .ch-film-ambient { display: none; }
+.corp-light .ch-hero--film .ch-hero-shade { display: none; }
+.corp-light .ch-film {
+  border: 1px solid #dce1e8;
+  box-shadow: 0 24px 64px -32px rgba(17,24,39,.28);
+}
+.corp-light .ch-film::after { display: none; }
+.corp-light .ch-film-video { background: #070a10; }
+/* White veils replace dark text overlays; the original media files retain their colors. */
+.corp-light :is(.ch-manifesto-shade, .cs-bleed-shade) {
+  background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,.96) 34%, rgba(255,255,255,.73) 65%, rgba(255,255,255,.12) 100%);
+}
+.corp-light :is(.ch-band-shade, .cs-bleed-shade.is-center) {
+  background: rgba(255,255,255,.92);
+}
+.corp-light :is(.cs-energy, .ch-approach)::before {
+  background: linear-gradient(180deg,#f5f7fa,rgba(245,247,250,.94),#f5f7fa);
+}
+.corp-light :is(.cs-work, .ch-tile) figcaption {
+  background: linear-gradient(transparent,rgba(255,255,255,.97) 45%);
+}
+.corp-light :is(.ws-primary, .rs-next) {
+  background: #111827;
+  color: #fff;
+  box-shadow: none;
+}
+.corp-light .ws-progress span { background: #09658a; box-shadow: none; }
+.corp-light .cs-status { color: #09658a; border-color: #b5cbd5; background: #f2f7fa; }
+.corp-light .cs-status.is-next { color: #71521a; background: #fcf8ef; }
+.corp-light .cs-status.is-future { color: #596273; background: #f5f7fa; }
+.corp-sticky-light > div { background: rgba(255,255,255,.97) !important; border-top-color: #dce1e8 !important; }
+.corp-sticky-light > div > div > div:first-child { color: #111827 !important; }
+.corp-sticky-light > div > div > div:last-child { color: #596273 !important; }
+.corp-sticky-light a { box-shadow: none !important; }
+@media (max-width: 860px) {
+  .corp-light .ch-hero--film { min-height: 0; }
+  .corp-light .ch-hero-grid { display: flex; flex-direction: column; gap: 1.8rem; padding: 2.5rem 1.25rem 3rem; }
+  .corp-light .ch-hero-copy { padding: 0; width: 100%; }
+  .corp-light .ch-film { position: relative; inset: auto; width: min(100%, 340px); height: auto; aspect-ratio: 9 / 16; border-radius: 20px; }
+  .corp-light .ch-film-video { object-fit: contain; }
+  .corp-light :is(.ch-manifesto-shade, .cs-bleed-shade) { background: rgba(255,255,255,.94); }
+}

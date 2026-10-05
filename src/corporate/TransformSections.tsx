@@ -14,8 +14,7 @@ import { Suspense, lazy, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FONT_DISPLAY, FONT_SERIF_JA, FONT_SERIF_EN, FONT_SANS,
-  GOLD, GOLD_LIGHT, TEXT_BODY, TEXT_MUTED,
-  sectionLabel, sectionLabelMain, sectionLabelSub, sectionH2, sectionLead,
+  GOLD, GOLD_LIGHT, sectionLabel, sectionLabelMain, sectionLabelSub, sectionH2, sectionLead,
   quietCard, stepNumber, ctaHero, ctaGhost, reveal,
 } from './corpTheme';
 import {
@@ -49,7 +48,7 @@ export function Section({
   narrow?: boolean;
 }) {
   return (
-    <section id={id} className="lp-section-pad" style={{ padding: '7rem 1.5rem', background, scrollMarginTop: 70 }}>
+    <section id={id} className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: `var(--corp-surface, ${background})`, scrollMarginTop: 70 }}>
       <div style={{ maxWidth: narrow ? 900 : 1180, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <p style={sectionLabel}>
@@ -70,7 +69,7 @@ export function Kicker({ en }: { en: string }) {
   return (
     <p style={{
       fontFamily: FONT_SERIF_EN, fontStyle: 'italic', fontSize: 'clamp(0.85rem, 1.3vw, 1rem)',
-      color: 'rgba(226,232,240,0.5)', letterSpacing: '0.1em', textAlign: 'center', marginTop: '0.9rem',
+      color: "var(--corp-muted, rgba(226,232,240,0.5))", letterSpacing: '0.1em', textAlign: 'center', marginTop: '0.9rem',
     }}>
       {en}
     </p>
@@ -83,7 +82,7 @@ export function FlowChain({ steps, accent }: { steps: string[]; accent: string }
     <div className="corp-chain">
       {steps.map((s, i) => (
         <span key={s} className="corp-chain-item">
-          <span className="corp-chain-chip" style={{ borderColor: `${accent}55`, color: '#EEF2F7' }}>{s}</span>
+          <span className="corp-chain-chip" style={{ borderColor: `${accent}55`, color: "var(--corp-text, #EEF2F7)" }}>{s}</span>
           {i < steps.length - 1 && <span aria-hidden className="corp-chain-arrow" style={{ color: accent }}>→</span>}
         </span>
       ))}
@@ -99,7 +98,7 @@ export function PhilosophyLead({ onAnchor }: { onAnchor?: AnchorHandler }) {
     <section
       id="philosophy"
       className="lp-section-pad"
-      style={{ padding: '7rem 1.5rem', background: 'linear-gradient(180deg,#070A10 0%,#0A0D14 100%)', scrollMarginTop: 70 }}
+      style={{ padding: '7rem 1.5rem', background: "linear-gradient(180deg,var(--corp-surface, #070A10) 0%,var(--corp-surface-soft, #0A0D14) 100%)", scrollMarginTop: 70 }}
     >
       <div style={{ maxWidth: 880, margin: '0 auto', textAlign: 'center' }}>
         <p style={sectionLabel}>
@@ -110,7 +109,7 @@ export function PhilosophyLead({ onAnchor }: { onAnchor?: AnchorHandler }) {
           技術は変わる。
           <br />
           <span style={{
-            background: 'linear-gradient(110deg,#FFFFFF,#BAE6FD 55%,#7DD3FC)',
+            background: "linear-gradient(110deg,var(--corp-surface-raised, #FFFFFF),#BAE6FD 55%,#7DD3FC)",
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: 900,
           }}>
             核は、変わらない。
@@ -126,7 +125,7 @@ export function PhilosophyLead({ onAnchor }: { onAnchor?: AnchorHandler }) {
           <br />
           CORE は、最新技術を追いかける会社ではなく、
           <br />
-          <strong style={{ color: '#EEF2F7', fontWeight: 700 }}>変わらない本質のために、最新技術を使う会社</strong>です。
+          <strong style={{ color: "var(--corp-text, #EEF2F7)", fontWeight: 700 }}>変わらない本質のために、最新技術を使う会社</strong>です。
         </p>
         {onAnchor && (
           <p style={{ marginTop: '2.2rem' }}>
@@ -136,7 +135,7 @@ export function PhilosophyLead({ onAnchor }: { onAnchor?: AnchorHandler }) {
               /* 単独で置くリンクは指で狙える高さを持たせる（実測 20px だった） */
               style={{
                 display: 'inline-flex', alignItems: 'center', minHeight: 44, padding: '0 0.4rem',
-                fontFamily: FONT_SERIF_JA, fontSize: '0.85rem', color: GOLD_LIGHT,
+                fontFamily: FONT_SERIF_JA, fontSize: '0.85rem', color: "var(--corp-accent, #BAE6FD)",
                 textDecoration: 'underline', textUnderlineOffset: 4,
               }}
             >
@@ -157,7 +156,7 @@ export function PhilosophyCore() {
     <section
       id="philosophy-core"
       className="lp-section-pad"
-      style={{ padding: '7rem 1.5rem', background: 'radial-gradient(120% 90% at 50% 0%, #0B0F17 0%, #070A10 70%)', scrollMarginTop: 70 }}
+      style={{ padding: '7rem 1.5rem', background: "radial-gradient(120% 90% at 50% 0%, var(--corp-surface-soft, #0B0F17) 0%, var(--corp-surface, #070A10) 70%)", scrollMarginTop: 70 }}
     >
       <div style={{ maxWidth: 820, margin: '0 auto' }}>
         <p style={{ ...sectionLabel, alignItems: 'flex-start' }}>
@@ -168,7 +167,7 @@ export function PhilosophyCore() {
           変わらない本質のために、最新の技術を使う。
         </motion.h2>
         <div style={{
-          fontFamily: FONT_SERIF_JA, color: TEXT_BODY, fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)',
+          fontFamily: FONT_SERIF_JA, color: "var(--corp-body, rgba(226,232,240,0.78))", fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)',
           lineHeight: 2.5, marginTop: '2rem',
         }}>
           <p style={{ marginBottom: '1.8rem' }}>
@@ -176,7 +175,7 @@ export function PhilosophyCore() {
             五年前に正しかった構成は、五年後には残っていないかもしれません。
           </p>
           <p style={{ marginBottom: '1.8rem' }}>
-            <strong style={{ color: '#EEF2F7', fontWeight: 700 }}>核とは、人です。</strong>
+            <strong style={{ color: "var(--corp-text, #EEF2F7)", fontWeight: 700 }}>核とは、人です。</strong>
             人の役に立つこと。人が価値を生むこと。人が人らしく笑っていられること。
             その核だけは、時代が変わっても同じです。AIが賢くなるほど、人の温度が価値になります。
           </p>
@@ -193,7 +192,7 @@ export function PhilosophyCore() {
         </div>
         <p style={{
           fontFamily: FONT_SERIF_EN, fontStyle: 'italic', fontSize: '1rem',
-          color: 'rgba(226,232,240,0.5)', letterSpacing: '0.08em', marginTop: '2.4rem',
+          color: "var(--corp-muted, rgba(226,232,240,0.5))", letterSpacing: '0.08em', marginTop: '2.4rem',
         }}>
           We use the newest technology for the oldest reasons.
         </p>
@@ -228,7 +227,7 @@ export function WhatWeDo({ onAnchor }: { onAnchor?: AnchorHandler }) {
               {s.soon && (
                 <span style={{
                   fontFamily: FONT_DISPLAY, fontSize: '0.58rem', letterSpacing: '0.24em',
-                  color: '#0A0F18', background: `linear-gradient(135deg, ${s.accent}, #7DD3FC)`,
+                  color: "var(--corp-text, #0A0F18)", background: `linear-gradient(135deg, ${s.accent}, #7DD3FC)`,
                   padding: '3px 9px', borderRadius: 999, fontWeight: 700,
                 }}>
                   COMING SOON
@@ -236,10 +235,10 @@ export function WhatWeDo({ onAnchor }: { onAnchor?: AnchorHandler }) {
               )}
             </div>
             <div>
-              <p style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(1rem, 1.6vw, 1.2rem)', letterSpacing: '0.1em', color: '#EEF2F7', fontWeight: 700 }}>
+              <p style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(1rem, 1.6vw, 1.2rem)', letterSpacing: '0.1em', color: "var(--corp-text, #EEF2F7)", fontWeight: 700 }}>
                 {s.titleEn}
               </p>
-              <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.8rem', color: TEXT_MUTED, letterSpacing: '0.12em', marginTop: 4 }}>
+              <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.8rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", letterSpacing: '0.12em', marginTop: 4 }}>
                 {s.titleJa}
               </p>
             </div>
@@ -249,13 +248,13 @@ export function WhatWeDo({ onAnchor }: { onAnchor?: AnchorHandler }) {
             }}>
               {s.copy}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.92rem', color: TEXT_BODY, lineHeight: 2.05 }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.92rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.05 }}>
               {s.body}
             </p>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
               {s.items.map(it => (
                 <li key={it} style={{
-                  fontFamily: FONT_SANS, fontSize: '0.74rem', color: 'rgba(226,232,240,0.78)',
+                  fontFamily: FONT_SANS, fontSize: '0.74rem', color: "var(--corp-body, rgba(226,232,240,0.78))",
                   border: `1px solid ${s.accent}33`, borderRadius: 999, padding: '5px 11px',
                 }}>
                   {it}
@@ -347,7 +346,7 @@ export function DifferenceSection() {
       </div>
       <p style={{
         fontFamily: FONT_SERIF_EN, fontStyle: 'italic', textAlign: 'center', marginTop: '3rem',
-        fontSize: 'clamp(1rem, 2vw, 1.35rem)', color: 'rgba(226,232,240,0.62)', letterSpacing: '0.06em',
+        fontSize: 'clamp(1rem, 2vw, 1.35rem)', color: "var(--corp-muted, rgba(226,232,240,0.62))", letterSpacing: '0.06em',
       }}>
         We don’t just build software.
       </p>
@@ -438,10 +437,10 @@ function CompanyOsRadialMobile() {
             x={cx + n.x - n.w / 2} y={cy + n.y - pillH / 2} width={n.w} height={pillH} rx={pillH / 2}
             fill="rgba(255,255,255,0.045)" stroke="rgba(125,211,252,0.34)" strokeWidth={1}
           />
-          <text x={cx + n.x} y={cy + n.y - 4} textAnchor="middle" fill="#EEF2F7" fontSize={12.5} fontFamily={FONT_SERIF_JA} fontWeight={600} letterSpacing="0.03em">
+          <text x={cx + n.x} y={cy + n.y - 4} textAnchor="middle" fill="var(--corp-text, #EEF2F7)" fontSize={12.5} fontFamily={FONT_SERIF_JA} fontWeight={600} letterSpacing="0.03em">
             {n.label}
           </text>
-          <text x={cx + n.x} y={cy + n.y + 14} textAnchor="middle" fill="rgba(226,232,240,0.55)" fontSize={8.6} fontFamily={FONT_SANS} letterSpacing="0.01em">
+          <text x={cx + n.x} y={cy + n.y + 14} textAnchor="middle" fill="var(--corp-muted, rgba(226,232,240,0.55))" fontSize={8.6} fontFamily={FONT_SANS} letterSpacing="0.01em">
             {n.sub}
           </text>
         </motion.g>
@@ -543,10 +542,10 @@ function CompanyOsSvg() {
             x={n.x - 74} y={n.y - 27} width={148} height={54} rx={27}
             fill="rgba(255,255,255,0.045)" stroke="rgba(125,211,252,0.34)" strokeWidth={1}
           />
-          <text x={n.x} y={n.y - 3} textAnchor="middle" fill="#EEF2F7" fontSize={16} fontFamily={FONT_SERIF_JA} fontWeight={600} letterSpacing="0.06em">
+          <text x={n.x} y={n.y - 3} textAnchor="middle" fill="var(--corp-text, #EEF2F7)" fontSize={16} fontFamily={FONT_SERIF_JA} fontWeight={600} letterSpacing="0.06em">
             {n.label}
           </text>
-          <text x={n.x} y={n.y + 15} textAnchor="middle" fill="rgba(226,232,240,0.5)" fontSize={10.5} fontFamily={FONT_SANS} letterSpacing="0.04em">
+          <text x={n.x} y={n.y + 15} textAnchor="middle" fill="var(--corp-muted, rgba(226,232,240,0.5))" fontSize={10.5} fontFamily={FONT_SANS} letterSpacing="0.04em">
             {n.sub}
           </text>
         </motion.g>
@@ -594,8 +593,8 @@ export function CompanyOsSection({ onAnchor }: { onAnchor?: AnchorHandler }) {
           { t: '経営者が、直接聞ける', d: '数字の裏側を人に頼まなくても、その場で問い直せます。判断までの時間が短くなります。' },
         ].map((c, i) => (
           <motion.div key={c.t} {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }} style={quietCard}>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '1.05rem', fontWeight: 700, color: '#EEF2F7', lineHeight: 1.8, marginBottom: '0.7rem' }}>{c.t}</p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: TEXT_BODY, lineHeight: 2.05 }}>{c.d}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '1.05rem', fontWeight: 700, color: "var(--corp-text, #EEF2F7)", lineHeight: 1.8, marginBottom: '0.7rem' }}>{c.t}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.05 }}>{c.d}</p>
           </motion.div>
         ))}
       </div>
@@ -623,14 +622,14 @@ export function AssessmentSection({ onAnchor }: { onAnchor?: AnchorHandler }) {
       lead={<>「AIで何ができるか」から始めると、使われない仕組みができます。<br />先に、変えるべき場所を決めます。</>}
     >
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.7rem', letterSpacing: '0.3em', color: GOLD, marginBottom: '1.1rem' }}>
+        <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.7rem', letterSpacing: '0.3em', color: "var(--corp-accent, #7DD3FC)", marginBottom: '1.1rem' }}>
           SCOPE
         </p>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
           {ASSESSMENT_TARGETS.map(t => (
             <li key={t} style={{
-              fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: '#EEF2F7',
-              border: '1px solid rgba(125,211,252,0.34)', background: 'rgba(125,211,252,0.05)',
+              fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: "var(--corp-text, #EEF2F7)",
+              border: "1px solid var(--corp-line, rgba(125,211,252,0.34))", background: 'rgba(125,211,252,0.05)',
               borderRadius: 999, padding: '9px 18px', letterSpacing: '0.06em',
             }}>
               {t}
@@ -648,10 +647,10 @@ export function AssessmentSection({ onAnchor }: { onAnchor?: AnchorHandler }) {
             className="corp-step"
           >
             <span style={{ ...stepNumber, fontSize: '1.4rem', display: 'block', marginBottom: '0.7rem' }}>{s.no}</span>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '1.02rem', fontWeight: 700, color: '#EEF2F7', marginBottom: '0.6rem', letterSpacing: '0.06em' }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '1.02rem', fontWeight: 700, color: "var(--corp-text, #EEF2F7)", marginBottom: '0.6rem', letterSpacing: '0.06em' }}>
               {s.title}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.85rem', color: TEXT_BODY, lineHeight: 2 }}>{s.body}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.85rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2 }}>{s.body}</p>
           </motion.div>
         ))}
       </div>
@@ -660,14 +659,14 @@ export function AssessmentSection({ onAnchor }: { onAnchor?: AnchorHandler }) {
         {...reveal}
         style={{
           marginTop: '3.2rem', textAlign: 'center', padding: 'clamp(2rem, 4vw, 3.2rem)',
-          borderRadius: 22, border: '1px solid rgba(125,211,252,0.4)',
-          background: 'radial-gradient(140% 120% at 50% -20%, #101826 0%, #080B11 65%)',
+          borderRadius: 22, border: "1px solid var(--corp-line, rgba(125,211,252,0.4))",
+          background: "radial-gradient(140% 120% at 50% -20%, var(--corp-surface-soft, #101826) 0%, var(--corp-surface, #080B11) 65%)",
         }}
       >
-        <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.3em', color: GOLD, marginBottom: '1rem' }}>
+        <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.3em', color: "var(--corp-accent, #7DD3FC)", marginBottom: '1rem' }}>
           DELIVERABLE
         </p>
-        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.3rem, 2.6vw, 1.9rem)', fontWeight: 700, color: '#F3F6FB', lineHeight: 1.8, marginBottom: '1rem' }}>
+        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.3rem, 2.6vw, 1.9rem)', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.8, marginBottom: '1rem' }}>
           AI Transformation Roadmap
         </p>
         <p style={{ ...sectionLead, maxWidth: 560, marginBottom: '2rem' }}>
@@ -709,15 +708,15 @@ export function UseCasesSection() {
               <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.95rem', letterSpacing: '0.22em', color: u.accent, fontWeight: 700 }}>
                 {u.domainEn}
               </p>
-              <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: TEXT_MUTED, letterSpacing: '0.14em', marginTop: 3 }}>
+              <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", letterSpacing: '0.14em', marginTop: 3 }}>
                 {u.domainJa}
               </p>
             </div>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.05rem, 1.8vw, 1.3rem)', fontWeight: 700, color: '#F3F6FB', lineHeight: 1.85 }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.05rem, 1.8vw, 1.3rem)', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.85 }}>
               {u.headline}
             </p>
             <FlowChain steps={u.steps} accent={u.accent} />
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: TEXT_BODY, lineHeight: 2.05 }}>{u.body}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.05 }}>{u.body}</p>
           </motion.div>
         ))}
       </div>
@@ -750,10 +749,10 @@ export function ServiceLayersSection() {
             <div className="corp-layer-head">
               <span style={{ ...stepNumber, fontSize: 'clamp(2rem, 4.5vw, 3.2rem)', color: s.accent, lineHeight: 1 }}>{s.no}</span>
               <div>
-                <p style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(1.1rem, 2.1vw, 1.5rem)', letterSpacing: '0.1em', color: '#F3F6FB', fontWeight: 700 }}>
+                <p style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(1.1rem, 2.1vw, 1.5rem)', letterSpacing: '0.1em', color: "var(--corp-text, #F3F6FB)", fontWeight: 700 }}>
                   {s.titleEn}
                 </p>
-                <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.82rem', color: TEXT_MUTED, letterSpacing: '0.14em', marginTop: 5 }}>
+                <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", letterSpacing: '0.14em', marginTop: 5 }}>
                   {s.titleJa}{s.soon && <span style={{ color: s.accent, marginLeft: '0.8em', letterSpacing: '0.2em', fontFamily: FONT_DISPLAY, fontSize: '0.7rem' }}>COMING SOON</span>}
                 </p>
               </div>
@@ -764,13 +763,13 @@ export function ServiceLayersSection() {
             }}>
               {s.copy}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.95rem', color: TEXT_BODY, lineHeight: 2.2, maxWidth: 760 }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.95rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.2, maxWidth: 760 }}>
               {s.body}
             </p>
             <ul style={{ listStyle: 'none', padding: 0, margin: '1.6rem 0 0', display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
               {s.items.map(it => (
                 <li key={it} style={{
-                  fontFamily: FONT_SANS, fontSize: '0.78rem', color: 'rgba(226,232,240,0.8)',
+                  fontFamily: FONT_SANS, fontSize: '0.78rem', color: "var(--corp-body, rgba(226,232,240,0.8))",
                   border: `1px solid ${s.accent}38`, borderRadius: 999, padding: '6px 13px',
                 }}>
                   {it}
@@ -800,10 +799,10 @@ export function BusinessDevSection() {
       <div className="corp-grid-3">
         {BIZDEV_ITEMS.map((b, i) => (
           <motion.div key={b.t} {...reveal} transition={{ ...reveal.transition, delay: i * 0.06 }} style={quietCard}>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '1.05rem', fontWeight: 700, color: '#EEF2F7', marginBottom: '0.7rem', letterSpacing: '0.04em' }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '1.05rem', fontWeight: 700, color: "var(--corp-text, #EEF2F7)", marginBottom: '0.7rem', letterSpacing: '0.04em' }}>
               {b.t}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: TEXT_BODY, lineHeight: 2.05 }}>{b.d}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.05 }}>{b.d}</p>
           </motion.div>
         ))}
       </div>
@@ -826,38 +825,38 @@ export function IndustryOsSection({ onAnchor }: { onAnchor?: AnchorHandler }) {
       title={<>一社の課題解決を、<br />業界全体の仕組みに変える。</>}
       lead={<>受託で得た知見のうち、その業界の誰もが抱えている部分を製品にします。<br />いま {VERTICALS.length} つの業界で、業務そのものを引き受けるAIが動いています。</>}
     >
-      <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.66rem', letterSpacing: '0.3em', color: GOLD, textAlign: 'center', marginBottom: '1rem' }}>
+      <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.66rem', letterSpacing: '0.3em', color: "var(--corp-accent, #7DD3FC)", textAlign: 'center', marginBottom: '1rem' }}>
         IN&nbsp;OPERATION
       </p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.55rem', justifyContent: 'center', marginBottom: '2.4rem' }}>
         {VERTICALS.map(v => (
           <span key={v.name} style={{
             display: 'inline-flex', alignItems: 'baseline', gap: '0.6em',
-            fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: '#EEF2F7',
-            border: '1px solid rgba(125,211,252,0.4)', background: 'rgba(125,211,252,0.06)',
+            fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: "var(--corp-text, #EEF2F7)",
+            border: "1px solid var(--corp-line, rgba(125,211,252,0.4))", background: 'rgba(125,211,252,0.06)',
             borderRadius: 999, padding: '10px 20px', letterSpacing: '0.08em',
           }}>
             {v.industryShort}
-            <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.62rem', letterSpacing: '0.16em', color: GOLD }}>{v.name}</span>
+            <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.62rem', letterSpacing: '0.16em', color: "var(--corp-accent, #7DD3FC)" }}>{v.name}</span>
           </span>
         ))}
       </div>
 
-      <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.66rem', letterSpacing: '0.3em', color: 'rgba(226,232,240,0.5)', textAlign: 'center', marginBottom: '1rem' }}>
+      <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.66rem', letterSpacing: '0.3em', color: "var(--corp-muted, rgba(226,232,240,0.5))", textAlign: 'center', marginBottom: '1rem' }}>
         NEXT
       </p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', marginBottom: '2.6rem' }}>
         {INDUSTRY_NEXT.map(t => (
           <span key={t} style={{
-            fontFamily: FONT_SERIF_JA, fontSize: '0.86rem', color: TEXT_MUTED,
-            border: '1px dashed rgba(125,211,252,0.28)', borderRadius: 999, padding: '9px 18px', letterSpacing: '0.08em',
+            fontFamily: FONT_SERIF_JA, fontSize: '0.86rem', color: "var(--corp-muted, rgba(226,232,240,0.62))",
+            border: "1px dashed var(--corp-line, rgba(125,211,252,0.28))", borderRadius: 999, padding: '9px 18px', letterSpacing: '0.08em',
           }}>
             {t}
           </span>
         ))}
         <span style={{
-          fontFamily: FONT_DISPLAY, fontSize: '0.6rem', letterSpacing: '0.24em', color: 'rgba(226,232,240,0.55)',
-          border: '1px dashed rgba(125,211,252,0.28)', borderRadius: 999, padding: '9px 14px', fontWeight: 700,
+          fontFamily: FONT_DISPLAY, fontSize: '0.6rem', letterSpacing: '0.24em', color: "var(--corp-muted, rgba(226,232,240,0.55))",
+          border: "1px dashed var(--corp-line, rgba(125,211,252,0.28))", borderRadius: 999, padding: '9px 14px', fontWeight: 700,
           display: 'inline-flex', alignItems: 'center',
         }}>
           COMING SOON
@@ -890,8 +889,8 @@ export function PartnerSection({ onAnchor }: { onAnchor?: AnchorHandler }) {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', marginBottom: '3rem' }}>
         {PARTNER_TARGETS.map(t => (
           <span key={t} style={{
-            fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: '#EEF2F7',
-            border: '1px solid rgba(125,211,252,0.32)', background: 'rgba(125,211,252,0.05)',
+            fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: "var(--corp-text, #EEF2F7)",
+            border: "1px solid var(--corp-line, rgba(125,211,252,0.32))", background: 'rgba(125,211,252,0.05)',
             borderRadius: 999, padding: '9px 18px', letterSpacing: '0.06em',
           }}>
             {t}
@@ -902,10 +901,10 @@ export function PartnerSection({ onAnchor }: { onAnchor?: AnchorHandler }) {
       <div className="corp-grid-3">
         {PARTNER_FORMS.map((f, i) => (
           <motion.div key={f.t} {...reveal} transition={{ ...reveal.transition, delay: i * 0.06 }} style={quietCard}>
-            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.95rem', letterSpacing: '0.16em', color: GOLD_LIGHT, fontWeight: 700, marginBottom: '0.7rem' }}>
+            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.95rem', letterSpacing: '0.16em', color: "var(--corp-accent, #BAE6FD)", fontWeight: 700, marginBottom: '0.7rem' }}>
               {f.t}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: TEXT_BODY, lineHeight: 2.05 }}>{f.d}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.05 }}>{f.d}</p>
           </motion.div>
         ))}
       </div>
@@ -945,11 +944,11 @@ export function AiNativeSection() {
             className="corp-native-item"
           >
             <span style={{ ...stepNumber, fontSize: '0.72rem', opacity: 0.8 }}>{String(i + 1).padStart(2, '0')}</span>
-            <span style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', letterSpacing: '0.1em', color: '#F3F6FB', fontWeight: 700 }}>
+            <span style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', letterSpacing: '0.1em', color: "var(--corp-text, #F3F6FB)", fontWeight: 700 }}>
               {s.en}
             </span>
-            <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: TEXT_MUTED, letterSpacing: '0.12em' }}>{s.ja}</span>
-            <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.85rem', color: TEXT_BODY, lineHeight: 1.95 }}>{s.body}</span>
+            <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", letterSpacing: '0.12em' }}>{s.ja}</span>
+            <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.85rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.95 }}>{s.body}</span>
           </motion.li>
         ))}
       </ol>
@@ -974,17 +973,17 @@ export function TechnologySection() {
       <div className="corp-grid-2">
         {TECH_GROUPS.map((g, i) => (
           <motion.div key={g.purpose} {...reveal} transition={{ ...reveal.transition, delay: i * 0.07 }} style={quietCard}>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.05rem, 1.8vw, 1.25rem)', fontWeight: 700, color: '#F3F6FB', lineHeight: 1.85, marginBottom: '0.8rem' }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.05rem, 1.8vw, 1.25rem)', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.85, marginBottom: '0.8rem' }}>
               {g.purpose}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: TEXT_BODY, lineHeight: 2.05, marginBottom: '1.3rem' }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.05, marginBottom: '1.3rem' }}>
               {g.body}
             </p>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
               {g.tech.map(t => (
                 <li key={t} style={{
                   fontFamily: FONT_SANS, fontSize: '0.74rem', letterSpacing: '0.06em',
-                  color: 'rgba(226,232,240,0.72)', border: '1px solid rgba(125,211,252,0.24)',
+                  color: "var(--corp-body, rgba(226,232,240,0.72))", border: "1px solid var(--corp-line, rgba(125,211,252,0.24))",
                   borderRadius: 6, padding: '5px 10px',
                 }}>
                   {t}
@@ -1026,19 +1025,19 @@ export function CoreNumbersSection() {
           >
             <p style={{
               fontFamily: FONT_DISPLAY, fontSize: 'clamp(2.6rem, 6vw, 3.6rem)', fontWeight: 700, lineHeight: 1,
-              background: 'linear-gradient(120deg,#FFFFFF,#BAE6FD 55%,#7DD3FC)',
+              background: "linear-gradient(120deg,var(--corp-surface-raised, #FFFFFF),#BAE6FD 55%,#7DD3FC)",
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             }}>
               {n.value}
             </p>
-            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.64rem', letterSpacing: '0.26em', color: GOLD, marginTop: '0.9rem', fontWeight: 600 }}>
+            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.64rem', letterSpacing: '0.26em', color: "var(--corp-accent, #7DD3FC)", marginTop: '0.9rem', fontWeight: 600 }}>
               {n.label}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.86rem', color: '#EEF2F7', marginTop: '0.4rem', letterSpacing: '0.06em' }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.86rem', color: "var(--corp-text, #EEF2F7)", marginTop: '0.4rem', letterSpacing: '0.06em' }}>
               {n.labelJa}
             </p>
             {n.note && (
-              <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.74rem', color: TEXT_MUTED, marginTop: '0.5rem', lineHeight: 1.8 }}>
+              <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.74rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", marginTop: '0.5rem', lineHeight: 1.8 }}>
                 {n.note}
               </p>
             )}
@@ -1070,22 +1069,22 @@ export function InvestmentSection({ onAnchor }: { onAnchor?: AnchorHandler }) {
             transition={{ ...reveal.transition, delay: i * 0.08 }}
             style={{ ...quietCard, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}
           >
-            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.9rem', letterSpacing: '0.16em', color: GOLD_LIGHT, fontWeight: 700 }}>
+            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.9rem', letterSpacing: '0.16em', color: "var(--corp-accent, #BAE6FD)", fontWeight: 700 }}>
               {t.name}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.78rem', color: TEXT_MUTED, letterSpacing: '0.1em' }}>{t.nameJa}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", letterSpacing: '0.1em' }}>{t.nameJa}</p>
             <p style={{
               fontFamily: t.price === 'CUSTOM' ? FONT_DISPLAY : FONT_SERIF_JA,
-              fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, color: '#F3F6FB', letterSpacing: '0.06em', marginTop: '0.4rem',
+              fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", letterSpacing: '0.06em', marginTop: '0.4rem',
             }}>
               {t.price}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: TEXT_MUTED, lineHeight: 1.8 }}>{t.note}</p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: TEXT_BODY, lineHeight: 2.05, marginTop: '0.4rem' }}>{t.body}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", lineHeight: 1.8 }}>{t.note}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.05, marginTop: '0.4rem' }}>{t.body}</p>
           </motion.div>
         ))}
       </div>
-      <p style={{ ...sectionLead, textAlign: 'center', marginTop: '2.4rem', fontSize: '0.86rem', color: TEXT_MUTED, maxWidth: 640 }}>
+      <p style={{ ...sectionLead, textAlign: 'center', marginTop: '2.4rem', fontSize: '0.86rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", maxWidth: 640 }}>
         自社プロダクト（Prism・Resonance ほか）単体のご利用は月額数千円から。
         ここに示しているのは、事業そのものを設計し直す伴走型プロジェクトの規模感です。
       </p>
@@ -1117,10 +1116,10 @@ export function EngagementSection({ onAnchor }: { onAnchor?: AnchorHandler }) {
         {ENGAGEMENT_STEPS.map((s, i) => (
           <motion.div key={s.no} {...reveal} transition={{ ...reveal.transition, delay: i * 0.07 }} className="corp-step">
             <span style={{ ...stepNumber, fontSize: '1.4rem', display: 'block', marginBottom: '0.7rem' }}>{s.no}</span>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '1.02rem', fontWeight: 700, color: '#EEF2F7', marginBottom: '0.6rem', letterSpacing: '0.06em' }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '1.02rem', fontWeight: 700, color: "var(--corp-text, #EEF2F7)", marginBottom: '0.6rem', letterSpacing: '0.06em' }}>
               {s.title}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.85rem', color: TEXT_BODY, lineHeight: 2 }}>{s.body}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.85rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2 }}>{s.body}</p>
           </motion.div>
         ))}
       </div>
@@ -1128,10 +1127,10 @@ export function EngagementSection({ onAnchor }: { onAnchor?: AnchorHandler }) {
       <div className="corp-grid-3" style={{ marginTop: '3.2rem' }}>
         {ENGAGEMENT_TERMS.map((t, i) => (
           <motion.div key={t.t} {...reveal} transition={{ ...reveal.transition, delay: i * 0.05 }} style={quietCard}>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.98rem', fontWeight: 700, color: '#F3F6FB', marginBottom: '0.6rem', letterSpacing: '0.06em' }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.98rem', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", marginBottom: '0.6rem', letterSpacing: '0.06em' }}>
               {t.t}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: TEXT_BODY, lineHeight: 2.05 }}>{t.d}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.88rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.05 }}>{t.d}</p>
           </motion.div>
         ))}
       </div>
@@ -1164,14 +1163,14 @@ export function SecuritySection() {
       <div className="corp-grid-2">
         {SECURITY_ITEMS.map((s, i) => (
           <motion.div key={s.t} {...reveal} transition={{ ...reveal.transition, delay: i * 0.06 }} style={quietCard}>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1rem, 1.6vw, 1.15rem)', fontWeight: 700, color: '#F3F6FB', lineHeight: 1.85, marginBottom: '0.7rem' }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1rem, 1.6vw, 1.15rem)', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.85, marginBottom: '0.7rem' }}>
               {s.t}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: TEXT_BODY, lineHeight: 2.05 }}>{s.d}</p>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.05 }}>{s.d}</p>
           </motion.div>
         ))}
       </div>
-      <p style={{ ...sectionLead, textAlign: 'center', marginTop: '2.4rem', fontSize: '0.84rem', color: TEXT_MUTED, maxWidth: 660 }}>
+      <p style={{ ...sectionLead, textAlign: 'center', marginTop: '2.4rem', fontSize: '0.84rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", maxWidth: 660 }}>
         第三者認証（ISO/Pマークなど）は取得していません。取得していないものを、あるようには書きません。
         御社の情報セキュリティ基準に合わせた運用が必要な場合は、着手前にすり合わせます。
       </p>
@@ -1203,12 +1202,12 @@ export function FaqSection() {
             style={quietCard}
           >
             <summary className="corp-faq-q">
-              <span style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(0.96rem, 1.6vw, 1.08rem)', fontWeight: 700, color: '#F3F6FB', lineHeight: 1.8 }}>
+              <span style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(0.96rem, 1.6vw, 1.08rem)', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.8 }}>
                 {f.q}
               </span>
-              <span aria-hidden className="corp-faq-mark" style={{ color: GOLD }}>＋</span>
+              <span aria-hidden className="corp-faq-mark" style={{ color: "var(--corp-accent, #7DD3FC)" }}>＋</span>
             </summary>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: TEXT_BODY, lineHeight: 2.1, marginTop: '0.9rem' }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.1, marginTop: '0.9rem' }}>
               {f.a}
             </p>
           </motion.details>

@@ -7,7 +7,7 @@
 // ============================================================
 import type { MouseEvent as ReactMouseEvent } from 'react';
 import { motion } from 'framer-motion';
-import { FONT_JA, FONT_EN, ACCENT, ACCENT_LIGHT, PAPER, TEXT_BODY, TEXT_MUTED, LINE, INK, INK_2, ctaGhost, sectionH2, sectionLead, reveal } from '../corpTheme';
+import { FONT_JA, FONT_EN, LINE, INK, INK_2, ctaGhost, sectionH2, sectionLead, reveal } from '../corpTheme';
 import { TRANSFORMATION_LOOP } from './model';
 import { ASSUMPTIONS } from './engine';
 import { Kick, ScoreCta, RoaiModelSection } from './HomeRoaiSections';
@@ -55,10 +55,10 @@ export default function ReturnOnAiPage({ onAnchor }: { onAnchor: AnchorHandler }
         <div className="ch-wrap ro-hero-inner">
           <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
             <Kick>Return on AI</Kick>
-            <h1 id="roai-h" className="ch-h1" style={{ fontFamily: FONT_JA, color: '#fff', maxWidth: 980, fontSize: 'clamp(2rem, 4.6vw, 4rem)' }}>
-              問うべきは、<br className="ch-br-m" />「AIを導入したか」<br className="ch-br-m" />ではない。<br /><span style={{ color: ACCENT_LIGHT }}>「AIが何を<br className="ch-br-m" />生み出したか」だ。</span>
+            <h1 id="roai-h" className="ch-h1" style={{ fontFamily: FONT_JA, color: "var(--corp-text, #fff)", maxWidth: 980, fontSize: 'clamp(2rem, 4.6vw, 4rem)' }}>
+              問うべきは、<br className="ch-br-m" />「AIを導入したか」<br className="ch-br-m" />ではない。<br /><span style={{ color: "var(--corp-accent, #7DD3FC)" }}>「AIが何を<br className="ch-br-m" />生み出したか」だ。</span>
             </h1>
-            <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(0.98rem, 1.5vw, 1.12rem)', lineHeight: 1.95, color: 'rgba(236,242,250,0.85)', maxWidth: 640, margin: '0 0 2rem', fontWeight: 500 }}>
+            <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(0.98rem, 1.5vw, 1.12rem)', lineHeight: 1.95, color: "var(--corp-body, rgba(236,242,250,0.85))", maxWidth: 640, margin: '0 0 2rem', fontWeight: 500 }}>
               1億円を投資した。100個のAIエージェントを作った。全社員に生成AIを配った。
               それ自体は成功ではありません。売上・利益・時間・速度・リスク・新しい価値として、AIが何を返したか。
               それを経営指標として扱うのが Return on AI です。
@@ -77,10 +77,10 @@ export default function ReturnOnAiPage({ onAnchor }: { onAnchor: AnchorHandler }
         <div className="ro-fail">
           {FAIL_REASONS.map((f, i) => (
             <motion.div key={f.t} {...reveal} className="ro-fail-item">
-              <span style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.2em', color: ACCENT, fontWeight: 700 }}>0{i + 1}</span>
+              <span style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.2em', color: "var(--corp-accent, #38BDF8)", fontWeight: 700 }}>0{i + 1}</span>
               <div>
-                <h3 style={{ fontFamily: FONT_JA, fontSize: '1.02rem', fontWeight: 800, color: PAPER, margin: '0 0 0.3rem' }}>{f.t}</h3>
-                <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', color: TEXT_BODY, lineHeight: 1.85, margin: 0 }}>{f.d}</p>
+                <h3 style={{ fontFamily: FONT_JA, fontSize: '1.02rem', fontWeight: 800, color: "var(--corp-text, #F3F6FB)", margin: '0 0 0.3rem' }}>{f.t}</h3>
+                <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.85, margin: 0 }}>{f.d}</p>
               </div>
             </motion.div>
           ))}
@@ -92,14 +92,14 @@ export default function ReturnOnAiPage({ onAnchor }: { onAnchor: AnchorHandler }
         lead="会計基準の公式指標ではなく、AI投資を経営判断できる形にするための戦略KPIとして扱います。分子と分母に何を入れるかを先に決めるのが、計測の第一歩です。">
         <div className="ro-formula">
           <motion.div {...reveal} className="ro-formula-col">
-            <p className="ro-formula-label" style={{ fontFamily: FONT_EN, color: ACCENT_LIGHT }}>ECONOMIC VALUE CREATED BY AI</p>
+            <p className="ro-formula-label" style={{ fontFamily: FONT_EN, color: "var(--corp-accent, #7DD3FC)" }}>ECONOMIC VALUE CREATED BY AI</p>
             <ul style={{ fontFamily: FONT_JA }}>
               {VALUE_ITEMS.map(v => <li key={v.en}><strong>{v.ja}</strong><span style={{ fontFamily: FONT_EN }}>{v.en}</span></li>)}
             </ul>
           </motion.div>
           <div className="ro-formula-div" aria-hidden><span style={{ fontFamily: FONT_EN }}>÷</span></div>
           <motion.div {...reveal} className="ro-formula-col">
-            <p className="ro-formula-label" style={{ fontFamily: FONT_EN, color: TEXT_MUTED }}>TOTAL AI INVESTMENT</p>
+            <p className="ro-formula-label" style={{ fontFamily: FONT_EN, color: "var(--corp-muted, rgba(226,232,240,0.62))" }}>TOTAL AI INVESTMENT</p>
             <ul style={{ fontFamily: FONT_JA }}>
               {INVEST_ITEMS.map(v => <li key={v.en}><strong>{v.ja}</strong><span style={{ fontFamily: FONT_EN }}>{v.en}</span></li>)}
             </ul>
@@ -114,10 +114,10 @@ export default function ReturnOnAiPage({ onAnchor }: { onAnchor: AnchorHandler }
       <Block id="roai-loss" kick="Loss avoidance" h={<>売上に出ない価値も、<br />経済価値として数える。</>} bg={INK_2}
         lead="サイバー攻撃を防ぐ。障害を防ぐ。情報漏洩を防ぐ。契約リスクを見つける。人的ミスを防ぐ。売上として表示されなくても、大きな経済価値があります。">
         <motion.div {...reveal} className="ro-expected">
-          <p style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.2rem, 2.4vw, 1.8rem)', fontWeight: 700, color: PAPER, margin: '0 0 0.6rem', letterSpacing: '-0.01em' }}>
+          <p style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.2rem, 2.4vw, 1.8rem)', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", margin: '0 0 0.6rem', letterSpacing: '-0.01em' }}>
             Expected Loss ＝ Probability of Event × Estimated Impact
           </p>
-          <p style={{ fontFamily: FONT_JA, fontSize: '0.92rem', color: TEXT_BODY, lineHeight: 1.9, margin: 0, maxWidth: 720 }}>
+          <p style={{ fontFamily: FONT_JA, fontSize: '0.92rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.9, margin: 0, maxWidth: 720 }}>
             発生確率 × 想定損失額 で「期待損失」を置き、AIで減らせる分を Loss Avoidance として数えます。
             確定した損害額のようには見せず、必ず幅と前提を添えて出します。CORE ROAI SCORE では対策段階に応じた年間発生確率
             （点検・監査あり 3% ／ 基本対策のみ 8% ／ 担当者まかせ 15%）と削減率 {A.lossReduction * 100}% を仮定として明示します。
@@ -136,13 +136,13 @@ export default function ReturnOnAiPage({ onAnchor }: { onAnchor: AnchorHandler }
           ].map((c, i) => (
             <div key={c.k} className="ro-capacity-cell">
               {i > 0 && <span className="ro-capacity-op" aria-hidden style={{ fontFamily: FONT_EN }}>{i === 1 ? '÷' : '='}</span>}
-              <p style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.22em', color: ACCENT_LIGHT, fontWeight: 700, margin: 0, textTransform: 'uppercase' }}>{c.k}</p>
-              <p style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', fontWeight: 800, color: '#fff', margin: '0.3rem 0 0.1rem', letterSpacing: '-0.02em' }}>{c.v}</p>
-              <p style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: TEXT_MUTED, margin: 0 }}>{c.j}</p>
+              <p style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.22em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 700, margin: 0, textTransform: 'uppercase' }}>{c.k}</p>
+              <p style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', fontWeight: 800, color: "var(--corp-text, #fff)", margin: '0.3rem 0 0.1rem', letterSpacing: '-0.02em' }}>{c.v}</p>
+              <p style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: 0 }}>{c.j}</p>
             </div>
           ))}
         </motion.div>
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.82rem', color: TEXT_MUTED, textAlign: 'center', margin: '1.4rem auto 0', maxWidth: 640, lineHeight: 1.8 }}>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", textAlign: 'center', margin: '1.4rem auto 0', maxWidth: 640, lineHeight: 1.8 }}>
           上記は前提を置いた試算例です。実際の投資規模は、貴社の現状データに基づく CORE ROAI SCORE の診断結果から算出します。
         </p>
       </Block>
@@ -153,10 +153,10 @@ export default function ReturnOnAiPage({ onAnchor }: { onAnchor: AnchorHandler }
         <div className="ro-loop">
           {TRANSFORMATION_LOOP.map((s, i) => (
             <motion.div key={s.en} {...reveal} className="ro-loop-step">
-              <span style={{ fontFamily: FONT_EN, fontSize: '0.68rem', letterSpacing: '0.2em', color: ACCENT, fontWeight: 700 }}>0{i + 1}</span>
-              <h3 style={{ fontFamily: FONT_EN, fontSize: '1.05rem', fontWeight: 800, color: PAPER, margin: '0.3rem 0 0' }}>{s.en}</h3>
-              <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', fontWeight: 700, color: '#fff', margin: '0.1rem 0 0.4rem' }}>{s.ja}</p>
-              <p style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: TEXT_BODY, lineHeight: 1.8, margin: 0 }}>{s.body}</p>
+              <span style={{ fontFamily: FONT_EN, fontSize: '0.68rem', letterSpacing: '0.2em', color: "var(--corp-accent, #38BDF8)", fontWeight: 700 }}>0{i + 1}</span>
+              <h3 style={{ fontFamily: FONT_EN, fontSize: '1.05rem', fontWeight: 800, color: "var(--corp-text, #F3F6FB)", margin: '0.3rem 0 0' }}>{s.en}</h3>
+              <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', fontWeight: 700, color: "var(--corp-text, #fff)", margin: '0.1rem 0 0.4rem' }}>{s.ja}</p>
+              <p style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.8, margin: 0 }}>{s.body}</p>
             </motion.div>
           ))}
         </div>
@@ -167,10 +167,10 @@ export default function ReturnOnAiPage({ onAnchor }: { onAnchor: AnchorHandler }
         lead="Business Goal → Baseline → KPI → ROAI Simulation → Redesign → Build → Deploy → Measure → Optimize → Scale。COREのすべての案件はこの順で進みます。">
         <motion.ol {...reveal} className="ro-measure" style={{ fontFamily: FONT_JA }}>
           {['経営目標を決める', 'ベースライン（今の時間・コスト・売上・リスク）を測る', 'KPI と目標 ROAI を置く', 'ROAI をシミュレーションする', '業務と組織を再設計する', '最適な技術で作る', '現場に導入する', '同じ KPI で After を測る', '改善する', '効いたものを広げる'].map((s, i) => (
-            <li key={s}><span style={{ fontFamily: FONT_EN, color: ACCENT }}>{String(i + 1).padStart(2, '0')}</span>{s}</li>
+            <li key={s}><span style={{ fontFamily: FONT_EN, color: "var(--corp-accent, #38BDF8)" }}>{String(i + 1).padStart(2, '0')}</span>{s}</li>
           ))}
         </motion.ol>
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.84rem', color: TEXT_MUTED, margin: '1.6rem 0 0', lineHeight: 1.8, maxWidth: 720 }}>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.84rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '1.6rem 0 0', lineHeight: 1.8, maxWidth: 720 }}>
           Technology follows Strategy. 最適ならOpenAI、Claude、Gemini、オープンソース。AIエージェントが不要なら使わない。自動化で十分ならAIすら使わない。
           COREは技術を売る会社ではなく、経営成果のために最適な技術を選ぶ会社です。
         </p>
@@ -180,14 +180,14 @@ export default function ReturnOnAiPage({ onAnchor }: { onAnchor: AnchorHandler }
       <section className="ch-band" aria-labelledby="roai-cta-h">
         <div className="ch-band-shade" aria-hidden />
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 760, margin: '0 auto' }}>
-          <p style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.3em', color: ACCENT_LIGHT, fontWeight: 600, marginBottom: '1rem' }}>MEASURE YOUR RETURN ON AI</p>
+          <p style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.3em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 600, marginBottom: '1rem' }}>MEASURE YOUR RETURN ON AI</p>
           <h2 id="roai-cta-h" style={{ ...sectionH2, fontSize: 'clamp(2rem, 4.4vw, 3.2rem)' }}>AI投資の前に、<br />Returnを測る。</h2>
           <p style={{ ...sectionLead, margin: '0 auto 2rem' }}>約2分で、あなたの会社のAI投資優先順位と潜在的な経済価値を診断します。</p>
           <div className="ch-cta-row" style={{ justifyContent: 'center' }}>
             <ScoreCta onAnchor={onAnchor} where="roai-final" label="CORE ROAI SCOREを受ける" />
             <a href="#contact" onClick={e => onAnchor(e, '#contact')} style={ctaGhost}>ROAI戦略相談を申し込む</a>
           </div>
-          <p style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: TEXT_MUTED, marginTop: '1.4rem', borderTop: `1px solid ${LINE}`, paddingTop: '1rem', display: 'inline-block' }}>
+          <p style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", marginTop: '1.4rem', borderTop: `1px solid ${LINE}`, paddingTop: '1rem', display: 'inline-block' }}>
             CORE ROAI SCORE・CORE ROAI MODEL は株式会社COREの独自名称です。
           </p>
         </div>

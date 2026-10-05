@@ -11,6 +11,7 @@
 //   自社プロダクト8つは、開発・運用の実体を示すものとして〈製品〉タブへ移した。
 // ============================================================
 import { useEffect, useState, useRef, type ReactNode, type MouseEvent as ReactMouseEvent } from 'react';
+import './corpLight.css';
 import { motion } from 'framer-motion';
 import LegalModal, { type LegalKind } from '../components/LegalModal';
 import { Mail as MailIcon } from 'lucide-react';
@@ -412,7 +413,7 @@ export default function CoreSite() {
 
     // theme-color (金×黒テーマ)
     const themeMeta = document.querySelector('meta[name="theme-color"]');
-    if (themeMeta) themeMeta.setAttribute('content', '#070A10');
+    if (themeMeta) themeMeta.setAttribute('content', '#FFFFFF');
 
     // favicon を CORE 専用に
     const links = document.querySelectorAll('link[rel="icon"], link[rel="apple-touch-icon"]');
@@ -432,10 +433,10 @@ export default function CoreSite() {
   }, []);
 
   return (
-    <div
+    <div className="corp-light"
       style={{
-        background: '#070A10',
-        color: '#F3F6FB',
+        background: "var(--corp-surface, #070A10)",
+        color: "var(--corp-text, #F3F6FB)",
         minHeight: '100dvh',
         fontFamily: FONT_SANS,
         // 修正 (オーナー報告 2026-05-27 / 28):
@@ -458,10 +459,10 @@ export default function CoreSite() {
           position: 'sticky',
           top: 0,
           zIndex: 50,
-          background: 'rgba(5,5,5,0.78)',
+          background: "rgba(var(--corp-surface-rgb, 5,5,5), 0.78)",
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          borderBottom: '1px solid rgba(125,211,252,0.22)',
+          borderBottom: "1px solid var(--corp-line, rgba(125,211,252,0.22))",
         }}
       >
         <div
@@ -498,7 +499,7 @@ export default function CoreSite() {
                     fontSize: 10,
                     fontWeight: 600,
                     letterSpacing: '0.3em',
-                    color: 'rgba(224,242,254,0.58)',
+                    color: "var(--corp-muted, rgba(224,242,254,0.58))",
                     lineHeight: 1,
                   }}
                 >
@@ -511,8 +512,8 @@ export default function CoreSite() {
                     fontSize: 22.32,
                     fontWeight: 700,
                     letterSpacing: '0.42em',
-                    color: '#E0F2FE',
-                    background: 'linear-gradient(135deg, #FFFFFF, #BAE6FD, #38BDF8)',
+                    color: "var(--corp-text, #E0F2FE)",
+                    background: "linear-gradient(135deg, var(--corp-surface-raised, #FFFFFF), #BAE6FD, #38BDF8)",
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     lineHeight: 1,
@@ -682,7 +683,7 @@ export default function CoreSite() {
         className="lp-section-pad"
         style={{
           padding: '7rem 1.5rem',
-          background: 'radial-gradient(130% 90% at 50% 0%, #0C1119 0%, #070A10 68%)',
+          background: "radial-gradient(130% 90% at 50% 0%, var(--corp-surface-soft, #0C1119) 0%, var(--corp-surface, #070A10) 68%)",
           textAlign: 'center',
           position: 'relative',
           overflow: 'hidden',
@@ -712,7 +713,7 @@ export default function CoreSite() {
             <br />
             <span
               style={{
-                background: 'linear-gradient(110deg,#FFFFFF,#BAE6FD 55%,#7DD3FC)',
+                background: "linear-gradient(110deg,var(--corp-surface-raised, #FFFFFF),#BAE6FD 55%,#7DD3FC)",
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 fontWeight: 900,
@@ -726,7 +727,7 @@ export default function CoreSite() {
             style={{
               fontFamily: FONT_SERIF_JA,
               fontSize: 'clamp(0.98rem, 1.45vw, 1.12rem)',
-              color: 'rgba(226,232,240,0.78)',
+              color: "var(--corp-body, rgba(226,232,240,0.78))",
               lineHeight: 2.2,
               maxWidth: 760,
               margin: '0 auto 2.5rem',
@@ -739,7 +740,7 @@ export default function CoreSite() {
             <br />
             集客、接客、顧客対応、経営判断、実行、そして経営者の健康管理まで。
             <br />
-            <strong style={{ color: '#F3F6FB', fontWeight: 700 }}>会社の部門が、そのまま{SUITE_COUNT_KANJI}つ揃う</strong>という構成です。
+            <strong style={{ color: "var(--corp-text, #F3F6FB)", fontWeight: 700 }}>会社の部門が、そのまま{SUITE_COUNT_KANJI}つ揃う</strong>という構成です。
             <br />
             残るのは、経営者にしかできない判断だけになります。
           </p>
@@ -776,7 +777,7 @@ export default function CoreSite() {
         className="lp-section-pad"
         style={{
           padding: '7rem 1.5rem',
-          background: '#080B11',
+          background: "var(--corp-surface, #080B11)",
         }}
       >
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
@@ -800,7 +801,7 @@ export default function CoreSite() {
             <p
               style={{
                 fontFamily: FONT_SERIF_JA,
-                color: 'rgba(226,232,240,0.7)',
+                color: "var(--corp-body, rgba(226,232,240,0.7))",
                 fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)',
                 maxWidth: 700,
                 margin: '0 auto',
@@ -808,7 +809,7 @@ export default function CoreSite() {
                 fontWeight: 400,
               }}
             >
-              経営の司令塔 <strong style={{ color: '#F3F6FB', fontWeight: 600 }}>Prism</strong> に、
+              経営の司令塔 <strong style={{ color: "var(--corp-text, #F3F6FB)", fontWeight: 600 }}>Prism</strong> に、
               Instagram・LINE・リンクの三つの SNS ツールがつながる。
               <br />
               あなたの仕事も SNS も、ひとつの AI エージェントの流れで動きます。
@@ -845,13 +846,13 @@ export default function CoreSite() {
               margin: '2.5rem 0',
               padding: 'clamp(1.8rem, 4vw, 3rem) clamp(1.4rem, 4vw, 3rem)',
               borderRadius: 26,
-              border: '1px solid rgba(201,162,75,0.45)',
+              border: "1px solid var(--corp-line, rgba(201,162,75,0.45))",
               background:
-                'radial-gradient(120% 140% at 85% 0%, rgba(59,52,94,0.55) 0%, rgba(10,13,20,0.96) 55%), #0a0d14',
+                "radial-gradient(120% 140% at 85% 0%, rgba(59,52,94,0.55) 0%, rgba(var(--corp-surface-rgb, 10,13,20), 0.96) 55%), var(--corp-surface-soft, #0a0d14)",
               position: 'relative',
               overflow: 'hidden',
               textDecoration: 'none',
-              color: '#F3F6FB',
+              color: "var(--corp-text, #F3F6FB)",
             }}
           >
             {/* Universe マーク（オーナー提供画像 2026-08-03。素材: ~/Desktop/00-CORE/Universe/logo/universe-mark-v6-transparent.png）
@@ -910,7 +911,7 @@ export default function CoreSite() {
                 <br />
                 一枚で見渡せます。
               </h3>
-              <p style={{ fontFamily: FONT_SERIF_JA, color: 'rgba(226,232,240,0.75)', fontSize: '0.95rem', lineHeight: 2, marginBottom: '1.4rem' }}>
+              <p style={{ fontFamily: FONT_SERIF_JA, color: "var(--corp-body, rgba(226,232,240,0.75))", fontSize: '0.95rem', lineHeight: 2, marginBottom: '1.4rem' }}>
                 30の業務を「人がやる → AIが下書きする → 自動で回す」の3段階で整理した一覧図（宇宙図）です。
                 どの業務から着手すべきかを、登録不要・無料でご確認いただけます。COREの各サービスは、この図のいずれかを担当しています。
               </p>
@@ -918,7 +919,7 @@ export default function CoreSite() {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 8,
                   minHeight: 48, padding: '0 1.6rem', borderRadius: 999,
-                  border: '1px solid rgba(201,162,75,0.6)', color: '#E8CF9A',
+                  border: "1px solid var(--corp-line, rgba(201,162,75,0.6))", color: '#E8CF9A',
                   fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.06em',
                 }}
               >
@@ -1064,8 +1065,8 @@ export default function CoreSite() {
               textAlign: 'center',
               gap: '0.9rem',
               padding: 'clamp(2.2rem, 4vw, 3.2rem) clamp(1.4rem, 4vw, 3rem)',
-              background: '#FFFFFF',
-              border: '1px solid rgba(168,130,60,0.4)',
+              background: "var(--corp-surface-raised, #FFFFFF)",
+              border: "1px solid var(--corp-line, rgba(168,130,60,0.4))",
               borderRadius: 24,
               textDecoration: 'none',
               transition: 'transform 0.2s cubic-bezier(.4,0,.2,1), box-shadow 0.2s ease',
@@ -1090,7 +1091,7 @@ export default function CoreSite() {
                 fontWeight: 700,
                 lineHeight: 1.6,
                 letterSpacing: '0.04em',
-                color: '#111827',
+                color: "var(--corp-text, #111827)",
               }}
             >
               成果から逆算する、
@@ -1116,8 +1117,8 @@ export default function CoreSite() {
                 marginTop: '0.4rem',
                 padding: '0 1.9rem',
                 borderRadius: 6,
-                background: '#111827',
-                color: '#FFFFFF',
+                background: "var(--corp-surface-soft, #111827)",
+                color: "var(--corp-text, #FFFFFF)",
                 fontFamily: FONT_SANS,
                 fontSize: '0.88rem',
                 fontWeight: 700,
@@ -1148,13 +1149,13 @@ export default function CoreSite() {
       <section
         id="screens"
         className="lp-section-pad"
-        style={{ padding: '7rem 1.5rem', background: 'linear-gradient(180deg, #0A0D14, #12100a 55%, #0A0D14)', color: '#F3F6FB' }}
+        style={{ padding: '7rem 1.5rem', background: "linear-gradient(180deg, var(--corp-surface-soft, #0A0D14), var(--corp-surface, #12100a) 55%, var(--corp-surface-soft, #0A0D14))", color: "var(--corp-text, #F3F6FB)" }}
       >
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <p style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', letterSpacing: '0.35em', textTransform: 'uppercase', color: '#C9A24B', fontSize: '0.8rem', margin: 0 }}>Real Screens</p>
             <h2 style={{ fontSize: 'clamp(1.6rem, 3.6vw, 2.4rem)', fontWeight: 600, letterSpacing: '0.04em', margin: '0.6rem 0 0.4rem' }}>稼働中の画面を、ご覧ください。</h2>
-            <p style={{ color: 'rgba(226,232,240,0.68)', fontSize: '0.92rem', lineHeight: 2, maxWidth: 560, margin: '0 auto' }}>
+            <p style={{ color: "var(--corp-muted, rgba(226,232,240,0.68))", fontSize: '0.92rem', lineHeight: 2, maxWidth: 560, margin: '0 auto' }}>
               モックアップではなく、いま本番で動いている画面。<br />気になった一枚から、そのまま触れられます。
             </p>
           </div>
@@ -1177,8 +1178,8 @@ export default function CoreSite() {
                 rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}
                 style={{
                   display: 'block', textDecoration: 'none', color: 'inherit',
-                  border: '1px solid rgba(201,162,75,0.25)', borderRadius: 16, overflow: 'hidden',
-                  background: '#0b0a07',
+                  border: "1px solid var(--corp-line, rgba(201,162,75,0.25))", borderRadius: 16, overflow: 'hidden',
+                  background: "var(--corp-surface, #0b0a07)",
                   transition: 'transform 0.2s cubic-bezier(.22,1,.36,1), box-shadow 0.2s, border-color 0.2s',
                 }}
                 onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.borderColor = '#C9A24B'; e.currentTarget.style.boxShadow = '0 26px 56px -26px rgba(0,0,0,.85)'; }}
@@ -1187,11 +1188,11 @@ export default function CoreSite() {
                 <div style={{ aspectRatio: '4 / 5', overflow: 'hidden' }}>
                   <img src={s.img} alt={s.name + ' の実際の画面'} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
                 </div>
-                <div style={{ padding: '0.8rem 0.9rem 0.95rem', borderTop: '1px solid rgba(201,162,75,0.2)' }}>
+                <div style={{ padding: '0.8rem 0.9rem 0.95rem', borderTop: "1px solid var(--corp-line, rgba(201,162,75,0.2))" }}>
                   <div style={{ fontFamily: '"Inter", sans-serif', fontSize: '0.85rem', letterSpacing: '0.12em', color: '#E9CD8A' }}>{s.name}</div>
                   {/* ↗ は「別タブで開く」の印。サイト内へ飛ぶ Prism / Iris には付けない（1137行の
                       v.external ? '見にいく ↗' : '詳しく見る →' と同じルールに揃える）。 */}
-                  <div style={{ fontSize: '0.74rem', color: 'rgba(226,232,240,0.62)', marginTop: 2 }}>{s.cap} {s.url.startsWith('http') ? '↗' : '→'}</div>
+                  <div style={{ fontSize: '0.74rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", marginTop: 2 }}>{s.cap} {s.url.startsWith('http') ? '↗' : '→'}</div>
                 </div>
               </a>
             ))}
@@ -1207,7 +1208,7 @@ export default function CoreSite() {
       <section
         id="platform"
         className="lp-section-pad"
-        style={{ padding: '7rem 1.5rem', background: 'linear-gradient(180deg,#080B11 0%,#070A10 100%)' }}
+        style={{ padding: '7rem 1.5rem', background: "linear-gradient(180deg,var(--corp-surface, #080B11) 0%,var(--corp-surface, #070A10) 100%)" }}
       >
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
@@ -1218,7 +1219,7 @@ export default function CoreSite() {
             <h2 style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.85rem, 3.8vw, 2.85rem)', fontWeight: 700, lineHeight: 1.5, marginBottom: '1.25rem', letterSpacing: '0.04em' }}>
               小さく始めて、大きく育てる。
             </h2>
-            <p style={{ fontFamily: FONT_SERIF_JA, color: 'rgba(226,232,240,0.7)', fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)', maxWidth: 680, margin: '0 auto', lineHeight: 2 }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, color: "var(--corp-body, rgba(226,232,240,0.7))", fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)', maxWidth: 680, margin: '0 auto', lineHeight: 2 }}>
               どのプロダクトも、月々数千円から。事業が育ったら、そのまま上位プランへ。
               <br />
               {SUITE_COUNT_KANJI}つすべてが、ひとつの CORE でつながっています。
@@ -1238,7 +1239,7 @@ export default function CoreSite() {
                   background: p.featured ? 'linear-gradient(160deg, rgba(125,211,252,0.14), rgba(125,211,252,0.02))' : 'rgba(255,255,255,0.03)',
                   border: p.featured ? '1px solid rgba(125,211,252,0.55)' : '1px solid rgba(125,211,252,0.22)',
                   boxShadow: p.featured ? '0 24px 60px -30px rgba(125,211,252,0.45)' : 'none',
-                  color: '#F3F6FB', position: 'relative',
+                  color: "var(--corp-text, #F3F6FB)", position: 'relative',
                 }}
               >
                 <span style={{ fontFamily: FONT_SANS, fontSize: '0.62rem', letterSpacing: '0.18em', fontWeight: 700, color: p.featured ? '#BAE6FD' : 'rgba(226,232,240,0.5)' }}>{p.step}</span>
@@ -1255,14 +1256,14 @@ export default function CoreSite() {
                     <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.62rem', letterSpacing: '0.22em', color: p.accent, textTransform: 'uppercase', marginTop: 3 }}>{p.role}</span>
                   </span>
                 </span>
-                <span style={{ fontFamily: FONT_SANS, fontSize: '0.82rem', color: 'rgba(226,232,240,0.65)', lineHeight: 1.85, minHeight: '3em', marginTop: '0.3rem' }}>{p.copy}</span>
+                <span style={{ fontFamily: FONT_SANS, fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.65))", lineHeight: 1.85, minHeight: '3em', marginTop: '0.3rem' }}>{p.copy}</span>
                 <span style={{
-                  marginTop: 'auto', paddingTop: '0.9rem', borderTop: '1px solid rgba(125,211,252,0.2)',
+                  marginTop: 'auto', paddingTop: '0.9rem', borderTop: "1px solid var(--corp-line, rgba(125,211,252,0.2))",
                   display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '0.6rem',
                 }}>
                   <span style={{ fontFamily: FONT_SANS, fontWeight: 700, fontSize: '1.26rem', color: p.featured ? '#BAE6FD' : '#F3F6FB', fontVariantNumeric: 'tabular-nums' }}>
                     {p.price}
-                    <small style={{ fontSize: '0.72rem', fontWeight: 400, color: 'rgba(226,232,240,0.6)', marginLeft: 6 }}>{p.priceNote}</small>
+                    <small style={{ fontSize: '0.72rem', fontWeight: 400, color: "var(--corp-muted, rgba(226,232,240,0.6))", marginLeft: 6 }}>{p.priceNote}</small>
                   </span>
                   <span style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', fontWeight: 600, color: p.accent, whiteSpace: 'nowrap' }}>詳しく →</span>
                 </span>
@@ -1271,7 +1272,7 @@ export default function CoreSite() {
           </div>
           {/* 2026-08-02: 0.48=4.27:1 で AA(4.5:1) に届いていなかった。料金の但し書きは
               いちばん読まれないと困る文。0.60=6.2:1 に上げる（薄さの序列は 0.56<0.58<0.60 で維持）。 */}
-          <p style={{ textAlign: 'center', marginTop: '1.6rem', fontFamily: FONT_SANS, fontSize: '0.74rem', color: 'rgba(226,232,240,0.60)', lineHeight: 1.9 }}>
+          <p style={{ textAlign: 'center', marginTop: '1.6rem', fontFamily: FONT_SANS, fontSize: '0.74rem', color: "var(--corp-muted, rgba(226,232,240,0.60))", lineHeight: 1.9 }}>
             ※ 価格は税込・月額の入口プランです。詳細は各プロダクトのページでご確認ください。
           </p>
         </div>
@@ -1286,7 +1287,7 @@ export default function CoreSite() {
       <section
         id="vertical"
         className="lp-section-pad"
-        style={{ padding: '7rem 1.5rem', background: 'radial-gradient(120% 100% at 50% 0%, #0C1119 0%, #070A10 68%)', scrollMarginTop: 70 }}
+        style={{ padding: '7rem 1.5rem', background: "radial-gradient(120% 100% at 50% 0%, var(--corp-surface-soft, #0C1119) 0%, var(--corp-surface, #070A10) 68%)", scrollMarginTop: 70 }}
       >
         <div style={{ maxWidth: 1080, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -1297,7 +1298,7 @@ export default function CoreSite() {
             <h2 style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.85rem, 3.8vw, 2.85rem)', fontWeight: 700, lineHeight: 1.5, marginBottom: '1.25rem', letterSpacing: '0.04em' }}>
               あなたの業界の、AI。
             </h2>
-            <p style={{ fontFamily: FONT_SERIF_JA, color: 'rgba(226,232,240,0.7)', fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)', maxWidth: 680, margin: '0 auto 2rem', lineHeight: 2 }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, color: "var(--corp-body, rgba(226,232,240,0.7))", fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)', maxWidth: 680, margin: '0 auto 2rem', lineHeight: 2 }}>
               どの業界でも使える道具とは別に、ひとつの業界の仕事そのものを引き受けるAIを作っています。
               <br />
               その業界の言葉で話し、その業界の書類を作り、その業界の法令の中で動きます。
@@ -1345,7 +1346,7 @@ export default function CoreSite() {
                   rel={v.external ? 'noopener' : undefined}
                   className="lp-tap-link"
                   style={{
-                    display: 'flex', flexDirection: 'column', gap: '0.55rem', textDecoration: 'none', color: '#F3F6FB',
+                    display: 'flex', flexDirection: 'column', gap: '0.55rem', textDecoration: 'none', color: "var(--corp-text, #F3F6FB)",
                     padding: 0, borderRadius: 18, overflow: 'hidden', scrollMarginTop: 84,
                     background: `linear-gradient(165deg, ${v.accent}1C, rgba(255,255,255,0.02))`,
                     border: `1px solid ${v.accent}4D`,
@@ -1381,15 +1382,15 @@ export default function CoreSite() {
                     </span>
                     {/* 2026-08-02: 0.45=3.87:1 で AA 落第。10.9px しかない業種名が
                         いちばん薄いのは逆＝小さい字ほど濃くする。0.58=5.9:1。 */}
-                    <span style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', color: 'rgba(226,232,240,0.58)', letterSpacing: '0.05em', marginTop: '0.5rem' }}>{v.industry}</span>
+                    <span style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', color: "var(--corp-muted, rgba(226,232,240,0.58))", letterSpacing: '0.05em', marginTop: '0.5rem' }}>{v.industry}</span>
                     <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '1.02rem', fontWeight: 700, lineHeight: 1.65 }}>{v.tagline}</span>
-                    <span style={{ fontFamily: FONT_SANS, fontSize: '0.81rem', color: 'rgba(226,232,240,0.65)', lineHeight: 1.9 }}>{v.body}</span>
+                    <span style={{ fontFamily: FONT_SANS, fontSize: '0.81rem', color: "var(--corp-muted, rgba(226,232,240,0.65))", lineHeight: 1.9 }}>{v.body}</span>
                     <span style={{
                       marginTop: 'auto', paddingTop: '1rem', borderTop: `1px solid ${v.accent}33`,
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.6rem', flexWrap: 'wrap',
                     }}>
                       {/* 同上。「本番稼働中 / デモ公開中」は買う前にいちばん確かめたい一行。 */}
-                      <span style={{ fontFamily: FONT_SANS, fontSize: '0.7rem', color: 'rgba(226,232,240,0.58)' }}>{v.status}</span>
+                      <span style={{ fontFamily: FONT_SANS, fontSize: '0.7rem', color: "var(--corp-muted, rgba(226,232,240,0.58))" }}>{v.status}</span>
                       <span style={{ fontFamily: FONT_SANS, fontSize: '0.78rem', fontWeight: 700, color: v.accent, whiteSpace: 'nowrap' }}>
                         {v.external ? '見にいく ↗' : '詳しく見る →'}
                       </span>
@@ -1407,7 +1408,7 @@ export default function CoreSite() {
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minHeight: 48,
                 padding: '0 26px', borderRadius: 999, textDecoration: 'none',
                 fontFamily: FONT_SANS, fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.05em',
-                color: '#EEF2F7', border: '1px solid rgba(125,211,252,0.55)', background: 'rgba(125,211,252,0.08)',
+                color: "var(--corp-text, #EEF2F7)", border: "1px solid var(--corp-line, rgba(125,211,252,0.55))", background: 'rgba(125,211,252,0.08)',
               }}
             >
               業界特化ラインを見る →
@@ -1424,7 +1425,7 @@ export default function CoreSite() {
       <section
         id="who"
         className="lp-section-pad"
-        style={{ padding: '7rem 1.5rem', background: 'linear-gradient(180deg,#080B11 0%,#070A10 100%)' }}
+        style={{ padding: '7rem 1.5rem', background: "linear-gradient(180deg,var(--corp-surface, #080B11) 0%,var(--corp-surface, #070A10) 100%)" }}
       >
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3.75rem' }}>
@@ -1439,7 +1440,7 @@ export default function CoreSite() {
               組み合わせ方は、あなた次第。
             </h2>
             <p style={{
-              fontFamily: FONT_SERIF_JA, color: 'rgba(226,232,240,0.7)',
+              fontFamily: FONT_SERIF_JA, color: "var(--corp-body, rgba(226,232,240,0.7))",
               fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)', maxWidth: 660, margin: '0 auto', lineHeight: 2,
             }}>
               四つは、ひとつずつでも、すべて一緒でも。
@@ -1500,7 +1501,7 @@ export default function CoreSite() {
         className="lp-section-pad"
         style={{
           padding: '7rem 1.5rem',
-          background: 'radial-gradient(120% 80% at 50% 20%, #0c0a05 0%, #070A10 70%)',
+          background: "radial-gradient(120% 80% at 50% 20%, var(--corp-surface, #0c0a05) 0%, var(--corp-surface, #070A10) 70%)",
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -1529,7 +1530,7 @@ export default function CoreSite() {
             <p style={{
               fontFamily: FONT_SERIF_EN,
               fontSize: 'clamp(0.85rem, 1.3vw, 1rem)',
-              color: 'rgba(226,232,240,0.52)',
+              color: "var(--corp-muted, rgba(226,232,240,0.52))",
               fontStyle: 'italic',
               letterSpacing: '0.08em',
               marginTop: '0.85rem',
@@ -1604,7 +1605,7 @@ export default function CoreSite() {
                 }}>
                   <span style={{
                     width: 8, height: 8, borderRadius: '50%',
-                    background: '#fff',
+                    background: "var(--corp-surface-raised, #fff)",
                     boxShadow: `0 0 8px ${m.accent}`,
                   }} />
                 </div>
@@ -1623,7 +1624,7 @@ export default function CoreSite() {
                     fontFamily: FONT_SERIF_JA,
                     fontSize: 'clamp(1.15rem, 1.85vw, 1.4rem)',
                     fontWeight: 700,
-                    color: '#F3F6FB',
+                    color: "var(--corp-text, #F3F6FB)",
                     marginBottom: '0.6rem',
                     letterSpacing: '0.04em',
                   }}>
@@ -1632,7 +1633,7 @@ export default function CoreSite() {
                   <p style={{
                     fontFamily: FONT_SERIF_JA,
                     fontSize: 'clamp(0.9rem, 1.3vw, 1rem)',
-                    color: 'rgba(226,232,240,0.7)',
+                    color: "var(--corp-body, rgba(226,232,240,0.7))",
                     lineHeight: 1.95,
                     margin: 0,
                   }}>
@@ -1657,7 +1658,7 @@ export default function CoreSite() {
         className="lp-section-pad"
         style={{
           padding: '7rem 1.5rem',
-          background: '#070A10',
+          background: "var(--corp-surface, #070A10)",
         }}
       >
         <div style={{ maxWidth: 920, margin: '0 auto' }}>
@@ -1688,9 +1689,9 @@ export default function CoreSite() {
               justifyContent: 'center',
               marginBottom: '3.5rem',
               padding: '2.5rem',
-              border: '1px solid rgba(125,211,252,0.24)',
+              border: "1px solid var(--corp-line, rgba(125,211,252,0.24))",
               borderRadius: 16,
-              background: 'rgba(255,255,255,0.025)',
+              background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.025)",
             }}
           >
             <picture>
@@ -1720,7 +1721,7 @@ export default function CoreSite() {
                   fontSize: '0.78rem',
                   letterSpacing: '0.18em',
                   textTransform: 'uppercase',
-                  color: 'rgba(226,232,240,0.6)',
+                  color: "var(--corp-muted, rgba(226,232,240,0.6))",
                   marginBottom: '0.6rem',
                 }}
               >
@@ -1733,7 +1734,7 @@ export default function CoreSite() {
                   fontWeight: 700,
                   letterSpacing: '0.04em',
                   marginBottom: '0.2rem',
-                  color: '#F3F6FB',
+                  color: "var(--corp-text, #F3F6FB)",
                 }}
               >
                 井出 直毅
@@ -1742,7 +1743,7 @@ export default function CoreSite() {
                 style={{
                   fontFamily: FONT_SERIF_EN,
                   fontSize: '1rem',
-                  color: 'rgba(226,232,240,0.75)',
+                  color: "var(--corp-body, rgba(226,232,240,0.75))",
                   letterSpacing: '0.06em',
                   marginBottom: '1.25rem',
                 }}
@@ -1753,7 +1754,7 @@ export default function CoreSite() {
                 style={{
                   fontFamily: FONT_SERIF_EN,
                   fontSize: '0.95rem',
-                  color: 'rgba(226,232,240,0.7)',
+                  color: "var(--corp-body, rgba(226,232,240,0.7))",
                   lineHeight: 1.7,
                   fontStyle: 'italic',
                 }}
@@ -1774,10 +1775,10 @@ export default function CoreSite() {
               display: 'grid',
               gridTemplateColumns: '1fr',
               gap: 0,
-              border: '1px solid rgba(125,211,252,0.24)',
+              border: "1px solid var(--corp-line, rgba(125,211,252,0.24))",
               borderRadius: 14,
               overflow: 'hidden',
-              background: 'rgba(255,255,255,0.025)',
+              background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.025)",
             }}
           >
             <InfoRow label="会社名"     subLabel="Company"      value={COMPANY.nameJa}  subValue={COMPANY.nameEn} />
@@ -1792,13 +1793,13 @@ export default function CoreSite() {
           {/* 現在の提供状況について（feedback_lp_selling_structure §8 と同型。各サービスのFAQ/約款で
               既に開示済みの事実のみを転記し、法人サイト側にも同じ開示を横展開する。新規の数字・約束は作らない） */}
           <div style={{ marginTop: '3.5rem' }}>
-            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.28em', color: '#7DD3FC', textTransform: 'uppercase', marginBottom: '0.8rem', textAlign: 'center' }}>
+            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.28em', color: "var(--corp-accent, #7DD3FC)", textTransform: 'uppercase', marginBottom: '0.8rem', textAlign: 'center' }}>
               Current Status
             </p>
             <h3 style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.25rem, 2.3vw, 1.6rem)', fontWeight: 700, textAlign: 'center', marginBottom: '0.8rem', letterSpacing: '0.03em' }}>
               現在の提供状況について
             </h3>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: 'rgba(226,232,240,0.68)', lineHeight: 1.9, textAlign: 'center', maxWidth: 620, margin: '0 auto 2.2rem' }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: "var(--corp-muted, rgba(226,232,240,0.68))", lineHeight: 1.9, textAlign: 'center', maxWidth: 620, margin: '0 auto 2.2rem' }}>
               各サービスを正しくご検討いただけるよう、現在対応が完了していない点も含めて開示します。
             </p>
             <div style={{ display: 'grid', gap: '0.9rem' }}>
@@ -1808,9 +1809,9 @@ export default function CoreSite() {
                 { t: '導入実績・効果数値は、公開できる段階のもののみ記載しています', d: '「導入◯◯社」「効果◯◯%」といった数字は、実績として公開できる段階に至るまでは記載しません。公開可能になり次第、各サービスのページに掲載します。' },
                 { t: '一部の管理機能は開発中です', d: '例えば Prism では、アプリ内での領収書発行画面が現時点では未実装です。必要な方はメールにてご連絡いただければ個別に対応します。' },
               ].map((c) => (
-                <div key={c.t} style={{ padding: '1.4rem 1.6rem', borderRadius: 14, border: '1px solid rgba(125,211,252,0.24)', background: 'rgba(255,255,255,0.025)' }}>
-                  <p style={{ fontFamily: FONT_SERIF_JA, fontWeight: 600, fontSize: '0.95rem', color: '#F3F6FB', lineHeight: 1.8, marginBottom: '0.5rem' }}>{c.t}</p>
-                  <p style={{ fontFamily: FONT_SANS, fontSize: '0.82rem', color: 'rgba(226,232,240,0.62)', lineHeight: 1.9 }}>{c.d}</p>
+                <div key={c.t} style={{ padding: '1.4rem 1.6rem', borderRadius: 14, border: "1px solid var(--corp-line, rgba(125,211,252,0.24))", background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.025)" }}>
+                  <p style={{ fontFamily: FONT_SERIF_JA, fontWeight: 600, fontSize: '0.95rem', color: "var(--corp-text, #F3F6FB)", lineHeight: 1.8, marginBottom: '0.5rem' }}>{c.t}</p>
+                  <p style={{ fontFamily: FONT_SANS, fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", lineHeight: 1.9 }}>{c.d}</p>
                 </div>
               ))}
             </div>
@@ -1826,25 +1827,25 @@ export default function CoreSite() {
       <section
         id="executive"
         className="lp-section-pad"
-        style={{ padding: '7rem 1.5rem', background: '#070A10' }}
+        style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)" }}
       >
         <div
           style={{
             maxWidth: 1080, margin: '0 auto', position: 'relative', overflow: 'hidden',
             borderRadius: 24, padding: 'clamp(2.4rem, 5vw, 4.2rem)',
             /* 白ベース化でも、この演奏ショーケースは金×黒の高級タイルとして暗いまま残す(白ページ上のアクセント) */
-            background: 'radial-gradient(140% 120% at 85% -20%, #121B2B 0%, #080B11 60%)',
-            border: '1px solid rgba(125,211,252,0.5)',
+            background: "radial-gradient(140% 120% at 85% -20%, var(--corp-surface-soft, #121B2B) 0%, var(--corp-surface, #080B11) 60%)",
+            border: "1px solid var(--corp-line, rgba(125,211,252,0.5))",
             boxShadow: '0 40px 90px -40px rgba(125,211,252,0.55), inset 0 0 80px rgba(125,211,252,0.05)',
           }}
         >
-          <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.74rem', letterSpacing: '0.3em', color: '#7DD3FC', textTransform: 'uppercase', marginBottom: '1.2rem' }}>
+          <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.74rem', letterSpacing: '0.3em', color: "var(--corp-accent, #7DD3FC)", textTransform: 'uppercase', marginBottom: '1.2rem' }}>
             Executive Well-being Package
           </p>
           <h2
             style={{
               fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.6rem, 3.4vw, 2.5rem)', fontWeight: 700, lineHeight: 1.7, letterSpacing: '0.04em',
-              background: 'linear-gradient(120deg, #FFFFFF, #7DD3FC)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent',
+              background: "linear-gradient(120deg, var(--corp-surface-raised, #FFFFFF), #7DD3FC)", WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent',
               marginBottom: '1.2rem',
             }}
           >
@@ -1852,10 +1853,10 @@ export default function CoreSite() {
             <br />
             音楽が組織を潤す。
           </h2>
-          <p style={{ fontFamily: FONT_SERIF_JA, color: 'rgba(255,255,255,0.68)', fontSize: 'clamp(0.92rem, 1.4vw, 1.02rem)', lineHeight: 2.1, maxWidth: 640 }}>
+          <p style={{ fontFamily: FONT_SERIF_JA, color: "var(--corp-muted, rgba(255,255,255,0.68))", fontSize: 'clamp(0.92rem, 1.4vw, 1.02rem)', lineHeight: 2.1, maxWidth: 640 }}>
             CORE の上位プランをご契約の企業さまだけにご案内する、招待制の最上位パッケージ。
             代表・井出直毅は、チェリスト
-            <strong style={{ color: '#BAE6FD', fontWeight: 600 }}> GAUCHE </strong>
+            <strong style={{ color: "var(--corp-accent, #BAE6FD)", fontWeight: 600 }}> GAUCHE </strong>
             としても活動しています。その演奏とレッスンを、御社の福利厚生とブランディングにご活用いただけます。
           </p>
           <div className="lp-exec-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', margin: '2.2rem 0 2.4rem' }}>
@@ -1864,17 +1865,17 @@ export default function CoreSite() {
               { t: 'チェロスクール法人契約（福利厚生）', d: '従業員は GAUCHE Cello School の受け放題レッスンへ。楽器は無料貸与、手ぶらで始められます。' },
               { t: '経営層向け Executive Private 優先枠', d: '役員・経営層のための完全1対1レッスン。多忙な予定に合わせるフルフレックス制。' },
             ].map(f => (
-              <div key={f.t} style={{ padding: '1.3rem 1.2rem', borderRadius: 14, background: 'rgba(125,211,252,0.05)', border: '1px solid rgba(125,211,252,0.22)' }}>
-                <p style={{ fontFamily: FONT_SERIF_JA, fontWeight: 600, fontSize: '0.95rem', color: '#EEF2F7', lineHeight: 1.8, marginBottom: '0.5rem' }}>{f.t}</p>
-                <p style={{ fontFamily: FONT_SANS, fontSize: '0.8rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.9 }}>{f.d}</p>
+              <div key={f.t} style={{ padding: '1.3rem 1.2rem', borderRadius: 14, background: 'rgba(125,211,252,0.05)', border: "1px solid var(--corp-line, rgba(125,211,252,0.22))" }}>
+                <p style={{ fontFamily: FONT_SERIF_JA, fontWeight: 600, fontSize: '0.95rem', color: "var(--corp-text, #EEF2F7)", lineHeight: 1.8, marginBottom: '0.5rem' }}>{f.t}</p>
+                <p style={{ fontFamily: FONT_SANS, fontSize: '0.8rem', color: "var(--corp-muted, rgba(255,255,255,0.55))", lineHeight: 1.9 }}>{f.d}</p>
               </div>
             ))}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1.2rem', justifyContent: 'space-between' }}>
-            <p style={{ fontFamily: FONT_SERIF_EN, fontSize: '1.3rem', letterSpacing: '0.14em', color: '#BAE6FD' }}>
+            <p style={{ fontFamily: FONT_SERIF_EN, fontSize: '1.3rem', letterSpacing: '0.14em', color: "var(--corp-accent, #BAE6FD)" }}>
               By Invitation
               {/* 2026-07-31 巡回: 0.45(4.43:1) は 0.72rem の字送り広めの文だとさらに読みにくい。0.62 に。 */}
-              <span style={{ display: 'block', fontFamily: FONT_SANS, fontSize: '0.72rem', letterSpacing: '0.06em', color: 'rgba(255,255,255,0.62)', marginTop: 4 }}>
+              <span style={{ display: 'block', fontFamily: FONT_SANS, fontSize: '0.72rem', letterSpacing: '0.06em', color: "var(--corp-muted, rgba(255,255,255,0.62))", marginTop: 4 }}>
                 上位プラン契約企業さま限定 ・ 完全個別お見積り
               </span>
             </p>
@@ -1884,7 +1885,7 @@ export default function CoreSite() {
                 className="lp-tap-link"
                 style={{
                   fontFamily: FONT_SANS, fontSize: '0.88rem', fontWeight: 700, padding: '0.95rem 1.9rem', borderRadius: 999,
-                  background: 'linear-gradient(135deg, #BAE6FD, #7DD3FC)', color: '#0B1220', textDecoration: 'none',
+                  background: 'linear-gradient(135deg, #BAE6FD, #7DD3FC)', color: "var(--corp-text, #0B1220)", textDecoration: 'none',
                 }}
               >
                 導入の相談をする
@@ -1896,7 +1897,7 @@ export default function CoreSite() {
                 className="lp-tap-link"
                 style={{
                   fontFamily: FONT_SANS, fontSize: '0.88rem', fontWeight: 600, padding: '0.95rem 1.9rem', borderRadius: 999,
-                  border: '1px solid rgba(125,211,252,0.5)', color: '#BAE6FD', textDecoration: 'none',
+                  border: "1px solid var(--corp-line, rgba(125,211,252,0.5))", color: "var(--corp-accent, #BAE6FD)", textDecoration: 'none',
                 }}
               >
                 GAUCHE の演奏を見る ↗
@@ -1919,7 +1920,7 @@ export default function CoreSite() {
       <ContactSection>
         {/* フォームが合わない用件（取材・採用）のための、従来どおりのメール窓口 */}
         <div style={{ marginTop: '3.5rem', textAlign: 'center' }}>
-          <p style={{ fontSize: '0.82rem', color: 'rgba(226,232,240,0.52)', letterSpacing: '0.18em', marginBottom: '1.1rem', fontFamily: FONT_SERIF_EN, textTransform: 'uppercase' }}>
+          <p style={{ fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.52))", letterSpacing: '0.18em', marginBottom: '1.1rem', fontFamily: FONT_SERIF_EN, textTransform: 'uppercase' }}>
             Other
           </p>
           <div
@@ -1940,8 +1941,8 @@ export default function CoreSite() {
                   alignItems: 'center',
                   gap: '0.5rem',
                   padding: '1.5rem 1.25rem',
-                  background: 'rgba(255,255,255,0.035)',
-                  border: '1px solid rgba(125,211,252,0.24)',
+                  background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.035)",
+                  border: "1px solid var(--corp-line, rgba(125,211,252,0.24))",
                   borderRadius: 14,
                   textDecoration: 'none',
                   color: 'inherit',
@@ -1959,14 +1960,14 @@ export default function CoreSite() {
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                <span style={{ fontFamily: FONT_SERIF_JA, fontWeight: 600, fontSize: '0.95rem', color: '#F3F6FB', letterSpacing: '0.02em' }}>{c.label}</span>
-                <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.78rem', color: 'rgba(226,232,240,0.6)', lineHeight: 1.6 }}>{c.desc}</span>
+                <span style={{ fontFamily: FONT_SERIF_JA, fontWeight: 600, fontSize: '0.95rem', color: "var(--corp-text, #F3F6FB)", letterSpacing: '0.02em' }}>{c.label}</span>
+                <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.6))", lineHeight: 1.6 }}>{c.desc}</span>
               </a>
             ))}
           </div>
 
           {/* 直接連絡 */}
-          <p style={{ fontSize: '0.82rem', color: 'rgba(226,232,240,0.52)', letterSpacing: '0.18em', marginBottom: '0.85rem', fontFamily: FONT_SERIF_EN, textTransform: 'uppercase' }}>
+          <p style={{ fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.52))", letterSpacing: '0.18em', marginBottom: '0.85rem', fontFamily: FONT_SERIF_EN, textTransform: 'uppercase' }}>
             Direct
           </p>
           <a
@@ -1987,15 +1988,15 @@ export default function CoreSite() {
           {/* メールを書く前に、ほとんどの人が確かめたいのは
               「誰がやっているのか」「いくらか」「やめられるか」の 3 つ。
               リンクの文言でそれが分かるようにする（2026-07-31） */}
-          <p style={{ fontSize: '0.78rem', color: 'rgba(226,232,240,0.60)', marginTop: '1.25rem', fontFamily: FONT_SERIF_JA, lineHeight: 1.8 }}>
+          <p style={{ fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.60))", marginTop: '1.25rem', fontFamily: FONT_SERIF_JA, lineHeight: 1.8 }}>
             {/* 文中のリンクなので面は広げられないが、上下に余白を持たせて指で狙える
                 高さ（実測 18px → 44px）にする。行の高さは変わらない。 */}
-            <a href="/faq" style={{ color: '#BAE6FD', textDecoration: 'underline', textUnderlineOffset: 3, display: 'inline-block', padding: '13px 4px' }}>よくある質問</a>
+            <a href="/faq" style={{ color: "var(--corp-accent, #BAE6FD)", textDecoration: 'underline', textUnderlineOffset: 3, display: 'inline-block', padding: '13px 4px' }}>よくある質問</a>
             {' '}に、誰が作っているか・料金・解約・データの扱いをまとめています。
           </p>
           {/* 2026-08-03: 「動いているのか」を確かめる場所を、問い合わせる前に置く */}
-          <p style={{ fontSize: '0.78rem', color: 'rgba(226,232,240,0.60)', marginTop: '0.6rem', fontFamily: FONT_SERIF_JA, lineHeight: 1.8 }}>
-            <a href="/status" style={{ color: '#BAE6FD', textDecoration: 'underline', textUnderlineOffset: 3, display: 'inline-block', padding: '13px 4px' }}>いまの稼働状況</a>
+          <p style={{ fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.60))", marginTop: '0.6rem', fontFamily: FONT_SERIF_JA, lineHeight: 1.8 }}>
+            <a href="/status" style={{ color: "var(--corp-accent, #BAE6FD)", textDecoration: 'underline', textUnderlineOffset: 3, display: 'inline-block', padding: '13px 4px' }}>いまの稼働状況</a>
             {' '}では、7つのサービスがこの瞬間ひらけるかを実際に測って出しています。
           </p>
         </div>
@@ -2007,9 +2008,9 @@ export default function CoreSite() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       <footer
         style={{
-          background: '#070A10',
+          background: "var(--corp-surface, #070A10)",
           padding: '3.5rem 1.5rem 2.5rem',
-          borderTop: '1px solid rgba(125,211,252,0.14)',
+          borderTop: "1px solid var(--corp-line, rgba(125,211,252,0.14))",
         }}
       >
         <div
@@ -2038,8 +2039,8 @@ export default function CoreSite() {
                   fontSize: 19.84,
                   fontWeight: 700,
                   letterSpacing: '0.42em',
-                  color: '#E0F2FE',
-                  background: 'linear-gradient(135deg, #FFFFFF, #BAE6FD, #38BDF8)',
+                  color: "var(--corp-text, #E0F2FE)",
+                  background: "linear-gradient(135deg, var(--corp-surface-raised, #FFFFFF), #BAE6FD, #38BDF8)",
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   lineHeight: 1,
@@ -2052,7 +2053,7 @@ export default function CoreSite() {
               style={{
                 fontFamily: FONT_SERIF_JA,
                 fontSize: '0.78rem',
-                color: 'rgba(226,232,240,0.52)',
+                color: "var(--corp-muted, rgba(226,232,240,0.52))",
                 lineHeight: 1.9,
                 marginTop: '0.85rem',
               }}
@@ -2096,7 +2097,7 @@ export default function CoreSite() {
             <p
               style={{
                 fontSize: '0.72rem',
-                color: 'rgba(125,211,252,0.85)',
+                color: "var(--corp-accent, rgba(125,211,252,0.85))",
                 lineHeight: 1.8,
                 marginTop: '0.5rem',
                 fontFamily: FONT_SERIF_JA,
@@ -2134,13 +2135,13 @@ export default function CoreSite() {
         </div>
         <div
           style={{
-            borderTop: '1px solid rgba(125,211,252,0.14)',
+            borderTop: "1px solid var(--corp-line, rgba(125,211,252,0.14))",
             paddingTop: '1.75rem',
             textAlign: 'center',
             fontSize: '0.7rem',
             /* 2026-08-02: 0.4=3.26:1。11.2px で会社名・運営責任者を名乗る行が
                ページ中いちばん読みにくかった（法務表記は読めることが要件）。0.56=5.5:1。 */
-            color: 'rgba(226,232,240,0.56)',
+            color: "var(--corp-muted, rgba(226,232,240,0.56))",
             fontFamily: FONT_DISPLAY,
             letterSpacing: '0.25em',
           }}
@@ -2232,8 +2233,8 @@ function FeatureProduct({
         position: 'relative',
         marginBottom: '2rem',
         padding: 'clamp(2rem, 4vw, 3.5rem)',
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.012))',
-        border: '1px solid rgba(125,211,252,0.2)',
+        background: "linear-gradient(180deg, rgba(var(--corp-tint-rgb, 255,255,255), 0.04), rgba(var(--corp-tint-rgb, 255,255,255), 0.012))",
+        border: "1px solid var(--corp-line, rgba(125,211,252,0.2))",
         borderRadius: 24,
         overflow: 'hidden',
         display: 'flex',
@@ -2330,7 +2331,7 @@ function FeatureProduct({
         <p
           style={{
             fontSize: '0.7rem',
-            color: 'rgba(226,232,240,0.55)',
+            color: "var(--corp-muted, rgba(226,232,240,0.55))",
             letterSpacing: '0.2em',
             marginTop: 4,
             fontFamily: FONT_SERIF_EN,
@@ -2380,7 +2381,7 @@ function FeatureProduct({
           style={{
             fontFamily: FONT_SERIF_EN,
             fontSize: '0.9rem',
-            color: 'rgba(226,232,240,0.52)',
+            color: "var(--corp-muted, rgba(226,232,240,0.52))",
             fontStyle: 'italic',
             letterSpacing: '0.1em',
             marginBottom: '1.5rem',
@@ -2393,7 +2394,7 @@ function FeatureProduct({
           style={{
             fontFamily: FONT_SERIF_JA,
             fontSize: 'clamp(0.92rem, 1.4vw, 1rem)',
-            color: 'rgba(226,232,240,0.78)',
+            color: "var(--corp-body, rgba(226,232,240,0.78))",
             lineHeight: 2.1,
             marginBottom: '1.5rem',
             fontWeight: 400,
@@ -2412,7 +2413,7 @@ function FeatureProduct({
                 gap: '0.6rem',
                 fontFamily: FONT_SERIF_JA,
                 fontSize: '0.92rem',
-                color: 'rgba(226,232,240,0.78)',
+                color: "var(--corp-body, rgba(226,232,240,0.78))",
                 lineHeight: 1.9,
                 marginBottom: '0.5rem',
               }}
@@ -2497,7 +2498,7 @@ function InfoRow({
             fontFamily: FONT_SERIF_JA,
             fontSize: '0.85rem',
             fontWeight: 700,
-            color: 'rgba(226,232,240,0.92)',
+            color: "var(--corp-body, rgba(226,232,240,0.92))",
             letterSpacing: '0.08em',
           }}
         >
@@ -2508,7 +2509,7 @@ function InfoRow({
             fontFamily: FONT_DISPLAY,
             fontSize: '0.65rem',
             letterSpacing: '0.25em',
-            color: 'rgba(125,211,252,0.85)',
+            color: "var(--corp-accent, rgba(125,211,252,0.85))",
             marginTop: 4,
             fontWeight: 600,
           }}
@@ -2517,7 +2518,7 @@ function InfoRow({
         </p>
       </div>
       <div>
-        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.95rem', color: '#F3F6FB', lineHeight: 1.7, fontWeight: 500 }}>
+        <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.95rem', color: "var(--corp-text, #F3F6FB)", lineHeight: 1.7, fontWeight: 500 }}>
           {value}
         </p>
         {subValue && (
@@ -2525,7 +2526,7 @@ function InfoRow({
             style={{
               fontFamily: FONT_SERIF_EN,
               fontSize: '0.78rem',
-              color: 'rgba(226,232,240,0.52)',
+              color: "var(--corp-muted, rgba(226,232,240,0.52))",
               marginTop: 4,
               lineHeight: 1.6,
               fontStyle: 'italic',
@@ -2588,7 +2589,7 @@ function SatCard({ m, size = 44 }: { m: SuiteMember; size?: number }) {
       backdropFilter: 'blur(6px)',
     }}>
       <s.Logo size={size} withWordmark={false} />
-      <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '0.82rem', color: '#F3F6FB', fontWeight: 600, fontStyle: 'italic' }}>{s.name}</span>
+      <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '0.82rem', color: "var(--corp-text, #F3F6FB)", fontWeight: 600, fontStyle: 'italic' }}>{s.name}</span>
       {/* 部署名 = 製品名を知らない人が最初に読む一行。ここを薄くすると図の意味が消える。
           折り返し禁止: 2行になるとカードが伸びて六角の場からはみ出す（上の SAT_RADIUS の注記）。
           くわしい部署名（「集客 ─ Instagram」）は、図の下の一覧で読める。 */}
@@ -2605,13 +2606,13 @@ function PrismCard({ size = 58 }: { size?: number }) {
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
       padding: '1.15rem 1.25rem 1rem', width: 144,
-      background: 'radial-gradient(circle at 50% 32%, rgba(167,139,250,0.3), #0c0a07)',
-      border: '1px solid rgba(167,139,250,0.6)', borderRadius: 22,
+      background: "radial-gradient(circle at 50% 32%, rgba(167,139,250,0.3), var(--corp-surface, #0c0a07))",
+      border: "1px solid var(--corp-line, rgba(167,139,250,0.6))", borderRadius: 22,
       boxShadow: '0 0 52px rgba(167,139,250,0.42), inset 0 0 26px rgba(167,139,250,0.14)',
     }}>
       <PrismLogo size={size} withWordmark={false} />
-      <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.58rem', letterSpacing: '0.3em', color: 'rgba(226,232,240,0.6)', fontWeight: 700 }}>{s.name.toUpperCase()}</span>
-      <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.72rem', color: '#F3F6FB', fontWeight: 700, letterSpacing: '0.06em', textAlign: 'center', lineHeight: 1.5 }}>
+      <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.58rem', letterSpacing: '0.3em', color: "var(--corp-muted, rgba(226,232,240,0.6))", fontWeight: 700 }}>{s.name.toUpperCase()}</span>
+      <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.72rem', color: "var(--corp-text, #F3F6FB)", fontWeight: 700, letterSpacing: '0.06em', textAlign: 'center', lineHeight: 1.5 }}>
         経営
         <br />
         7人の参謀
@@ -2635,20 +2636,20 @@ function SuiteRoleChain() {
           <div style={{
             display: 'flex', flexDirection: 'column', gap: 4, textAlign: 'center',
             padding: '0.7rem 0.9rem', borderRadius: 14, width: 168, maxWidth: '100%',
-            background: 'rgba(125,211,252,0.07)', border: '1px solid rgba(125,211,252,0.28)',
+            background: 'rgba(125,211,252,0.07)', border: "1px solid var(--corp-line, rgba(125,211,252,0.28))",
           }}>
-            <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.54rem', letterSpacing: '0.24em', color: 'rgba(186,230,253,0.8)', fontWeight: 700 }}>
+            <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.54rem', letterSpacing: '0.24em', color: "var(--corp-accent, rgba(186,230,253,0.8))", fontWeight: 700 }}>
               {r.en}
             </span>
-            <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.98rem', fontWeight: 700, color: '#F3F6FB', letterSpacing: '0.08em' }}>
+            <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.98rem', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", letterSpacing: '0.08em' }}>
               {r.ja}
             </span>
-            <span style={{ fontFamily: FONT_SANS, fontSize: '0.68rem', color: 'rgba(226,232,240,0.62)', lineHeight: 1.7 }}>
+            <span style={{ fontFamily: FONT_SANS, fontSize: '0.68rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", lineHeight: 1.7 }}>
               {r.desc}
             </span>
           </div>
           {i < SUITE_ROLES.length - 1 && (
-            <span aria-hidden style={{ alignSelf: 'center', color: 'rgba(125,211,252,0.55)', fontSize: '0.9rem' }}>→</span>
+            <span aria-hidden style={{ alignSelf: 'center', color: "var(--corp-accent, rgba(125,211,252,0.55))", fontSize: '0.9rem' }}>→</span>
           )}
         </div>
       ))}
@@ -2709,16 +2710,16 @@ function ConnectedSuite() {
         <div style={{
           position: 'absolute', top: 0, left: '50%', transform: 'translate(-50%, -50%)', zIndex: 4,
           display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0.42rem 0.95rem', borderRadius: 999,
-          background: 'rgba(6,18,16,0.88)', border: `1px solid ${GUILD_TEAL}88`,
+          background: "rgba(var(--corp-surface-rgb, 6,18,16), 0.88)", border: `1px solid ${GUILD_TEAL}88`,
           boxShadow: `0 0 24px ${GUILD_TEAL}55`, backdropFilter: 'blur(6px)', whiteSpace: 'nowrap',
         }}>
           <GuildLogo size={20} withWordmark={false} />
-          <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.62rem', letterSpacing: '0.34em', color: '#7ef0dd', fontWeight: 700, paddingLeft: '0.34em' }}>GUILD</span>
+          <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.62rem', letterSpacing: '0.34em', color: "var(--corp-accent, #7ef0dd)", fontWeight: 700, paddingLeft: '0.34em' }}>GUILD</span>
         </div>
         {/* 場の意味（下端中央） */}
         <div style={{
           position: 'absolute', bottom: '-1.7rem', left: '50%', transform: 'translateX(-50%)', zIndex: 4,
-          fontFamily: FONT_SERIF_JA, fontSize: '0.74rem', color: 'rgba(126,240,221,0.82)', letterSpacing: '0.06em', whiteSpace: 'nowrap',
+          fontFamily: FONT_SERIF_JA, fontSize: '0.74rem', color: "var(--corp-accent, rgba(126,240,221,0.82))", letterSpacing: '0.06em', whiteSpace: 'nowrap',
         }}>
           実行 ─ 貢献で動く、ひとつの場〈Guild〉
         </div>
@@ -2749,10 +2750,10 @@ function ConnectedSuite() {
           <div style={{
             position: 'absolute', top: 0, left: '50%', transform: 'translate(-50%, -50%)',
             display: 'inline-flex', alignItems: 'center', gap: 6, padding: '0.32rem 0.82rem', borderRadius: 999,
-            background: '#06120f', border: `1px solid ${GUILD_TEAL}88`, boxShadow: `0 0 18px ${GUILD_TEAL}44`, whiteSpace: 'nowrap',
+            background: "var(--corp-surface, #06120f)", border: `1px solid ${GUILD_TEAL}88`, boxShadow: `0 0 18px ${GUILD_TEAL}44`, whiteSpace: 'nowrap',
           }}>
             <GuildLogo size={16} withWordmark={false} />
-            <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.56rem', letterSpacing: '0.3em', color: '#7ef0dd', fontWeight: 700, paddingLeft: '0.3em' }}>GUILD</span>
+            <span style={{ fontFamily: FONT_DISPLAY, fontSize: '0.56rem', letterSpacing: '0.3em', color: "var(--corp-accent, #7ef0dd)", fontWeight: 700, paddingLeft: '0.3em' }}>GUILD</span>
           </div>
 
           <PrismCard size={50} />
@@ -2767,14 +2768,14 @@ function ConnectedSuite() {
                   border: `1px solid ${s.accent}55`, borderRadius: 16 }}>
                   <s.Logo size={36} withWordmark={false} />
                   <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '1rem', color: '#F3F6FB', fontWeight: 600, fontStyle: 'italic' }}>{s.name}</span>
+                    <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '1rem', color: "var(--corp-text, #F3F6FB)", fontWeight: 600, fontStyle: 'italic' }}>{s.name}</span>
                     <span style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.7rem', color: s.accent, fontWeight: 700, letterSpacing: '0.04em' }}>{m.dept}</span>
                   </span>
                 </div>
               );
             })}
           </div>
-          <div style={{ marginTop: '1rem', fontFamily: FONT_SERIF_JA, fontSize: '0.72rem', color: 'rgba(126,240,221,0.82)', letterSpacing: '0.04em', textAlign: 'center', lineHeight: 1.8 }}>
+          <div style={{ marginTop: '1rem', fontFamily: FONT_SERIF_JA, fontSize: '0.72rem', color: "var(--corp-accent, rgba(126,240,221,0.82))", letterSpacing: '0.04em', textAlign: 'center', lineHeight: 1.8 }}>
             実行 ─ 貢献で動く、ひとつの場〈Guild〉
           </div>
         </div>
@@ -2789,9 +2790,9 @@ function ConnectedSuite() {
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.85rem', flexWrap: 'wrap',
           maxWidth: 620, margin: '3.4rem auto 0', minHeight: 56, padding: '0.9rem 1.4rem',
-          borderRadius: 18, textDecoration: 'none', color: '#F3F6FB',
-          background: 'radial-gradient(120% 160% at 50% 0%, rgba(59,52,94,0.5), rgba(10,13,20,0.9))',
-          border: '1px solid rgba(201,162,75,0.42)',
+          borderRadius: 18, textDecoration: 'none', color: "var(--corp-text, #F3F6FB)",
+          background: "radial-gradient(120% 160% at 50% 0%, rgba(59,52,94,0.5), rgba(var(--corp-surface-rgb, 10,13,20), 0.9))",
+          border: "1px solid var(--corp-line, rgba(201,162,75,0.42))",
         }}
       >
         <img src="/universe-mark.png" alt="" aria-hidden style={{ width: 34, height: 34, flexShrink: 0, opacity: 0.92 }} />
@@ -2834,7 +2835,7 @@ function SuiteRoster() {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <span style={{ display: 'inline-flex', flexShrink: 0 }}><s.Logo size={26} withWordmark={false} /></span>
-              <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '1.02rem', fontStyle: 'italic', fontWeight: 600, color: '#F3F6FB' }}>{s.name}</span>
+              <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '1.02rem', fontStyle: 'italic', fontWeight: 600, color: "var(--corp-text, #F3F6FB)" }}>{s.name}</span>
               <span style={{
                 marginLeft: 'auto', flexShrink: 0,
                 fontFamily: FONT_SANS, fontSize: '0.64rem', fontWeight: 800, letterSpacing: '0.08em',
@@ -2848,7 +2849,7 @@ function SuiteRoster() {
             <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.8rem', fontWeight: 700, color: s.accent, letterSpacing: '0.04em', margin: 0 }}>
               {m.dept}
             </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.84rem', color: 'rgba(226,232,240,0.76)', lineHeight: 1.95, margin: 0 }}>
+            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.84rem', color: "var(--corp-body, rgba(226,232,240,0.76))", lineHeight: 1.95, margin: 0 }}>
               {m.line}
             </p>
           </div>
@@ -2870,25 +2871,25 @@ function SuitePackage({ onAnchor }: { onAnchor: (e: ReactMouseEvent<HTMLAnchorEl
         maxWidth: 960, margin: '4.5rem auto 0', padding: 'clamp(1.9rem, 4vw, 3rem) clamp(1.3rem, 4vw, 2.6rem)',
         borderRadius: 26, textAlign: 'center',
         background: 'linear-gradient(165deg, rgba(125,211,252,0.15), rgba(125,211,252,0.03) 72%)',
-        border: '1px solid rgba(125,211,252,0.55)',
+        border: "1px solid var(--corp-line, rgba(125,211,252,0.55))",
         boxShadow: '0 34px 90px -46px rgba(125,211,252,0.6)',
       }}
     >
-      <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.7rem', letterSpacing: '0.34em', color: '#7DD3FC', textTransform: 'uppercase', marginBottom: '1rem' }}>
+      <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.7rem', letterSpacing: '0.34em', color: "var(--corp-accent, #7DD3FC)", textTransform: 'uppercase', marginBottom: '1rem' }}>
         CORE Continuum
       </p>
       <h3 style={{
         fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.4rem, 3.2vw, 2.15rem)', fontWeight: 700,
-        lineHeight: 1.6, letterSpacing: '0.04em', color: '#F3F6FB', marginBottom: '1.1rem',
+        lineHeight: 1.6, letterSpacing: '0.04em', color: "var(--corp-text, #F3F6FB)", marginBottom: '1.1rem',
       }}>
         この{SUITE_COUNT_KANJI}つを、ひとつの契約で。
       </h3>
       <p style={{
         fontFamily: FONT_SERIF_JA, fontSize: 'clamp(0.92rem, 1.4vw, 1.02rem)',
-        color: 'rgba(226,232,240,0.78)', lineHeight: 2.1, maxWidth: 640, margin: '0 auto 2rem',
+        color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2.1, maxWidth: 640, margin: '0 auto 2rem',
       }}>
         単品でそろえると、おすすめプランの合計で
-        {' '}<strong style={{ color: '#BAE6FD', fontWeight: 700 }}>月 {formatYen(SUITE_BEST_TOTAL)}</strong>。
+        {' '}<strong style={{ color: "var(--corp-accent, #BAE6FD)", fontWeight: 700 }}>月 {formatYen(SUITE_BEST_TOTAL)}</strong>。
         <br />
         Continuum なら、ひとつのアカウントで、ひとつの請求で使えます。
       </p>
@@ -2904,12 +2905,12 @@ function SuitePackage({ onAnchor }: { onAnchor: (e: ReactMouseEvent<HTMLAnchorEl
             background: pl.featured ? 'rgba(125,211,252,0.16)' : 'rgba(255,255,255,0.04)',
             border: pl.featured ? '1px solid rgba(125,211,252,0.6)' : '1px solid rgba(255,255,255,0.12)',
           }}>
-            <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '0.92rem', letterSpacing: '0.08em', color: '#EEF2F7' }}>{pl.name}</span>
+            <span style={{ fontFamily: FONT_SERIF_EN, fontSize: '0.92rem', letterSpacing: '0.08em', color: "var(--corp-text, #EEF2F7)" }}>{pl.name}</span>
             <span style={{ fontFamily: FONT_SANS, fontVariantNumeric: 'tabular-nums', fontSize: '1.24rem', fontWeight: 800, color: pl.featured ? '#BAE6FD' : '#F4F7FC' }}>
               {pl.price}
-              <span style={{ fontSize: '0.66rem', fontWeight: 600, color: 'rgba(255,255,255,0.55)', marginLeft: 5 }}>/ 月（税込）</span>
+              <span style={{ fontSize: '0.66rem', fontWeight: 600, color: "var(--corp-muted, rgba(255,255,255,0.55))", marginLeft: 5 }}>/ 月（税込）</span>
             </span>
-            <span style={{ fontFamily: FONT_SANS, fontSize: '0.68rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7 }}>{pl.tag}</span>
+            <span style={{ fontFamily: FONT_SANS, fontSize: '0.68rem', color: "var(--corp-muted, rgba(255,255,255,0.6))", lineHeight: 1.7 }}>{pl.tag}</span>
           </div>
         ))}
       </div>
@@ -2921,7 +2922,7 @@ function SuitePackage({ onAnchor }: { onAnchor: (e: ReactMouseEvent<HTMLAnchorEl
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minHeight: 50,
             padding: '0 28px', borderRadius: 999, textDecoration: 'none',
             fontFamily: FONT_SANS, fontSize: '0.88rem', fontWeight: 800, letterSpacing: '0.04em',
-            background: 'linear-gradient(90deg,#BAE6FD,#7DD3FC)', color: '#141414',
+            background: 'linear-gradient(90deg,#BAE6FD,#7DD3FC)', color: "var(--corp-text, #141414)",
           }}
         >
           Continuum の世界を見る →
@@ -2934,14 +2935,14 @@ function SuitePackage({ onAnchor }: { onAnchor: (e: ReactMouseEvent<HTMLAnchorEl
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minHeight: 50,
             padding: '0 26px', borderRadius: 999, textDecoration: 'none',
             fontFamily: FONT_SANS, fontSize: '0.86rem', fontWeight: 800, letterSpacing: '0.04em',
-            color: '#EEF2F7', border: '1px solid rgba(125,211,252,0.55)', background: 'rgba(125,211,252,0.08)',
+            color: "var(--corp-text, #EEF2F7)", border: "1px solid var(--corp-line, rgba(125,211,252,0.55))", background: 'rgba(125,211,252,0.08)',
           }}
         >
           プランと料金を見る
         </a>
       </div>
 
-      <p style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', color: 'rgba(255,255,255,0.62)', lineHeight: 2, marginTop: '1.5rem' }}>
+      <p style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', color: "var(--corp-muted, rgba(255,255,255,0.62))", lineHeight: 2, marginTop: '1.5rem' }}>
         Pulse は先行モニター中のため無料（正式版 ¥2,980/月 の予定）で、上の合計には入れていません。
         <br />
         いつでも解約できます。
@@ -2979,25 +2980,25 @@ function UseCaseCard({ persona, headline, body, tools, lead }: {
       </span>
       <h3 style={{
         fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.25rem, 2vw, 1.5rem)', fontWeight: 700,
-        color: '#F3F6FB', letterSpacing: '0.03em', lineHeight: 1.5, margin: 0,
+        color: "var(--corp-text, #F3F6FB)", letterSpacing: '0.03em', lineHeight: 1.5, margin: 0,
       }}>
         {headline}
       </h3>
       <p style={{
-        fontFamily: FONT_SERIF_JA, fontSize: '0.92rem', color: 'rgba(226,232,240,0.72)',
+        fontFamily: FONT_SERIF_JA, fontSize: '0.92rem', color: "var(--corp-body, rgba(226,232,240,0.72))",
         lineHeight: 2, margin: 0, flex: 1,
       }}>
         {body}
       </p>
-      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', borderTop: '1px solid rgba(125,211,252,0.2)', paddingTop: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', borderTop: "1px solid var(--corp-line, rgba(125,211,252,0.2))", paddingTop: '1rem' }}>
         {tools.map((t, i) => (
           <span key={i} style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-            fontFamily: FONT_SERIF_EN, fontSize: '0.8rem', fontStyle: 'italic', fontWeight: 600, color: '#F3F6FB',
+            fontFamily: FONT_SERIF_EN, fontSize: '0.8rem', fontStyle: 'italic', fontWeight: 600, color: "var(--corp-text, #F3F6FB)",
           }}>
             <span style={{ width: 7, height: 7, borderRadius: '50%', background: t.c, boxShadow: `0 0 7px ${t.c}` }} />
             {t.t}
-            {i < tools.length - 1 && <span style={{ color: 'rgba(226,232,240,0.56)', marginLeft: '0.3rem', fontStyle: 'normal' }}>＋</span>}
+            {i < tools.length - 1 && <span style={{ color: "var(--corp-muted, rgba(226,232,240,0.56))", marginLeft: '0.3rem', fontStyle: 'normal' }}>＋</span>}
           </span>
         ))}
       </div>
@@ -3012,14 +3013,14 @@ const footHead: React.CSSProperties = {
   fontFamily: FONT_DISPLAY,
   fontSize: '0.7rem',
   letterSpacing: '0.3em',
-  color: 'rgba(226,232,240,0.55)',
+  color: "var(--corp-muted, rgba(226,232,240,0.55))",
   marginBottom: '0.85rem',
   fontWeight: 700,
 };
 const footLink: React.CSSProperties = {
   display: 'block',
   fontFamily: FONT_SERIF_JA,
-  color: 'rgba(226,232,240,0.7)',
+  color: "var(--corp-body, rgba(226,232,240,0.7))",
   fontSize: '0.85rem',
   textDecoration: 'none',
   marginBottom: '0.5rem',

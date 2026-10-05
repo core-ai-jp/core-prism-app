@@ -9,7 +9,7 @@
 //   ・送信結果は API の応答を見てから表示する（「届きました」を先に言わない）。
 // ============================================================
 import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type FormEvent } from 'react';
-import { FONT_JA, FONT_EN, ACCENT, ACCENT_LIGHT, PAPER, TEXT_BODY, TEXT_MUTED, LINE, INK, ctaHero, ctaGhost } from '../corpTheme';
+import { FONT_JA, FONT_EN, ACCENT, ACCENT_LIGHT, TEXT_MUTED, LINE, ctaHero, ctaGhost } from '../corpTheme';
 import { activeQuestions, findOption, CATEGORY_LABEL, INDUSTRY_LABEL, type Question } from './schema';
 import { computeRoai, formatRangeYen, formatYen, formatHours, showsDailyStep, ASSUMPTIONS, type RoaiResult, type Basis } from './engine';
 import { RETURN_BY_KEY, RETURNS } from './model';
@@ -53,7 +53,7 @@ export default function RoaiScore({ onAnchor }: { onAnchor: AnchorHandler }) {
   const restart = () => { track('roai_restart'); clearSession(); persist(newSession('restart')); setPhase('start'); window.scrollTo({ top: 0, behavior: 'auto' }); };
 
   return (
-    <div className="rs-page" style={{ background: INK, minHeight: '70vh' }}>
+    <div className="rs-page" style={{ background: "var(--corp-surface, #070A10)", minHeight: '70vh' }}>
       {phase === 'start' && <StartScreen onStart={() => start(false)} onResume={hasProgress ? () => start(true) : undefined} answered={Object.keys(session.answers).length} />}
       {phase === 'quiz' && (
         <Quiz
@@ -72,11 +72,11 @@ export default function RoaiScore({ onAnchor }: { onAnchor: AnchorHandler }) {
 function StartScreen({ onStart, onResume, answered }: { onStart: () => void; onResume?: () => void; answered: number }) {
   return (
     <section className="rs-shell rs-start lp-safe" aria-labelledby="rs-start-h">
-      <p style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.3em', color: ACCENT_LIGHT, fontWeight: 700, margin: '0 0 1rem' }}>CORE ROAI SCORE</p>
+      <p style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.3em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 700, margin: '0 0 1rem' }}>CORE ROAI SCORE</p>
       <h1 id="rs-start-h" className="rs-h1" style={{ fontFamily: FONT_JA }}>
         あなたの会社の、<br />次にAI投資すべき場所はどこか。
       </h1>
-      <p style={{ fontFamily: FONT_JA, fontSize: '1rem', lineHeight: 1.95, color: TEXT_BODY, margin: '1.2rem 0 1.6rem' }}>
+      <p style={{ fontFamily: FONT_JA, fontSize: '1rem', lineHeight: 1.95, color: "var(--corp-body, rgba(226,232,240,0.78))", margin: '1.2rem 0 1.6rem' }}>
         約2分・選択式の診断で、次を可視化します。すべての数字は入力と公開された仮定から計算し、根拠を開いて確かめられます。
       </p>
       <ul className="ro-outputs" style={{ fontFamily: FONT_JA }}>
@@ -92,7 +92,7 @@ function StartScreen({ onStart, onResume, answered }: { onStart: () => void; onR
           {onResume ? '最初からやり直す' : '無料でROAIを診断する'}
         </button>
       </div>
-      <p style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: TEXT_MUTED, lineHeight: 1.8, margin: '1.4rem 0 0' }}>
+      <p style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", lineHeight: 1.8, margin: '1.4rem 0 0' }}>
         連絡先の入力は不要です。結果を見たあとで、詳細レポートや相談を希望する場合にだけお聞きします。
         回答はお使いの端末に保存され、送信するまでCOREには届きません。
       </p>
@@ -151,11 +151,11 @@ function Quiz({ session, saveFailed, onChange, onComplete }: { session: RoaiSess
         <span style={{ width: `${pct}%` }} />
       </div>
       <div className="rs-quiz-meta">
-        <span style={{ fontFamily: FONT_EN, color: ACCENT_LIGHT, letterSpacing: '0.24em', fontSize: '0.66rem', fontWeight: 700 }}>{cat.en}</span>
-        <span style={{ fontFamily: FONT_JA, color: TEXT_MUTED, fontSize: '0.76rem' }}>{cat.ja} ・ {idx + 1} / {questions.length}</span>
+        <span style={{ fontFamily: FONT_EN, color: "var(--corp-accent, #7DD3FC)", letterSpacing: '0.24em', fontSize: '0.66rem', fontWeight: 700 }}>{cat.en}</span>
+        <span style={{ fontFamily: FONT_JA, color: "var(--corp-muted, rgba(226,232,240,0.62))", fontSize: '0.76rem' }}>{cat.ja} ・ {idx + 1} / {questions.length}</span>
       </div>
       <h2 ref={headRef} tabIndex={-1} className="rs-q" style={{ fontFamily: FONT_JA }}>{q.text}</h2>
-      {q.hint && <p style={{ fontFamily: FONT_JA, fontSize: '0.82rem', color: TEXT_MUTED, margin: '0 0 1.2rem', lineHeight: 1.7 }}>{q.hint}</p>}
+      {q.hint && <p style={{ fontFamily: FONT_JA, fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '0 0 1.2rem', lineHeight: 1.7 }}>{q.hint}</p>}
       <div className="rs-opts" role="radiogroup" aria-label={q.text}>
         {q.options.map((o, i) => {
           const on = (pending ?? selected) === o.value;
@@ -194,9 +194,9 @@ function Brief({ session, onAnchor, onRestart, onLeadSent }: { session: RoaiSess
     <article className="rs-brief lp-safe" aria-labelledby="rs-brief-h">
       {/* 表紙 */}
       <header className="rs-shell rs-brief-head">
-        <p style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.3em', color: ACCENT_LIGHT, fontWeight: 700, margin: '0 0 0.8rem' }}>AI TRANSFORMATION BRIEF</p>
+        <p style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.3em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 700, margin: '0 0 0.8rem' }}>AI TRANSFORMATION BRIEF</p>
         <h1 id="rs-brief-h" className="rs-h1" style={{ fontFamily: FONT_JA }}>{ind}・{emp ?? '規模未回答'}の御社の、<br />AI投資の優先順位。</h1>
-        <p style={{ fontFamily: FONT_EN, fontSize: '0.74rem', color: TEXT_MUTED, margin: '0.8rem 0 0', letterSpacing: '0.06em' }}>
+        <p style={{ fontFamily: FONT_EN, fontSize: '0.74rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '0.8rem 0 0', letterSpacing: '0.06em' }}>
           {date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })} ・ CORE ROAI SCORE v{r.version}
         </p>
       </header>
@@ -246,9 +246,9 @@ function Brief({ session, onAnchor, onRestart, onLeadSent }: { session: RoaiSess
             <li key={p.key}>
               <span className="rs-prio-no" style={{ fontFamily: FONT_EN }}>0{p.rank}</span>
               <div>
-                <p style={{ fontFamily: FONT_EN, fontSize: '1.02rem', fontWeight: 800, color: PAPER, margin: 0 }}>{p.title}</p>
-                <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', fontWeight: 700, color: '#fff', margin: '0.1rem 0 0.35rem' }}>{p.titleJa}</p>
-                <p style={{ fontFamily: FONT_JA, fontSize: '0.82rem', color: TEXT_BODY, lineHeight: 1.8, margin: 0 }}>{p.why}</p>
+                <p style={{ fontFamily: FONT_EN, fontSize: '1.02rem', fontWeight: 800, color: "var(--corp-text, #F3F6FB)", margin: 0 }}>{p.title}</p>
+                <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', fontWeight: 700, color: "var(--corp-text, #fff)", margin: '0.1rem 0 0.35rem' }}>{p.titleJa}</p>
+                <p style={{ fontFamily: FONT_JA, fontSize: '0.82rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.8, margin: 0 }}>{p.why}</p>
                 <ul className="rs-usecases" style={{ fontFamily: FONT_JA }}>
                   {RETURN_BY_KEY[p.key].useCases.slice(0, 3).map(u => <li key={u}>{u}</li>)}
                 </ul>
@@ -258,7 +258,7 @@ function Brief({ session, onAnchor, onRestart, onLeadSent }: { session: RoaiSess
           ))}
         </ol>
         {r.priorities.length > 3 && (
-          <p style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: TEXT_MUTED, margin: '0.8rem 0 0' }}>
+          <p style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '0.8rem 0 0' }}>
             続いて {r.priorities.slice(3).map(p => `${p.titleJa}（${p.potential}）`).join('、')}。
           </p>
         )}
@@ -276,9 +276,9 @@ function Brief({ session, onAnchor, onRestart, onLeadSent }: { session: RoaiSess
           <Val k="POTENTIAL LOSS AVOIDANCE" v={r.value.lossAvoidance.mid > 0 ? `${formatYen(r.value.lossAvoidance.mid)}+` : '—'} sub="期待損失ベース" />
         </div>
         <div className="rs-total">
-          <span style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.24em', color: ACCENT_LIGHT, fontWeight: 700 }}>TOTAL POTENTIAL VALUE</span>
-          <strong style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', color: '#fff', letterSpacing: '-0.02em' }}>{formatRangeYen(r.value.total)}</strong>
-          <span style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: TEXT_MUTED }}>/ 年（中央値 {formatYen(r.value.total.mid)}）</span>
+          <span style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.24em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 700 }}>TOTAL POTENTIAL VALUE</span>
+          <strong style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', color: "var(--corp-text, #fff)", letterSpacing: '-0.02em' }}>{formatRangeYen(r.value.total)}</strong>
+          <span style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.62))" }}>/ 年（中央値 {formatYen(r.value.total.mid)}）</span>
         </div>
         <p className="rs-disclaimer" style={{ fontFamily: FONT_JA }}>
           入力情報および一定の仮定に基づく概算シミュレーションであり、成果を保証するものではありません。実際の数値は、AI Transformation Session で御社の実数から算定します。
@@ -294,26 +294,26 @@ function Brief({ session, onAnchor, onRestart, onLeadSent }: { session: RoaiSess
           {r.capacity.table.map(t => (
             <div key={t.roai} className={'rs-cap-cell' + (t.roai === r.capacity.targetRoai ? ' is-target' : '')}>
               <span style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.2em', color: t.roai === r.capacity.targetRoai ? ACCENT_LIGHT : TEXT_MUTED, fontWeight: 700 }}>TARGET ROAI {t.roai}.0x</span>
-              <strong style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: '#fff', letterSpacing: '-0.02em' }}>{t.investment > 0 ? formatYen(t.investment) : '—'}</strong>
-              <span style={{ fontFamily: FONT_JA, fontSize: '0.74rem', color: TEXT_MUTED }}>{t.roai === r.capacity.targetRoai ? '基準' : t.roai < r.capacity.targetRoai ? '積極' : '保守'}</span>
+              <strong style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: "var(--corp-text, #fff)", letterSpacing: '-0.02em' }}>{t.investment > 0 ? formatYen(t.investment) : '—'}</strong>
+              <span style={{ fontFamily: FONT_JA, fontSize: '0.74rem', color: "var(--corp-muted, rgba(226,232,240,0.62))" }}>{t.roai === r.capacity.targetRoai ? '基準' : t.roai < r.capacity.targetRoai ? '積極' : '保守'}</span>
             </div>
           ))}
         </div>
-        {r.budget.gapNote && <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', color: TEXT_BODY, lineHeight: 1.85, margin: '1.2rem 0 0', borderLeft: `2px solid ${ACCENT}`, paddingLeft: '0.9rem' }}>{r.budget.gapNote}</p>}
+        {r.budget.gapNote && <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.85, margin: '1.2rem 0 0', borderLeft: `2px solid ${ACCENT}`, paddingLeft: '0.9rem' }}>{r.budget.gapNote}</p>}
       </section>
 
       {/* Recommendation + Roadmap */}
       <section className="rs-shell rs-sec" aria-labelledby="rs-rec-h">
-        <p style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.24em', color: ACCENT_LIGHT, fontWeight: 700, margin: '0 0 0.5rem' }}>RECOMMENDATION</p>
+        <p style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.24em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 700, margin: '0 0 0.5rem' }}>RECOMMENDATION</p>
         <h2 id="rs-rec-h" className="rs-h2" style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.4rem, 3vw, 1.9rem)' }}>{r.recommendation.headline}</h2>
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.92rem', color: TEXT_BODY, lineHeight: 1.95, margin: '0 0 2rem' }}>{r.recommendation.body}</p>
-        <h3 style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.24em', color: TEXT_MUTED, fontWeight: 700, margin: '0 0 1rem' }}>90-DAY AI TRANSFORMATION ROADMAP</h3>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.92rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.95, margin: '0 0 2rem' }}>{r.recommendation.body}</p>
+        <h3 style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.24em', color: "var(--corp-muted, rgba(226,232,240,0.62))", fontWeight: 700, margin: '0 0 1rem' }}>90-DAY AI TRANSFORMATION ROADMAP</h3>
         <div className="rs-road">
           {r.roadmap.map(p => (
             <div key={p.en} className="rs-road-phase">
-              <span style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.2em', color: ACCENT, fontWeight: 700 }}>{p.range}</span>
-              <p style={{ fontFamily: FONT_EN, fontSize: '1rem', fontWeight: 800, color: PAPER, margin: '0.2rem 0 0' }}>{p.en}</p>
-              <p style={{ fontFamily: FONT_JA, fontSize: '0.8rem', fontWeight: 700, color: '#fff', margin: '0 0 0.6rem' }}>{p.ja}</p>
+              <span style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.2em', color: "var(--corp-accent, #38BDF8)", fontWeight: 700 }}>{p.range}</span>
+              <p style={{ fontFamily: FONT_EN, fontSize: '1rem', fontWeight: 800, color: "var(--corp-text, #F3F6FB)", margin: '0.2rem 0 0' }}>{p.en}</p>
+              <p style={{ fontFamily: FONT_JA, fontSize: '0.8rem', fontWeight: 700, color: "var(--corp-text, #fff)", margin: '0 0 0.6rem' }}>{p.ja}</p>
               <ul style={{ fontFamily: FONT_JA }}>{p.items.map(i => <li key={i}>{i}</li>)}</ul>
             </div>
           ))}
@@ -337,18 +337,18 @@ function Brief({ session, onAnchor, onRestart, onLeadSent }: { session: RoaiSess
 function Kpi({ k, v, sub }: { k: string; v: string; sub: string }) {
   return (
     <div className="rs-kpi">
-      <span style={{ fontFamily: FONT_EN, fontSize: '0.62rem', letterSpacing: '0.24em', color: ACCENT_LIGHT, fontWeight: 700 }}>{k}</span>
-      <strong style={{ fontFamily: FONT_EN, fontSize: '1.7rem', color: '#fff', letterSpacing: '-0.02em' }}>{v}</strong>
-      <span style={{ fontFamily: FONT_JA, fontSize: '0.72rem', color: TEXT_MUTED }}>{sub}</span>
+      <span style={{ fontFamily: FONT_EN, fontSize: '0.62rem', letterSpacing: '0.24em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 700 }}>{k}</span>
+      <strong style={{ fontFamily: FONT_EN, fontSize: '1.7rem', color: "var(--corp-text, #fff)", letterSpacing: '-0.02em' }}>{v}</strong>
+      <span style={{ fontFamily: FONT_JA, fontSize: '0.72rem', color: "var(--corp-muted, rgba(226,232,240,0.62))" }}>{sub}</span>
     </div>
   );
 }
 function Val({ k, v, sub }: { k: string; v: string; sub: string }) {
   return (
     <div className="rs-val">
-      <span style={{ fontFamily: FONT_EN, fontSize: '0.62rem', letterSpacing: '0.22em', color: ACCENT_LIGHT, fontWeight: 700 }}>{k}</span>
-      <strong style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.2rem, 2.4vw, 1.6rem)', color: '#fff', letterSpacing: '-0.02em' }}>{v}</strong>
-      <span style={{ fontFamily: FONT_JA, fontSize: '0.72rem', color: TEXT_MUTED }}>{sub}</span>
+      <span style={{ fontFamily: FONT_EN, fontSize: '0.62rem', letterSpacing: '0.22em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 700 }}>{k}</span>
+      <strong style={{ fontFamily: FONT_EN, fontSize: 'clamp(1.2rem, 2.4vw, 1.6rem)', color: "var(--corp-text, #fff)", letterSpacing: '-0.02em' }}>{v}</strong>
+      <span style={{ fontFamily: FONT_JA, fontSize: '0.72rem', color: "var(--corp-muted, rgba(226,232,240,0.62))" }}>{sub}</span>
     </div>
   );
 }
@@ -367,7 +367,7 @@ function BasisPanel({ r }: { r: RoaiResult }) {
     <details className="rs-basis" onToggle={e => { if ((e.currentTarget as HTMLDetailsElement).open) track('roai_basis_open'); }}>
       <summary style={{ fontFamily: FONT_JA }}>算定根拠を見る</summary>
       <div className="rs-basis-body">
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: TEXT_MUTED, margin: '0 0 1rem', lineHeight: 1.8 }}>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '0 0 1rem', lineHeight: 1.8 }}>
           すべての数字は、御社の入力・公開されたベンチマーク・明示した仮定・式のどれかから計算しています。LLMは使っていません。同じ回答なら同じ結果になります。
         </p>
         {groups.map(g => (
@@ -383,7 +383,7 @@ function BasisPanel({ r }: { r: RoaiResult }) {
             </dl>
           </div>
         ))}
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.74rem', color: TEXT_MUTED, margin: '1rem 0 0' }}>人件費単価 ¥{ASSUMPTIONS.hourlyCost.toLocaleString('ja-JP')}/時 は賞与・社会保険を含む総額ベースの概算中央値。御社の実数に置き換えると精度が上がります。</p>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.74rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '1rem 0 0' }}>人件費単価 ¥{ASSUMPTIONS.hourlyCost.toLocaleString('ja-JP')}/時 は賞与・社会保険を含む総額ベースの概算中央値。御社の実数に置き換えると精度が上がります。</p>
       </div>
     </details>
   );
@@ -406,7 +406,7 @@ function BasisPanel({ r }: { r: RoaiResult }) {
 function NeriStep({ mode }: { mode: 'prepare' | 'focus' }) {
   return (
     <section className="rs-shell rs-sec rs-neri" aria-labelledby="rs-neri-h">
-      <p style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.24em', color: ACCENT_LIGHT, fontWeight: 700, margin: '0 0 0.5rem' }}>START TODAY</p>
+      <p style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.24em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 700, margin: '0 0 0.5rem' }}>START TODAY</p>
       <h2 id="rs-neri-h" className="rs-h2" style={{ fontFamily: FONT_JA }}>90日を待たずに、<br />今日から測れる場所。</h2>
       <p className="rs-lead" style={{ fontFamily: FONT_JA }}>
         {mode === 'prepare'
@@ -414,12 +414,12 @@ function NeriStep({ mode }: { mode: 'prepare' | 'focus' }) {
           : '突出した機会が見当たらないときは、大きな投資より、1つの業務のBefore / Afterを測る方が確実です。その1つを、今日から始められます。'}
       </p>
       <div className="rs-neri-card">
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.98rem', fontWeight: 800, color: '#fff', margin: 0, lineHeight: 1.6 }}>CORE NERI — 話すだけで、会社が動く。</p>
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', color: TEXT_BODY, lineHeight: 1.9, margin: '0.6rem 0 0' }}>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.98rem', fontWeight: 800, color: "var(--corp-text, #fff)", margin: 0, lineHeight: 1.6 }}>CORE NERI — 話すだけで、会社が動く。</p>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.86rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.9, margin: '0.6rem 0 0' }}>
           当社が開発・運営している、経営者のためのAIです。答えるAIではなく、聞いたことをその場で仕事にします。予定・メール・売上・記録が、話しかけた場で動きます。外へ出る操作（送信・決済）の前には必ず確認を挟みます。
         </p>
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.9rem', fontWeight: 800, color: '#fff', margin: '1.1rem 0 0' }}>{NERI_FACTS.from}</p>
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: TEXT_MUTED, lineHeight: 1.8, margin: '0.25rem 0 1.2rem' }}>{NERI_FACTS.free}。</p>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.9rem', fontWeight: 800, color: "var(--corp-text, #fff)", margin: '1.1rem 0 0' }}>{NERI_FACTS.from}</p>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", lineHeight: 1.8, margin: '0.25rem 0 1.2rem' }}>{NERI_FACTS.free}。</p>
         <a
           href={neriLpUrl('roai-brief')}
           target="_blank"
@@ -428,7 +428,7 @@ function NeriStep({ mode }: { mode: 'prepare' | 'focus' }) {
           style={{ ...ctaGhost, display: 'block', textAlign: 'center' }}
         >CORE NERI を見る</a>
       </div>
-      <p style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: TEXT_MUTED, lineHeight: 1.85, margin: '1.1rem 0 0' }}>
+      <p style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", lineHeight: 1.85, margin: '1.1rem 0 0' }}>
         上の金額は AI Transformation（御社の実数での算定と実装）の話です。NERI はその置き換えではなく、決まるまでの間と、決まったあとの毎日を動かすものです。
       </p>
     </section>
@@ -482,9 +482,9 @@ function NextAction({ session, r, onAnchor, onLeadSent }: { session: RoaiSession
 
   return (
     <section className="rs-shell rs-sec rs-next" aria-labelledby="rs-next-h">
-      <p style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.24em', color: ACCENT_LIGHT, fontWeight: 700, margin: '0 0 0.5rem' }}>NEXT ACTION</p>
+      <p style={{ fontFamily: FONT_EN, fontSize: '0.66rem', letterSpacing: '0.24em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 700, margin: '0 0 0.5rem' }}>NEXT ACTION</p>
       <h2 id="rs-next-h" className="rs-h2" style={{ fontFamily: FONT_JA }}>この会社のROAIを、<br />実際の数字で算定する。</h2>
-      <p style={{ fontFamily: FONT_JA, fontSize: '0.92rem', color: TEXT_BODY, lineHeight: 1.95, margin: '0 0 1.6rem' }}>
+      <p style={{ fontFamily: FONT_JA, fontSize: '0.92rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.95, margin: '0 0 1.6rem' }}>
         COREのAI Transformation Sessionでは、業務構造・売上構造・人件費・システム・データ・リスクを分析し、
         「どこへ、いくらAI投資すると、どの程度のReturnが期待できるか」を御社の実数で具体化します。
         最初の投資先は「{r.priorities[0].titleJa}」。ここから話を始めます。
@@ -492,11 +492,11 @@ function NextAction({ session, r, onAnchor, onLeadSent }: { session: RoaiSession
 
       {state === 'ok' ? (
         <div className="rs-done" role="status">
-          <p style={{ fontFamily: FONT_JA, fontSize: '1rem', fontWeight: 800, color: '#fff', margin: '0 0 0.4rem' }}>
+          <p style={{ fontFamily: FONT_JA, fontSize: '1rem', fontWeight: 800, color: "var(--corp-text, #fff)", margin: '0 0 0.4rem' }}>
             {sentKind === 'consult' ? 'ROAI戦略相談を受け付けました。' : '詳細レポートのご依頼を受け付けました。'}
           </p>
-          <p style={{ fontFamily: FONT_JA, fontSize: '0.84rem', color: TEXT_BODY, lineHeight: 1.85, margin: 0 }}>
-            通常1〜3営業日以内に、診断結果を踏まえてご連絡します。急ぎの場合は <a href="#contact" onClick={e => onAnchor(e, '#contact')} style={{ color: ACCENT_LIGHT }}>相談フォーム</a> からもどうぞ。
+          <p style={{ fontFamily: FONT_JA, fontSize: '0.84rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.85, margin: 0 }}>
+            通常1〜3営業日以内に、診断結果を踏まえてご連絡します。急ぎの場合は <a href="#contact" onClick={e => onAnchor(e, '#contact')} style={{ color: "var(--corp-accent, #7DD3FC)" }}>相談フォーム</a> からもどうぞ。
           </p>
         </div>
       ) : (
@@ -536,14 +536,14 @@ function NextAction({ session, r, onAnchor, onLeadSent }: { session: RoaiSession
             {state === 'sending' ? '送信しています…' : kind === 'consult' ? 'ROAI戦略相談を申し込む' : '詳細レポートを受け取る'}
           </button>
           <p ref={resultRef} role="alert" style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: '#FCA5A5', minHeight: '1.2em', margin: '0.6rem 0 0' }}>{state === 'fail' ? failMsg : ''}</p>
-          <p style={{ fontFamily: FONT_JA, fontSize: '0.72rem', color: TEXT_MUTED, lineHeight: 1.8, margin: '0.4rem 0 0' }}>
+          <p style={{ fontFamily: FONT_JA, fontSize: '0.72rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", lineHeight: 1.8, margin: '0.4rem 0 0' }}>
             送信すると、診断の回答と連絡先が株式会社COREに届きます。ご連絡とレポート作成の目的にのみ使用し、1年で削除します。第三者に提供しません。
           </p>
         </form>
       )}
-      <p style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: TEXT_MUTED, margin: '1.4rem 0 0', borderTop: `1px solid ${LINE}`, paddingTop: '1rem' }}>
-        フォームを使わずに相談したい場合は <a href="#contact" onClick={e => { track('roai_consult_click', 'brief-contact-link'); onAnchor(e, '#contact'); }} style={{ color: ACCENT_LIGHT }}>お問い合わせ</a>、または {' '}
-        <a href="mailto:info@core-ai.jp" style={{ color: ACCENT_LIGHT }}>info@core-ai.jp</a> へ。
+      <p style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '1.4rem 0 0', borderTop: `1px solid ${LINE}`, paddingTop: '1rem' }}>
+        フォームを使わずに相談したい場合は <a href="#contact" onClick={e => { track('roai_consult_click', 'brief-contact-link'); onAnchor(e, '#contact'); }} style={{ color: "var(--corp-accent, #7DD3FC)" }}>お問い合わせ</a>、または {' '}
+        <a href="mailto:info@core-ai.jp" style={{ color: "var(--corp-accent, #7DD3FC)" }}>info@core-ai.jp</a> へ。
       </p>
     </section>
   );

@@ -23,6 +23,7 @@ export default function CorpStickyCta() {
 
   // 部品は1つのまま props だけ差し替える（作り直すと出現アニメが巻き戻るため）。
   return (
+    <div className="corp-light corp-sticky-light">
     <LpStickyCta
       /* 見出しにサービス名を入れると、名前が長い回（Resonance）だけ375pxで2行に折れ、
          バーが67px→75pxに伸びて本文を覆う面積が増えた（2026-08-08 本番実測）。
@@ -40,8 +41,10 @@ export default function CorpStickyCta() {
       cta={pick ? `${pick.name} を見る →` : 'ROAIを無料診断する'}
       href={pick ? pick.url : '/roai-score'}
       onClick={pick ? undefined : () => { rememberSource('sticky'); track('corp_cta_click', 'sticky'); }}
-      accent1="#E0F2FE"
-      accent2="#38BDF8"
+      accent1="#111827"
+      accent2="#111827"
+      ctaColor="#FFFFFF"
     />
+    </div>
   );
 }
