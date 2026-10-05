@@ -425,10 +425,8 @@ export default function CoreSite() {
       if (sizes) l.setAttribute('sizes', sizes);
       document.head.appendChild(l);
     };
-    setLink('icon', '/core-icon.svg', 'image/svg+xml');
-    setLink('icon', '/core-192.png', 'image/png', '192x192');
-    setLink('icon', '/core-512.png', 'image/png', '512x512');
-    setLink('apple-touch-icon', '/core-180.png', undefined, '180x180');
+    setLink('icon', '/og-core-logo-white-v9.png', 'image/png', '1254x1254');
+    setLink('apple-touch-icon', '/og-core-logo-white-v9.png');
 
   }, []);
 
@@ -485,11 +483,11 @@ export default function CoreSite() {
           >
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12, lineHeight: 1 }}>
               <img
-                src="/core-logo-mark-v2.webp"
+                src="/og-core-logo-white-v9.png"
                 alt="株式会社CORE"
-                width={264}
-                height={160}
-                style={{ height: 36, width: 'auto', flexShrink: 0 }}
+                width={1254}
+                height={1254}
+                style={{ height: 48, width: 48, flexShrink: 0 }}
               />
               <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: 3 }}>
                 <span
@@ -2026,11 +2024,11 @@ export default function CoreSite() {
           <div>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, lineHeight: 1 }}>
               <img
-                src="/core-logo-mark-v2.webp"
+                src="/og-core-logo-white-v9.png"
                 alt="CORE"
-                width={264}
-                height={160}
-                style={{ height: 32, width: 'auto', flexShrink: 0 }}
+                width={1254}
+                height={1254}
+                style={{ height: 44, width: 44, flexShrink: 0 }}
               />
               <span
                 aria-hidden
