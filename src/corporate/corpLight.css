@@ -76,3 +76,7 @@
   .corp-light .ch-film-video { object-fit: contain; }
   .corp-light :is(.ch-manifesto-shade, .cs-bleed-shade) { background: rgba(255,255,255,.94); }
 }
+@media (max-width: 640px) {
+  /* Keep the complete first phrase together rather than stranding を on its own line. */
+  .corp-light .ws-intro-copy h1 { font-size: clamp(1.65rem, 6.8vw, 2rem); }
+}
