@@ -489,37 +489,14 @@ export default function CoreSite() {
                 height={1254}
                 style={{ height: 48, width: 48, flexShrink: 0 }}
               />
-              <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: 3 }}>
-                <span
-                  aria-hidden
-                  style={{
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontSize: 10,
-                    fontWeight: 600,
-                    letterSpacing: '0.3em',
-                    color: "var(--corp-muted, rgba(224,242,254,0.58))",
-                    lineHeight: 1,
-                  }}
-                >
-                  株式会社
-                </span>
-                <span
-                  aria-hidden
-                  style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: 22.32,
-                    fontWeight: 700,
-                    letterSpacing: '0.42em',
-                    color: "var(--corp-text, #E0F2FE)",
-                    background: "linear-gradient(135deg, var(--corp-surface-raised, #FFFFFF), #BAE6FD, #38BDF8)",
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    lineHeight: 1,
-                  }}
-                >
-                  CORE
-                </span>
-              </span>
+              <img
+                src="/core-company-wordmark-card-20261008.png"
+                alt=""
+                aria-hidden="true"
+                width={494}
+                height={71}
+                style={{ width: 156, height: 'auto', display: 'block', flexShrink: 0 }}
+              />
             </span>
           </a>
           {/* 別ページ（タブでは切り替わらない別ルート）だけをここに残す */}
@@ -2030,22 +2007,13 @@ export default function CoreSite() {
                 height={1254}
                 style={{ height: 44, width: 44, flexShrink: 0 }}
               />
-              <span
-                aria-hidden
-                style={{
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: 19.84,
-                  fontWeight: 700,
-                  letterSpacing: '0.42em',
-                  color: "var(--corp-text, #E0F2FE)",
-                  background: "linear-gradient(135deg, var(--corp-surface-raised, #FFFFFF), #BAE6FD, #38BDF8)",
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  lineHeight: 1,
-                }}
-              >
-                CORE
-              </span>
+              <img
+                src="/core-company-wordmark-card-20261008.png"
+                alt="株式会社CORE"
+                width={494}
+                height={71}
+                style={{ width: 156, height: 'auto', display: 'block' }}
+              />
             </span>
             <p
               style={{

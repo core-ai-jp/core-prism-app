@@ -9,7 +9,7 @@
   --corp-text: #111827;
   --corp-body: #374151;
   --corp-muted: #596273;
-  --corp-accent: #09658a;
+  --corp-accent: #0064D8;
   --corp-error: #b42318;
   --corp-line: rgba(17, 24, 39, .16);
   --corp-cta: #111827;
@@ -27,10 +27,10 @@
 }
 .corp-light header { background: rgba(255,255,255,.94) !important; }
 .corp-light .lp-tab { color: #596273; }
-.corp-light .lp-tab.is-on { color: #111827; border-bottom-color: #09658a; }
-.corp-light .lp-tab:hover { color: #09658a; }
+.corp-light .lp-tab.is-on { color: #111827; border-bottom-color: #0064D8; }
+.corp-light .lp-tab:hover { color: #0064D8; }
 .corp-light :is(a, button, input, select, textarea):focus-visible {
-  outline: 2px solid #09658a;
+  outline: 2px solid #0064D8;
   outline-offset: 4px;
 }
 .corp-light :is(input, select, textarea, option) { color: #111827; color-scheme: light; }
@@ -61,8 +61,8 @@
   color: #fff;
   box-shadow: none;
 }
-.corp-light .ws-progress span { background: #09658a; box-shadow: none; }
-.corp-light .cs-status { color: #09658a; border-color: #b5cbd5; background: #f2f7fa; }
+.corp-light .ws-progress span { background: #0064D8; box-shadow: none; }
+.corp-light .cs-status { color: #0064D8; border-color: #b5cbd5; background: #f2f7fa; }
 .corp-light .cs-status.is-next { color: #71521a; background: #fcf8ef; }
 .corp-light .cs-status.is-future { color: #596273; background: #f5f7fa; }
 .corp-sticky-light > div { background: rgba(255,255,255,.97) !important; border-top-color: #dce1e8 !important; }
@@ -80,4 +80,22 @@
 @media (max-width: 640px) {
   /* Keep the complete first phrase together rather than stranding を on its own line. */
   .corp-light .ws-intro-copy h1 { font-size: clamp(1.65rem, 6.8vw, 2rem); }
+}
+
+/* Owner 2026-10-08: black reading text; card-inspired cyan → blue → deep-blue emphasis.
+   The cyan stop is darkened only for text contrast on white; the original wordmark is unchanged. */
+.corp-light :is(.ch-manifesto-tagline, .ch-manifesto-h > span, .ro-band-en > span) {
+  width: fit-content;
+  color: #0064D8;
+  background: linear-gradient(100deg, #0096C8 0%, #0075F5 45%, #1034B5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+@media (forced-colors: active) {
+  .corp-light :is(.ch-manifesto-tagline, .ch-manifesto-h > span, .ro-band-en > span) {
+    background: none; -webkit-text-fill-color: CanvasText;
+  }
 }
