@@ -180,6 +180,25 @@ console.log('\n[6] 紹介経由の無料日数表示');
     checkout.includes('¥0 で ${freeDays} 日間トライアル開始'));
 }
 
+console.log('\n[7] 紹介経由 LP の無料日数表示');
+{
+  const landing = read('src/components/LandingPage.tsx');
+  ok('招待の有無から LP 全体の無料日数を 1 か所で決める',
+    landing.includes('const freeDays = pendingRef ? TRIAL_WITH_REFERRAL_DAYS : TRIAL_BASE_DAYS'));
+  ok('ヒーローと主 CTA は紹介分を含む freeDays を表示する',
+    landing.includes('{freeDays}日間無料・クレカ不要。')
+      && landing.includes('{freeDays}日間 無料ではじめる'));
+  ok('料金見出しと全プラン CTA は紹介分を含む freeDays を表示する',
+    landing.includes('まず{freeDays}日間、無料で。')
+      && landing.includes('{p.name} を{freeDays}日間 無料でためす'));
+  ok('安心説明・FAQ・最終 CTA も紹介分を含む freeDays を表示する',
+    landing.includes('s.body.replace(`${TRIAL_BASE_DAYS}日間`, `${freeDays}日間`)')
+      && landing.includes('answer={f.a.replace(`${TRIAL_BASE_DAYS}日間`, `${freeDays}日間`)}')
+      && landing.includes('{freeDays}日間、すべての機能を無料で。'));
+  ok('モバイルの紹介バナーは右上のテーマ切替ボタンと重ならない余白を持つ',
+    landing.includes("padding: '0.85rem 4.5rem 0.85rem 1rem'"));
+}
+
 console.log('');
 if (ng) { console.log(`NG  ${ng}件。クローラーが見る側の数字が、実際とずれています`); process.exit(1); }
 console.log('OK  静的HTMLの数字は、実際のデータと揃っています');

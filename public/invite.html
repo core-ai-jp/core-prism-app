@@ -126,12 +126,11 @@
           if (ref) qs.push('ref=' + encodeURIComponent(ref));
           if (from) qs.push('from=' + encodeURIComponent(from));
           if (msg) qs.push('msg=' + encodeURIComponent(msg));
-          // www.core-ai.jp の / は現在コーポレートサイトへ転送される。
-          // 招待ページをどの配信ホストから開いても、登録先は Prism 本体へ固定する。
+          // www.core-ai.jp の / は会社サイトへ転送されるため、Prism 本体へ固定する。
           var target = 'https://core-prism-app.vercel.app/' + (qs.length ? '?' + qs.join('&') : '');
           var a = document.getElementById('cta');
           if (a) a.setAttribute('href', target);
-          // 自動遷移しない。招待者の名前と一言、+7 日の条件を読んでから本人が進む。
+          // 自動遷移しない。招待者の名前・一言・特典を読んでから本人が進む。
         } catch (e) { /* */ }
       })();
     </script>
