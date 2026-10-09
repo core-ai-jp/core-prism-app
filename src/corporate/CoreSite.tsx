@@ -53,6 +53,7 @@ import { setCorpTab } from './corpRouteStore';
 import { TheChange, ProcessContrast, OneCore, StudioSection, NeriSection, Bridge, AshitakaHome, EnergyHome, Connection, Core2035, Invitation } from './StorySections';
 import AshitakaPage from './AshitakaPage';
 import EnergyPage from './EnergyPage';
+import AiAdvisorTab from './AiAdvisorTab';
 import { track } from './roai/track';
 import { neriLpUrl } from '../lib/coreLinks';
 
@@ -125,7 +126,7 @@ function jumpToHash(e: ReactMouseEvent<HTMLAnchorElement>, href: string) {
 //      SECTION_TAB でどの章がどのタブに載っているかを引き、
 //      必要ならタブを切り替えてからその章へ送る。
 // ============================================================
-export type CoreTabKey = 'home' | 'roai' | 'score' | 'os' | 'services' | 'products' | 'ashitaka' | 'energy' | 'company' | 'contact';
+export type CoreTabKey = 'home' | 'roai' | 'score' | 'os' | 'services' | 'products' | 'ashitaka' | 'energy' | 'company' | 'contact' | 'advisor';
 
 /**
  * 2026-09-03 MASTER PROMPT: Return on AI と CORE ROAI SCORE は中心的な知的資産なので、
@@ -152,6 +153,7 @@ const TAB_META: Record<CoreTabKey, { title: string; desc: string; path: string }
   ashitaka: { title: 'ASHITAKA PROJECT × REGIONAL OS — 文化を入口に、街と村のDXへ | 株式会社CORE', desc: '文化で接点をつくる ASHITAKA PROJECT と、自治体・地域事業者の業務をAI前提で再設計する REGIONAL OS。演奏するのは代表取締役本人。自治体・地域事業者へいま提供できることと、構想段階のものを分けて伝えます。', path: '/ashitaka' },
   energy: { title: 'CORE ENERGY — AIの電力需要に、地域の分散資源で応える | 株式会社CORE', desc: 'エネルギー事業者との協業領域。Energy Intelligence、AI最適化（需要予測・需給最適化・DR/VPP・設備保全）、地域プロジェクトの組成、計測。資産を持たず、AI・データ解析・設計・地域との合意形成から始めます。', path: '/energy' },
   company: { title: '会社について | 株式会社CORE', desc: 'いつの時代も、変わらない核を。核とは、人。会社概要・理念・代表。', path: '/corp#company' },
+  advisor: { title: 'AI顧問 — 月額50万円・3ヶ月から | 株式会社CORE', desc: 'CORE AI Transformation Partner。社外AI変革責任者として戦略・業務診断・小規模AI実装・研修・相談・ROAI測定を支援。月額50万円（税別）、最低3ヶ月。', path: '/corp#advisor' },
   contact: { title: '無料AI業務診断・ご相談 | 株式会社CORE', desc: '業種と業務を選び、年間工数・時間価値・AI実装適性・30日間の検証順序を約5分で整理。登録不要の無料診断。', path: '/corp#contact' },
 };
 
@@ -173,6 +175,7 @@ const CORE_TABS: { key: CoreTabKey; label: string; short: string; sub: string }[
   { key: 'energy', label: 'ENERGY', short: 'ENERGY', sub: 'FUTURE' },
   { key: 'company', label: '会社について', short: '会社', sub: 'COMPANY' },
   { key: 'contact', label: 'ご相談', short: '相談', sub: 'CONTACT' },
+  { key: 'advisor', label: 'AI顧問', short: 'AI顧問', sub: 'AI ADVISORY' },
 ];
 /** バーに無いタブ（roai / score / os / products）を開いているとき、どの札を点灯させるか。 */
 const TAB_CHIP: Partial<Record<CoreTabKey, CoreTabKey>> = { roai: 'services', score: 'services', os: 'services', products: 'services' };
@@ -221,6 +224,7 @@ const SECTION_TAB: Record<string, CoreTabKey> = {
   'philosophy-core': 'company', numbers: 'company',
   mission: 'company', executive: 'company', journey: 'company', about: 'company',
   contact: 'contact', faq: 'contact',
+  advisor: 'advisor', 'advisor-price': 'advisor',
 };
 
 /**
@@ -591,6 +595,7 @@ export default function CoreSite() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       {tab === 'ashitaka' && <AshitakaPage onAnchor={handleAnchor} />}
       {tab === 'energy' && <EnergyPage onAnchor={handleAnchor} />}
+      {tab === 'advisor' && <AiAdvisorTab onAnchor={handleAnchor} />}
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       {/*  RETURN ON AI（/return-on-ai）  */}
