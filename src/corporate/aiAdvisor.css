@@ -1,0 +1,72 @@
+/* PROJECT: white corporate palette; shared logo, typography and accents are inherited. */
+.aa-page { max-width: 1120px; margin: 0 auto; padding: 0 40px 96px; font-family: "Noto Sans JP", "Inter", sans-serif; color: var(--corp-text); font-size: 17px; line-height: 1.85; }
+.aa-page p { margin: 0 0 18px; }
+.aa-page h1,.aa-page h2,.aa-page h3 { color: var(--corp-text); letter-spacing: -.03em; font-weight: 700; }
+.aa-page h1 { font-size: clamp(36px, 4.8vw, 60px); line-height: 1.4; margin: 22px 0 26px; }
+.aa-page h2 { font-size: clamp(27px, 3vw, 36px); line-height: 1.5; margin: 12px 0 26px; }
+.aa-page h3 { font-size: 21px; margin: 0 0 12px; }
+.aa-page .aa-eyebrow { font-family: "Inter", "Noto Sans JP", sans-serif; font-size: 14px; font-weight: 600; letter-spacing: .12em; color: var(--corp-accent); }
+.aa-hero { padding: 76px 0 64px; }
+.aa-name { font-size: 20px; font-weight: 600; overflow-wrap: anywhere; }
+.aa-lead { font-size: 19px; color: var(--corp-body); }
+.aa-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 24px; margin: 30px 0 20px; }
+.aa-cta { display: inline-flex; justify-content: center; align-items: center; gap: 14px; min-height: 52px; padding: 12px 22px; background: var(--corp-cta); color: var(--corp-cta-text); border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 17px; }
+.aa-cta:hover { background: #25344b; }
+.aa-link { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: var(--corp-accent); font-weight: 600; text-decoration: underline; text-underline-offset: 6px; }
+.aa-page .aa-note { font-size: 16px; color: var(--corp-muted); line-height: 1.85; }
+.aa-section { border-top: 1px solid var(--corp-line); padding: 56px 0; scroll-margin-top: 150px; }
+.aa-heading { display: grid; grid-template-columns: 1fr 1.55fr; column-gap: 56px; }
+.aa-heading .aa-eyebrow { grid-column: 1 / -1; }
+.aa-heading > p:last-child { align-self: center; color: var(--corp-body); }
+.aa-services { display: grid; grid-template-columns: 1fr 1fr; column-gap: 44px; }
+.aa-service { display: flex; gap: 20px; padding: 28px 0 22px; border-top: 1px solid var(--corp-line); }
+.aa-index { font-family: "Inter", sans-serif; color: var(--corp-accent); font-size: 16px; padding-top: 3px; }
+.aa-service p { color: var(--corp-body); }
+.aa-page .aa-output { font-size: 16px; color: var(--corp-accent); margin-bottom: 0; }
+.aa-phases { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding: 0; margin: 36px 0 28px; }
+.aa-phases li { border-top: 2px solid var(--corp-accent); padding-top: 22px; }
+.aa-month { font-family: "Inter", sans-serif; font-size: 14px; color: var(--corp-accent); letter-spacing: .1em; }
+.aa-phases h3 { font-size: 27px; }
+.aa-price-layout { display: grid; grid-template-columns: .95fr 1.2fr; gap: 60px; }
+.aa-price { background: var(--corp-surface-soft); padding: 32px; border-radius: 14px; }
+.aa-page .aa-amount { display: flex; align-items: baseline; gap: 8px; margin: 12px 0 0; line-height: 1.3; }
+.aa-amount strong { font-family: "Inter", sans-serif; font-size: 76px; font-weight: 600; letter-spacing: -.05em; }
+.aa-amount span { font-size: 20px; }
+.aa-terms { margin: 28px 0; font-size: 16px; }
+.aa-terms > div { display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px; padding: 14px 0; border-top: 1px solid var(--corp-line); }
+.aa-terms dt { color: var(--corp-muted); }
+.aa-terms dd { margin: 0; }
+.aa-price .aa-note { margin: 20px 0 0; }
+.aa-scope { padding: 12px 0; }
+.aa-scope ul { padding-left: 1.2em; margin: 0 0 34px; color: var(--corp-body); }
+.aa-scope li { padding-left: 6px; margin-bottom: 16px; }
+.aa-close { display: grid; grid-template-columns: 1fr 1.55fr; gap: 56px; }
+.aa-close > div:last-child { padding-top: 12px; }
+.aa-invitation { text-align: center; background: var(--corp-surface-soft); padding: 44px 24px; border-radius: 14px; }
+@media (max-width: 700px) {
+ .aa-page { padding: 0 22px 100px; }
+ .aa-hero { padding: 40px 0 38px; }
+ .aa-page h1 { font-size: clamp(31px, 8.5vw, 42px); }
+ .aa-page h2 { font-size: 28px; }
+ .aa-name { font-size: 18px; }
+ .aa-lead { font-size: 17px; }
+ .aa-desktop { display: none; }
+ .aa-actions { gap: 12px; }
+ .aa-section { padding: 36px 0; }
+ .aa-heading,.aa-services,.aa-phases,.aa-price-layout,.aa-close { display: block; }
+ .aa-service { gap: 14px; padding: 24px 0; }
+ .aa-phases li { margin-bottom: 28px; }
+ .aa-price { padding: 26px 20px; }
+ .aa-price .aa-cta { width: 100%; box-sizing: border-box; padding-inline: 12px; }
+ .aa-scope { padding: 34px 0 0; }
+ .aa-close > div:last-child { padding-top: 0; }
+ .aa-invitation { padding: 32px 20px; }
+ .aa-invitation h2 { font-size: 26px; }
+ .aa-invitation .aa-cta { padding-inline: 14px; }
+}
+@media (max-width: 640px) {
+ .corp-light header .lp-tabs { justify-content: space-between; }
+ .corp-light header .lp-tab { padding-inline: 5px; font-size: 13px; letter-spacing: 0; }
+}
+
+.aa-page :is(p, li) { text-wrap: pretty; }

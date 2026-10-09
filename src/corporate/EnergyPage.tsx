@@ -5,7 +5,7 @@
 //   言葉の正本は coreStory.ts（ENERGY / ENERGY_PAGE）。ヒーローは送電網の実景風の写真（public/corp/energy-grid.webp）。
 // ============================================================
 import { motion } from 'framer-motion';
-import { FONT_JA, FONT_EN, INK, INK_2, INK_3, LINE, ctaHero, ctaGhost, sectionH2, sectionLead, reveal } from './corpTheme';
+import { FONT_JA, FONT_EN, LINE, ctaHero, ctaGhost, sectionH2, sectionLead, reveal } from './corpTheme';
 import { Kick } from './roai/HomeRoaiSections';
 import { rememberSource, track } from './roai/track';
 import { SIZES_FULL, photoSrcSet } from './photoSet';
@@ -46,7 +46,7 @@ export default function EnergyPage({ onAnchor }: { onAnchor: AnchorHandler }) {
       </section>
 
       {/* 提供範囲（NOW） */}
-      <section id="energy-offering" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, scrollMarginTop: 70 }} aria-labelledby="energy-offering-h">
+      <section id="energy-offering" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70 }} aria-labelledby="energy-offering-h">
         <div className="ch-wrap">
           <PageHead id="energy-offering-h" kicker={OF.kicker} h2={OF.h2} lead={OF.lead} />
           <motion.ol {...reveal} className="cs-offering" style={{ fontFamily: FONT_JA }}>
@@ -65,7 +65,7 @@ export default function EnergyPage({ onAnchor }: { onAnchor: AnchorHandler }) {
       </section>
 
       {/* 協業の形 */}
-      <section id="energy-partnership" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK_3, borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="energy-partnership-h">
+      <section id="energy-partnership" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #101826)", borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="energy-partnership-h">
         <div className="ch-wrap">
           <PageHead id="energy-partnership-h" kicker={PM.kicker} h2={PM.h2} lead={PM.lead} />
           <motion.ol {...reveal} className="cs-partners" style={{ fontFamily: FONT_JA }}>
@@ -82,7 +82,7 @@ export default function EnergyPage({ onAnchor }: { onAnchor: AnchorHandler }) {
       </section>
 
       {/* 論理 */}
-      <section id="energy-logic" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK_2, scrollMarginTop: 70 }} aria-labelledby="energy-logic-h">
+      <section id="energy-logic" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70 }} aria-labelledby="energy-logic-h">
         <div className="ch-wrap cs-connection">
           <motion.div {...reveal}>
             <Kick>{ENERGY_PAGE.logic.kicker}</Kick>
@@ -99,7 +99,7 @@ export default function EnergyPage({ onAnchor }: { onAnchor: AnchorHandler }) {
       </section>
 
       {/* 地域の資源 × 交点 */}
-      <section id="energy-intersection" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, scrollMarginTop: 70 }} aria-labelledby="energy-intersection-h">
+      <section id="energy-intersection" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70 }} aria-labelledby="energy-intersection-h">
         <div className="ch-wrap">
           <PageHead id="energy-intersection-h" kicker={ENERGY_PAGE.intersection.kicker} h2={ENERGY_PAGE.intersection.h2} lead={ENERGY.region} />
           <motion.p {...reveal} style={{ ...sectionLead, margin: '1rem 0 0' }}>{ENERGY_PAGE.intersection.body}</motion.p>
@@ -108,7 +108,7 @@ export default function EnergyPage({ onAnchor }: { onAnchor: AnchorHandler }) {
       </section>
 
       {/* 段階 */}
-      <section id="energy-stages" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK_2, borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="energy-stages-h">
+      <section id="energy-stages" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="energy-stages-h">
         <div className="ch-wrap">
           <PageHead id="energy-stages-h" kicker="The Sequence" h2={'資産を持たず、\n知性と設計から始める。'} lead="サービスから、ソフトウェアへ。ソフトウェアから、プロジェクトと提携へ。段階を飛ばさず、各段の実績の上に次を積み上げます。" />
           <div className="cs-energy-grid" style={{ marginTop: '2.6rem' }}>
@@ -130,7 +130,7 @@ export default function EnergyPage({ onAnchor }: { onAnchor: AnchorHandler }) {
       </section>
 
       {/* FAQ */}
-      <section id="energy-faq" className="lp-section-pad" style={{ padding: '6rem 1.5rem', background: INK, borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="energy-faq-h">
+      <section id="energy-faq" className="lp-section-pad" style={{ padding: '6rem 1.5rem', background: "var(--corp-surface, #070A10)", borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="energy-faq-h">
         <div className="ch-wrap" style={{ maxWidth: 860 }}>
           <PageHead id="energy-faq-h" kicker="FAQ" h2="よくある質問" />
           <motion.div {...reveal} className="cs-faq" style={{ fontFamily: FONT_JA }}>
@@ -151,7 +151,7 @@ export default function EnergyPage({ onAnchor }: { onAnchor: AnchorHandler }) {
         <div className="ch-wrap cs-bleed-inner is-center">
           <motion.div {...reveal} style={{ maxWidth: 760, margin: '0 auto' }}>
             <Kick center>Let’s talk</Kick>
-            <h2 id="energy-cta-h" style={{ ...sectionH2, margin: 0, color: '#fff' }}><Lines text={ENERGY_PAGE.cta.h2} /></h2>
+            <h2 id="energy-cta-h" style={{ ...sectionH2, margin: 0, color: "var(--corp-text, #fff)" }}><Lines text={ENERGY_PAGE.cta.h2} /></h2>
             <div className="ch-cta-row" style={{ justifyContent: 'center', marginTop: '1.8rem' }}>
               <a href="#contact" onClick={e => consult(e, 'energy-cta')} style={ctaHero}>{ENERGY_PAGE.cta.primary}</a>
             </div>

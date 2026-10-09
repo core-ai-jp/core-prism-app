@@ -18,8 +18,7 @@
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { motion } from 'framer-motion';
 import {
-  FONT_JA, FONT_EN, ACCENT, ACCENT_LIGHT, PAPER, TEXT_BODY, TEXT_MUTED, LINE, INK, INK_2,
-  ctaHero, ctaGhost, sectionH2, sectionLead, reveal,
+  FONT_JA, FONT_EN, ACCENT, ACCENT_LIGHT, LINE, ctaHero, ctaGhost, sectionH2, sectionLead, reveal,
 } from './corpTheme';
 import { SERVICE_LAYERS, DIFF_CORE, ASSESSMENT_STEPS, ASSESSMENT_TARGETS } from './transformData';
 import { SUITE_COUNT } from './suiteData';
@@ -35,7 +34,7 @@ function Kick({ children, center }: { children: React.ReactNode; center?: boolea
   return (
     <p style={{
       fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase',
-      color: ACCENT_LIGHT, fontWeight: 600, marginBottom: '1rem', textAlign: center ? 'center' : 'left',
+      color: "var(--corp-accent, #7DD3FC)", fontWeight: 600, marginBottom: '1rem', textAlign: center ? 'center' : 'left',
       display: 'flex', alignItems: 'center', gap: 10, justifyContent: center ? 'center' : 'flex-start',
     }}>
       <span aria-hidden style={{ width: 22, height: 1, background: ACCENT, display: 'inline-block' }} />
@@ -108,7 +107,7 @@ export function HomeHero({ onAnchor }: { onAnchor: AnchorHandler }) {
         <motion.div className="ch-hero-copy" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
           <Kick>AI Transformation Company — Kobe, Japan</Kick>
           {/* 言葉の正本は creedData / companyInfo.philosophy */}
-          <h1 className="ch-h1 ch-h1--creed" style={{ fontFamily: FONT_JA, color: '#FFFFFF' }}>
+          <h1 className="ch-h1 ch-h1--creed" style={{ fontFamily: FONT_JA, color: "var(--corp-text, #FFFFFF)" }}>
             いつの時代も、
             <br />
             変わらない核を。
@@ -152,15 +151,15 @@ const PRODUCT_NAMES = ['NERI', 'Prism', 'Resonance', 'Crystal', 'Iris', 'Lume', 
 
 export function ProofStrip({ onAnchor }: { onAnchor: AnchorHandler }) {
   return (
-    <section aria-label="自社プロダクト" style={{ background: INK, borderTop: `1px solid ${LINE}`, borderBottom: `1px solid ${LINE}`, padding: '1.6rem 1.5rem' }}>
+    <section aria-label="自社プロダクト" style={{ background: "var(--corp-surface, #070A10)", borderTop: `1px solid ${LINE}`, borderBottom: `1px solid ${LINE}`, padding: '1.6rem 1.5rem' }}>
       <div className="ch-wrap ch-proof">
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: TEXT_MUTED, letterSpacing: '0.08em', margin: 0, whiteSpace: 'nowrap' }}>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", letterSpacing: '0.08em', margin: 0, whiteSpace: 'nowrap' }}>
           自社開発・本番稼働中の AI プロダクト
         </p>
         <ul className="ch-logos" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
           {PRODUCT_NAMES.map(n => (
-            <li key={n} style={{ fontFamily: FONT_EN, fontSize: '1.02rem', fontWeight: 700, letterSpacing: '0.06em', color: 'rgba(236,242,250,0.72)' }}>
-              <span style={{ color: 'rgba(236,242,250,0.4)', fontWeight: 500, marginRight: 4 }}>CORE</span>{n}
+            <li key={n} style={{ fontFamily: FONT_EN, fontSize: '1.02rem', fontWeight: 700, letterSpacing: '0.06em', color: "var(--corp-body, rgba(236,242,250,0.72))" }}>
+              <span style={{ color: "var(--corp-muted, rgba(236,242,250,0.4))", fontWeight: 500, marginRight: 4 }}>CORE</span>{n}
             </li>
           ))}
         </ul>
@@ -192,7 +191,7 @@ export function WhyCore() {
     },
   ];
   return (
-    <section id="why" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, scrollMarginTop: 70 }}>
+    <section id="why" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70 }}>
       <div className="ch-wrap">
         <div className="ch-head">
           <Kick>Why CORE</Kick>
@@ -211,9 +210,9 @@ export function WhyCore() {
               <div className="ch-card-img">
                 <img src={it.img} srcSet={photoSrcSet(it.img, 1600)} sizes={SIZES_CARD} alt={it.alt} loading="lazy" decoding="async" width={1600} height={1067} />
               </div>
-              <p style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.24em', color: ACCENT, fontWeight: 700, margin: '1.4rem 0 0.6rem' }}>{it.no}</p>
-              <h3 style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.15rem, 1.7vw, 1.35rem)', fontWeight: 800, color: PAPER, lineHeight: 1.5, margin: '0 0 0.7rem', letterSpacing: '-0.005em' }}>{it.title}</h3>
-              <p style={{ fontFamily: FONT_JA, fontSize: '0.92rem', color: TEXT_BODY, lineHeight: 1.95, margin: 0 }}>{it.body}</p>
+              <p style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.24em', color: "var(--corp-accent, #38BDF8)", fontWeight: 700, margin: '1.4rem 0 0.6rem' }}>{it.no}</p>
+              <h3 style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.15rem, 1.7vw, 1.35rem)', fontWeight: 800, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.5, margin: '0 0 0.7rem', letterSpacing: '-0.005em' }}>{it.title}</h3>
+              <p style={{ fontFamily: FONT_JA, fontSize: '0.92rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.95, margin: 0 }}>{it.body}</p>
             </motion.article>
           ))}
         </div>
@@ -234,7 +233,7 @@ export function ServicesEditorial({ onAnchor }: { onAnchor: AnchorHandler }) {
     '朝のクリニック受付',
   ];
   return (
-    <section id="whatwedo" className="lp-section-pad" style={{ padding: '7rem 1.5rem 5rem', background: INK_2, scrollMarginTop: 70 }}>
+    <section id="whatwedo" className="lp-section-pad" style={{ padding: '7rem 1.5rem 5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70 }}>
       <div className="ch-wrap">
         <div className="ch-head">
           <Kick>What We Do</Kick>
@@ -253,26 +252,26 @@ export function ServicesEditorial({ onAnchor }: { onAnchor: AnchorHandler }) {
               </div>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '0.9rem' }}>
-                  <span style={{ fontFamily: FONT_EN, fontSize: '0.8rem', letterSpacing: '0.2em', color: ACCENT, fontWeight: 700 }}>{s.no}</span>
-                  <span style={{ fontFamily: FONT_EN, fontSize: '0.74rem', letterSpacing: '0.16em', color: TEXT_MUTED, textTransform: 'uppercase', fontWeight: 600 }}>{s.titleEn}</span>
+                  <span style={{ fontFamily: FONT_EN, fontSize: '0.8rem', letterSpacing: '0.2em', color: "var(--corp-accent, #38BDF8)", fontWeight: 700 }}>{s.no}</span>
+                  <span style={{ fontFamily: FONT_EN, fontSize: '0.74rem', letterSpacing: '0.16em', color: "var(--corp-muted, rgba(226,232,240,0.62))", textTransform: 'uppercase', fontWeight: 600 }}>{s.titleEn}</span>
                   {s.soon && (
-                    <span style={{ fontFamily: FONT_EN, fontSize: '0.58rem', letterSpacing: '0.2em', color: INK, background: ACCENT_LIGHT, padding: '3px 8px', borderRadius: 999, fontWeight: 700 }}>
+                    <span style={{ fontFamily: FONT_EN, fontSize: '0.58rem', letterSpacing: '0.2em', color: "var(--corp-text, #070A10)", background: ACCENT_LIGHT, padding: '3px 8px', borderRadius: 999, fontWeight: 700 }}>
                       COMING SOON
                     </span>
                   )}
                 </div>
-                <h3 style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.5rem, 2.6vw, 2.1rem)', fontWeight: 800, color: PAPER, lineHeight: 1.35, margin: '0 0 0.5rem', letterSpacing: '-0.01em' }}>
+                <h3 style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.5rem, 2.6vw, 2.1rem)', fontWeight: 800, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.35, margin: '0 0 0.5rem', letterSpacing: '-0.01em' }}>
                   {s.titleJa}
                 </h3>
-                <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1rem, 1.5vw, 1.12rem)', fontWeight: 700, color: ACCENT_LIGHT, lineHeight: 1.7, margin: '0 0 1rem' }}>
+                <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1rem, 1.5vw, 1.12rem)', fontWeight: 700, color: "var(--corp-accent, #7DD3FC)", lineHeight: 1.7, margin: '0 0 1rem' }}>
                   {s.copy}
                 </p>
-                <p style={{ fontFamily: FONT_JA, fontSize: '0.95rem', color: TEXT_BODY, lineHeight: 2, margin: '0 0 1.2rem' }}>{s.body}</p>
+                <p style={{ fontFamily: FONT_JA, fontSize: '0.95rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 2, margin: '0 0 1.2rem' }}>{s.body}</p>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                   {s.items.map(it => (
                     <li key={it} style={{
-                      fontFamily: FONT_JA, fontSize: '0.74rem', color: 'rgba(236,242,250,0.8)',
-                      border: `1px solid ${LINE}`, background: 'rgba(255,255,255,0.03)', borderRadius: 999, padding: '5px 11px',
+                      fontFamily: FONT_JA, fontSize: '0.74rem', color: "var(--corp-body, rgba(236,242,250,0.8))",
+                      border: `1px solid ${LINE}`, background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.03)", borderRadius: 999, padding: '5px 11px',
                     }}>
                       {it}
                     </li>
@@ -306,7 +305,7 @@ const SHOTS: { img: string; name: string; cap: string }[] = [
 
 export function ProductsProof({ onAnchor }: { onAnchor: AnchorHandler }) {
   return (
-    <section id="proof" className="lp-section-pad" style={{ padding: '7rem 0', background: INK, scrollMarginTop: 70, overflow: 'hidden' }}>
+    <section id="proof" className="lp-section-pad" style={{ padding: '7rem 0', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70, overflow: 'hidden' }}>
       <div className="ch-wrap" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '1.5rem' }}>
         <div className="ch-head" style={{ marginBottom: 0 }}>
           <Kick>Products</Kick>
@@ -323,8 +322,8 @@ export function ProductsProof({ onAnchor }: { onAnchor: AnchorHandler }) {
             <motion.figure key={s.name} {...reveal} transition={{ ...reveal.transition, delay: i * 0.05 }} className="ch-shot">
               <img src={s.img} alt={`${s.name} の実際の画面`} loading="lazy" decoding="async" />
               <figcaption>
-                <span style={{ fontFamily: FONT_EN, fontWeight: 700, fontSize: '0.9rem', color: '#fff', letterSpacing: '0.04em' }}>CORE {s.name}</span>
-                <span style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: TEXT_MUTED }}>{s.cap}</span>
+                <span style={{ fontFamily: FONT_EN, fontWeight: 700, fontSize: '0.9rem', color: "var(--corp-text, #fff)", letterSpacing: '0.04em' }}>CORE {s.name}</span>
+                <span style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))" }}>{s.cap}</span>
               </figcaption>
             </motion.figure>
           ))}
@@ -339,7 +338,7 @@ export function ProductsProof({ onAnchor }: { onAnchor: AnchorHandler }) {
 // ============================================================
 export function ApproachSection() {
   return (
-    <section id="difference" className="lp-section-pad ch-approach" style={{ padding: '7rem 1.5rem', background: INK_2, scrollMarginTop: 70, position: 'relative', overflow: 'hidden' }}>
+    <section id="difference" className="lp-section-pad ch-approach" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70, position: 'relative', overflow: 'hidden' }}>
       <img src={IMG.texture} alt="" aria-hidden loading="lazy" decoding="async" className="ch-approach-bg" />
       <div className="ch-wrap" style={{ position: 'relative' }}>
         <div className="ch-head">
@@ -357,14 +356,14 @@ export function ApproachSection() {
           {DIFF_CORE.map((s, i) => (
             <motion.li key={s} {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }} className="ch-step">
               <span className="ch-step-dot" aria-hidden />
-              <span style={{ fontFamily: FONT_EN, fontSize: '0.7rem', letterSpacing: '0.22em', color: ACCENT, fontWeight: 700, display: 'block', marginBottom: 8 }}>
+              <span style={{ fontFamily: FONT_EN, fontSize: '0.7rem', letterSpacing: '0.22em', color: "var(--corp-accent, #38BDF8)", fontWeight: 700, display: 'block', marginBottom: 8 }}>
                 {String(i + 1).padStart(2, '0')}
               </span>
-              <span style={{ fontFamily: FONT_JA, fontSize: 'clamp(1rem, 1.4vw, 1.12rem)', fontWeight: 800, color: PAPER, lineHeight: 1.5 }}>{s}</span>
+              <span style={{ fontFamily: FONT_JA, fontSize: 'clamp(1rem, 1.4vw, 1.12rem)', fontWeight: 800, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.5 }}>{s}</span>
             </motion.li>
           ))}
         </ol>
-        <p style={{ fontFamily: FONT_EN, fontSize: 'clamp(0.95rem, 1.6vw, 1.15rem)', color: TEXT_MUTED, letterSpacing: '0.02em', marginTop: '3rem', fontWeight: 500 }}>
+        <p style={{ fontFamily: FONT_EN, fontSize: 'clamp(0.95rem, 1.6vw, 1.15rem)', color: "var(--corp-muted, rgba(226,232,240,0.62))", letterSpacing: '0.02em', marginTop: '3rem', fontWeight: 500 }}>
           We don’t just build software. We change how the company works.
         </p>
       </div>
@@ -377,14 +376,14 @@ export function ApproachSection() {
 // ============================================================
 export function AssessmentHome({ onAnchor }: { onAnchor: AnchorHandler }) {
   return (
-    <section id="assessment" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, scrollMarginTop: 70 }}>
+    <section id="assessment" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70 }}>
       <div className="ch-wrap ch-two">
         <motion.div {...reveal} className="ch-assess-media">
           <img src={IMG.assessment} srcSet={photoSrcSet(IMG.assessment, 1600)} sizes={SIZES_CARD} alt="机の上のロードマップを指さす手元" loading="lazy" decoding="async" width={1600} height={1200} />
           <div className="ch-assess-tag">
-            <span style={{ fontFamily: FONT_EN, fontSize: '0.62rem', letterSpacing: '0.24em', color: ACCENT_LIGHT, fontWeight: 700 }}>DELIVERABLE</span>
-            <span style={{ fontFamily: FONT_JA, fontSize: '1.05rem', fontWeight: 800, color: '#fff' }}>AI Transformation Roadmap</span>
-            <span style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: TEXT_MUTED }}>どの業務を・どの順番で・いくらの効果を見込んで変えるか、実行できる1枚に。</span>
+            <span style={{ fontFamily: FONT_EN, fontSize: '0.62rem', letterSpacing: '0.24em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 700 }}>DELIVERABLE</span>
+            <span style={{ fontFamily: FONT_JA, fontSize: '1.05rem', fontWeight: 800, color: "var(--corp-text, #fff)" }}>AI Transformation Roadmap</span>
+            <span style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))" }}>どの業務を・どの順番で・いくらの効果を見込んで変えるか、実行できる1枚に。</span>
           </div>
         </motion.div>
         <div>
@@ -399,16 +398,16 @@ export function AssessmentHome({ onAnchor }: { onAnchor: AnchorHandler }) {
           </p>
           <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.8rem', display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
             {ASSESSMENT_TARGETS.map(t => (
-              <li key={t} style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: 'rgba(236,242,250,0.82)', border: `1px solid ${LINE}`, borderRadius: 999, padding: '5px 11px' }}>{t}</li>
+              <li key={t} style={{ fontFamily: FONT_JA, fontSize: '0.76rem', color: "var(--corp-body, rgba(236,242,250,0.82))", border: `1px solid ${LINE}`, borderRadius: 999, padding: '5px 11px' }}>{t}</li>
             ))}
           </ul>
           <ol className="ch-assess-steps" style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem' }}>
             {ASSESSMENT_STEPS.map(s => (
               <li key={s.no}>
-                <span style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.2em', color: ACCENT, fontWeight: 700 }}>{s.no}</span>
+                <span style={{ fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.2em', color: "var(--corp-accent, #38BDF8)", fontWeight: 700 }}>{s.no}</span>
                 <span>
-                  <strong style={{ fontFamily: FONT_JA, fontSize: '0.98rem', fontWeight: 800, color: PAPER, display: 'block', marginBottom: 2 }}>{s.title}</strong>
-                  <span style={{ fontFamily: FONT_JA, fontSize: '0.84rem', color: TEXT_BODY, lineHeight: 1.85 }}>{s.body}</span>
+                  <strong style={{ fontFamily: FONT_JA, fontSize: '0.98rem', fontWeight: 800, color: "var(--corp-text, #F3F6FB)", display: 'block', marginBottom: 2 }}>{s.title}</strong>
+                  <span style={{ fontFamily: FONT_JA, fontSize: '0.84rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.85 }}>{s.body}</span>
                 </span>
               </li>
             ))}
@@ -427,25 +426,25 @@ export function FounderMessage({ onAnchor }: { onAnchor: AnchorHandler }) {
   // 2026-09-06 CORE WEB 2035: 「論理と感情。技術と人。」— 長い伝記ではなく、この珍しい会社が存在する戦略的な意味を語る。
   // 言葉の正本は coreStory.ts（FOUNDER）。年齢・年・学歴は書かない（03_FACT_EVIDENCE_MAP G）。
   return (
-    <section id="founder" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK_2, scrollMarginTop: 70, position: 'relative', overflow: 'hidden' }}>
+    <section id="founder" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70, position: 'relative', overflow: 'hidden' }}>
       <div className="ch-wrap ch-two" style={{ position: 'relative' }}>
         <div>
           <Kick>{FOUNDER.kicker}</Kick>
           <h2 style={{ ...sectionH2, margin: 0 }}>
             {FOUNDER.h2.split('\n').map((l, i, a) => <span key={l}>{l}{i < a.length - 1 && <br />}</span>)}
           </h2>
-          <div style={{ fontFamily: FONT_JA, color: TEXT_BODY, fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)', lineHeight: 2.2, marginTop: '1.6rem', maxWidth: 560 }}>
-            <p style={{ margin: '0 0 1.2rem', color: PAPER, fontWeight: 700 }}>{FOUNDER.intro}</p>
-            <p style={{ margin: '0 0 1.2rem' }}><strong style={{ color: PAPER, fontWeight: 800 }}>{FOUNDER.thesis}</strong></p>
+          <div style={{ fontFamily: FONT_JA, color: "var(--corp-body, rgba(226,232,240,0.78))", fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)', lineHeight: 2.2, marginTop: '1.6rem', maxWidth: 560 }}>
+            <p style={{ margin: '0 0 1.2rem', color: "var(--corp-text, #F3F6FB)", fontWeight: 700 }}>{FOUNDER.intro}</p>
+            <p style={{ margin: '0 0 1.2rem' }}><strong style={{ color: "var(--corp-text, #F3F6FB)", fontWeight: 800 }}>{FOUNDER.thesis}</strong></p>
             {FOUNDER.story.map(p => <p key={p.slice(0, 12)} style={{ margin: '0 0 1.2rem' }}>{p}</p>)}
           </div>
           <ul style={{ listStyle: 'none', margin: '0.4rem 0 0', padding: '0 0 0 1.1rem', borderLeft: `2px solid ${ACCENT}`, display: 'grid', gap: '0.35rem', maxWidth: 560 }}>
-            {FOUNDER.track.map(t => <li key={t} style={{ fontFamily: FONT_JA, fontSize: '0.92rem', lineHeight: 1.8, color: 'rgba(226,232,240,0.82)', fontWeight: 600 }}>{t}</li>)}
+            {FOUNDER.track.map(t => <li key={t} style={{ fontFamily: FONT_JA, fontSize: '0.92rem', lineHeight: 1.8, color: "var(--corp-body, rgba(226,232,240,0.82))", fontWeight: 600 }}>{t}</li>)}
           </ul>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: '2rem' }}>
             <div>
-              <p style={{ fontFamily: FONT_JA, fontSize: '1.05rem', fontWeight: 800, color: '#fff', margin: 0 }}>{COMPANY_INFO.representative}</p>
-              <p style={{ fontFamily: FONT_EN, fontSize: '0.74rem', letterSpacing: '0.12em', color: TEXT_MUTED, margin: '2px 0 0' }}>
+              <p style={{ fontFamily: FONT_JA, fontSize: '1.05rem', fontWeight: 800, color: "var(--corp-text, #fff)", margin: 0 }}>{COMPANY_INFO.representative}</p>
+              <p style={{ fontFamily: FONT_EN, fontSize: '0.74rem', letterSpacing: '0.12em', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '2px 0 0' }}>
                 {COMPANY_INFO.representativeEn} — Founder &amp; CEO, {COMPANY_INFO.nameEn} ／ Cellist GAUCHE
               </p>
             </div>
@@ -477,10 +476,10 @@ export function CompanyOverview({ onAnchor }: { onAnchor: AnchorHandler }) {
     { k: '代表取締役', en: 'CEO', v: <>{COMPANY_INFO.representative}<span className="ch-dl-sub">{COMPANY_INFO.representativeEn}</span></> },
     { k: '本社所在地', en: 'Headquarters', v: <>{COMPANY_INFO.addressJa}<span className="ch-dl-sub">{COMPANY_INFO.addressEn}</span></> },
     { k: '事業内容', en: 'Business', v: SERVICE_LAYERS.map(s => s.titleJa).join('／') + '／自社AIプロダクトの開発・運営' },
-    { k: '連絡先', en: 'Contact', v: <a href={`mailto:${COMPANY_INFO.email}`} style={{ color: ACCENT_LIGHT, textDecoration: 'none' }}>{COMPANY_INFO.email}</a> },
+    { k: '連絡先', en: 'Contact', v: <a href={`mailto:${COMPANY_INFO.email}`} style={{ color: "var(--corp-accent, #7DD3FC)", textDecoration: 'none' }}>{COMPANY_INFO.email}</a> },
   ];
   return (
-    <section id="overview" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, scrollMarginTop: 70 }}>
+    <section id="overview" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70 }}>
       <div className="ch-wrap ch-two" style={{ alignItems: 'start' }}>
         <div>
           <Kick>Company</Kick>
@@ -496,10 +495,10 @@ export function CompanyOverview({ onAnchor }: { onAnchor: AnchorHandler }) {
           {rows.map(r => (
             <div key={r.k} className="ch-dl-row">
               <dt>
-                <span style={{ fontFamily: FONT_JA, fontSize: '0.88rem', fontWeight: 700, color: PAPER, display: 'block' }}>{r.k}</span>
-                <span style={{ fontFamily: FONT_EN, fontSize: '0.62rem', letterSpacing: '0.2em', color: TEXT_MUTED, textTransform: 'uppercase' }}>{r.en}</span>
+                <span style={{ fontFamily: FONT_JA, fontSize: '0.88rem', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", display: 'block' }}>{r.k}</span>
+                <span style={{ fontFamily: FONT_EN, fontSize: '0.62rem', letterSpacing: '0.2em', color: "var(--corp-muted, rgba(226,232,240,0.62))", textTransform: 'uppercase' }}>{r.en}</span>
               </dt>
-              <dd style={{ margin: 0, fontFamily: FONT_JA, fontSize: '0.92rem', color: TEXT_BODY, lineHeight: 1.8 }}>{r.v}</dd>
+              <dd style={{ margin: 0, fontFamily: FONT_JA, fontSize: '0.92rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.8 }}>{r.v}</dd>
             </div>
           ))}
           <div style={{ paddingTop: '1.4rem' }}>
@@ -521,12 +520,12 @@ export function FinalCta({ onAnchor }: { onAnchor: AnchorHandler }) {
       <div className="ch-band-shade" aria-hidden />
       <div style={{ position: 'relative', maxWidth: 820, margin: '0 auto' }}>
         <Kick center>Let’s talk</Kick>
-        <h2 style={{ ...sectionH2, fontSize: 'clamp(1.9rem, 4.2vw, 3.2rem)', margin: 0, color: '#fff' }}>
+        <h2 style={{ ...sectionH2, fontSize: 'clamp(1.9rem, 4.2vw, 3.2rem)', margin: 0, color: "var(--corp-text, #fff)" }}>
           まず、返したい仕事を
           <br />
           ひとつ教えてください。
         </h2>
-        <p style={{ ...sectionLead, margin: '1.2rem auto 2.2rem', color: 'rgba(236,242,250,0.85)' }}>
+        <p style={{ ...sectionLead, margin: '1.2rem auto 2.2rem', color: "var(--corp-body, rgba(236,242,250,0.85))" }}>
           初回のご相談に費用はいただきません。その場で、AIに任せられる業務と、人が担うべき業務を切り分けてお返しします。
           御社の「核」がどこにあるのかを、一緒に見極めます。
         </p>
@@ -534,8 +533,8 @@ export function FinalCta({ onAnchor }: { onAnchor: AnchorHandler }) {
           <a href="/roai-score" onClick={e => { rememberSource('home-final'); track('corp_cta_click', 'home-final'); onAnchor(e, '/roai-score'); }} style={ctaHero}>ROAIを無料診断する</a>
           <a href="#contact" onClick={e => onAnchor(e, '#contact')} style={{ ...ctaGhost, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>AI Transformationを相談する</a>
         </div>
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: 'rgba(236,242,250,0.7)', margin: '1.2rem 0 0' }}>
-          メールでのご相談は <a href={`mailto:${COMPANY_INFO.email}`} style={{ color: '#BAE6FD' }}>{COMPANY_INFO.email}</a>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.8rem', color: "var(--corp-body, rgba(236,242,250,0.7))", margin: '1.2rem 0 0' }}>
+          メールでのご相談は <a href={`mailto:${COMPANY_INFO.email}`} style={{ color: "var(--corp-accent, #BAE6FD)" }}>{COMPANY_INFO.email}</a>
         </p>
       </div>
     </section>

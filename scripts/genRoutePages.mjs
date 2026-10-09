@@ -31,7 +31,7 @@ const FONTS_CORP = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;
 const FONTS_STUDIO = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+JP:wght@400..900&family=Noto+Sans+JP:wght@300..700&family=Inter:wght@300;400;500;600;700&display=swap';
 
 const THEMES = {
-  corp:       { bg: '#050505', appTitle: 'CORE',        site: 'CORE',        entry: '/src/corpMain.tsx', fonts: FONTS_CORP,   dark: true,  gaSite: 'corp' },
+  corp:       { bg: '#FFFFFF', appTitle: 'CORE',        site: 'CORE',        entry: '/src/corpMain.tsx', fonts: FONTS_CORP,   dark: false, gaSite: 'corp' },
   studio:     { bg: '#FFFFFF', appTitle: 'CORE Studio', site: 'CORE Studio', entry: '/src/main.tsx',     fonts: FONTS_STUDIO, dark: false, gaSite: 'studio' },
   studioDark: { bg: '#0B0B0C', appTitle: 'CORE Studio', site: 'CORE Studio', entry: '/src/main.tsx',     fonts: FONTS_STUDIO, dark: true,  gaSite: 'studio' },
 };
@@ -90,11 +90,11 @@ export const PAGES = [
     title: 'Return on AI（ROAI）とは — AI投資を経営成果で測る指標 | 株式会社CORE',
     description: 'Return on AI（ROAI）とは、AIへの投資額ではなく、AIが返した経営成果で投資を評価する指標です。ROAI＝AIが生んだ経済価値÷AI投資総額。売上・コスト削減・時間・損失回避・新しい価値の5つのReturnで測ります。AI投資が成果にならない5つの理由、期待損失の数え方、投資余力の逆算、CORE Transformation Loop（8段）まで、株式会社COREが実務で使っている考え方を公開します。',
     keywords: 'Return on AI,ROAI,AI投資,ROI,AI導入 効果測定,AI 投資対効果,DX 効果測定,AI KPI,株式会社CORE',
-    og: `${CORP}/og-core-v7.png`,
+    og: `${CORP}/og-core-logo-white-v9.png`,
     ld: [
       { '@type': 'Article', '@id': `${CORP}/return-on-ai#article`, headline: 'Return on AI（ROAI）とは — AI投資を経営成果で測る指標',
         author: { '@id': `${CORP}/#founder` }, publisher: { '@id': ORG }, inLanguage: 'ja',
-        datePublished: '2026-09-03', dateModified: TODAY, image: `${CORP}/og-core-v7.png`,
+        datePublished: '2026-09-03', dateModified: TODAY, image: `${CORP}/og-core-logo-white-v9.png`,
         about: { '@id': `${CORP}/return-on-ai#term` }, mainEntityOfPage: `${CORP}/return-on-ai` },
       { '@type': 'DefinedTerm', '@id': `${CORP}/return-on-ai#term`, name: 'Return on AI', alternateName: ['ROAI', 'リターン・オン・AI'],
         url: `${CORP}/return-on-ai`, inDefinedTermSet: `${CORP}/return-on-ai`,
@@ -203,7 +203,7 @@ export const PAGES = [
     title: 'CORE ROAI SCORE — 約2分・無料のAI投資優先順位診断 | 株式会社CORE',
     description: '約2分・選択式で、あなたの会社の次にAI投資すべき場所、削減できる時間、経済価値の概算、売上・コスト・リスクの改善余地、AI Readiness、投資余力の目安を可視化する無料診断。連絡先の入力は不要。数字は入力と公開された仮定から決定論的に計算し、算定根拠を画面上で確かめられます。',
     keywords: 'AI診断 無料,AI投資 優先順位,DX診断,AI Readiness,ROAI診断,AI導入 診断,無料 診断 AI,株式会社CORE',
-    og: `${CORP}/og-core-v7.png`,
+    og: `${CORP}/og-core-logo-white-v9.png`,
     ld: [
       { '@type': 'WebApplication', '@id': `${CORP}/roai-score#app`, name: 'CORE ROAI SCORE',
         url: `${CORP}/roai-score`, applicationCategory: 'BusinessApplication', operatingSystem: 'Web', inLanguage: 'ja',
@@ -263,7 +263,7 @@ export const PAGES = [
     title: 'ASHITAKA PROJECT × REGIONAL OS — 文化を入口に、街と村のDXへ | 株式会社CORE',
     description: '株式会社COREは地域変革を二つの固有名で分けて設計します。文化で接点をつくる ASHITAKA PROJECT（代表取締役本人がチェリストとして演奏し、CORE Studioが映像化・発信）と、自治体・地域事業者の業務をAI前提で再設計する REGIONAL OS（住民対応・内部業務・地域事業者・地域データ基盤）。自治体・地域事業者へいま提供できることと、構想段階のものを分けてお伝えします。スタジオジブリの公式事業ではありません。',
     keywords: 'ASHITAKA PROJECT,REGIONAL OS,自治体DX,地域DX,地方創生,関係人口,自治体 AI導入,地域 AI,街のDX,村のDX,株式会社CORE,神戸',
-    og: `${CORP}/og-core-v8.png`,
+    og: `${CORP}/og-core-logo-white-v9.png`,
     ld: [
       { '@type': 'Project', '@id': `${CORP}/ashitaka#project`, name: 'ASHITAKA PROJECT', alternateName: 'ASHITAKA PROJECT by CORE',
         url: `${CORP}/ashitaka`, founder: { '@id': `${CORP}/#founder` }, parentOrganization: { '@id': ORG }, inLanguage: 'ja',
@@ -375,11 +375,11 @@ export const PAGES = [
     title: 'CORE ENERGY — AIの電力需要に、地域の分散資源で応える | 株式会社CORE',
     description: 'AIの普及は、計算基盤・データセンター・ロボティクスを通じて電力需要と系統の制約を押し上げます。株式会社COREは、エネルギー事業者との協業領域として、Energy Intelligence（データ解析・AI活用の設計・事業性評価）、AI最適化（需要予測・需給最適化・デマンドレスポンス・VPP・設備保全）、地域プロジェクトの組成、計測を提供します。現在は電力事業者でも設備の所有者でもなく、資産を持たず、AI・データ解析・設計・地域との合意形成から始めます。',
     keywords: 'AI エネルギー,エネルギー AI活用,需要予測 AI,需給最適化,デマンドレスポンス,VPP,設備保全 AI,分散型エネルギー,マイクログリッド,地域 再生可能エネルギー,Energy Intelligence,エネルギー DX,株式会社CORE',
-    og: `${CORP}/og-core-v8.png`,
+    og: `${CORP}/og-core-logo-white-v9.png`,
     ld: [
       { '@type': 'Article', '@id': `${CORP}/energy#article`, headline: 'CORE ENERGY — AIの電力需要に、地域の分散資源で応える',
         author: { '@id': `${CORP}/#founder` }, publisher: { '@id': ORG }, inLanguage: 'ja',
-        datePublished: TODAY, dateModified: TODAY, image: `${CORP}/og-core-v8.png`, mainEntityOfPage: `${CORP}/energy` },
+        datePublished: TODAY, dateModified: TODAY, image: `${CORP}/og-core-logo-white-v9.png`, mainEntityOfPage: `${CORP}/energy` },
       crumbs(`${CORP}/energy`, [['株式会社CORE', `${CORP}/corp`], ['CORE Energy', `${CORP}/energy`]]),
       faq(`${CORP}/energy`, [
         ['株式会社COREは電力事業者ですか。', 'いいえ。現在、電力事業者でも、発電・送配電設備の所有者でもありません。AI・データ解析・設計・地域との合意形成を提供します。'],
@@ -869,10 +869,11 @@ function render(page) {
   <head>
     <meta charset="UTF-8" />
     <!-- ★このファイルは scripts/genRoutePages.mjs が作っています。直接編集しても次の build で消えます。 -->
-    <link rel="icon" type="image/svg+xml" href="/core-icon-v2.svg" />
+    ${page.theme === 'corp' ? `<link rel="icon" type="image/png" sizes="1254x1254" href="/og-core-logo-white-v9.png" />
+    <link rel="apple-touch-icon" href="/og-core-logo-white-v9.png" />` : `<link rel="icon" type="image/svg+xml" href="/core-icon-v2.svg" />
     <link rel="icon" type="image/png" sizes="192x192" href="/core-192-v2.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/core-512-v2.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/core-180-v2.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/core-180-v2.png" />`}
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="${t.bg}" />
     <style>html, body { margin: 0; background: ${t.bg}; }</style>
@@ -902,11 +903,11 @@ function render(page) {
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:site_name" content="${t.site}" />
     <meta property="og:image" content="${page.og}" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content="${page.theme === 'corp' ? 1254 : 1200}" />
+    <meta property="og:image:height" content="${page.theme === 'corp' ? 1254 : 630}" />
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="${page.theme === 'corp' ? 'summary' : 'summary_large_image'}" />
     <meta name="twitter:title" content="${esc(page.title)}" />
     <meta name="twitter:description" content="${esc(page.description)}" />
     <meta name="twitter:image" content="${page.og}" />

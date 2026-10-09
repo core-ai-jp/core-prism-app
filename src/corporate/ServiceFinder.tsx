@@ -206,8 +206,8 @@ export function recommend(a1: string, a2: string, a3: string) {
 
 const cardBase: React.CSSProperties = {
   borderRadius: 20,
-  border: '1px solid rgba(125,211,252,0.28)',
-  background: 'linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.012))',
+  border: "1px solid var(--corp-line, rgba(125,211,252,0.28))",
+  background: "linear-gradient(180deg, rgba(var(--corp-tint-rgb, 255,255,255), 0.045), rgba(var(--corp-tint-rgb, 255,255,255), 0.012))",
 };
 
 export default function ServiceFinder() {
@@ -241,28 +241,28 @@ export default function ServiceFinder() {
         paddingTop: '4.5rem',
         paddingLeft: '1.25rem',
         paddingRight: '1.25rem',
-        background: 'radial-gradient(120% 100% at 50% 0%, #0E0E0E 0%, #060606 72%)',
-        borderTop: '1px solid rgba(125,211,252,0.16)',
-        borderBottom: '1px solid rgba(125,211,252,0.16)',
+        background: "radial-gradient(120% 100% at 50% 0%, var(--corp-surface, #0E0E0E) 0%, var(--corp-surface, #060606) 72%)",
+        borderTop: "1px solid var(--corp-line, rgba(125,211,252,0.16))",
+        borderBottom: "1px solid var(--corp-line, rgba(125,211,252,0.16))",
         // 追従ヘッダー(約72px)に見出しが隠れないよう、他セクションより深くとる
         scrollMarginTop: 104,
       }}
     >
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.32em', color: '#7DD3FC', textTransform: 'uppercase', marginBottom: '0.9rem' }}>
+          <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.32em', color: "var(--corp-accent, #7DD3FC)", textTransform: 'uppercase', marginBottom: '0.9rem' }}>
             Which one is yours
           </p>
           <h2
             style={{
               fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.4rem, 5vw, 2.2rem)', fontWeight: 700, lineHeight: 1.6, letterSpacing: '0.03em',
-              background: 'linear-gradient(120deg, #FFFFFF, #7DD3FC)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent',
+              background: "linear-gradient(120deg, var(--corp-surface-raised, #FFFFFF), #7DD3FC)", WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent',
               marginBottom: '0.8rem',
             }}
           >
             8つのうち、どれが合うかを診断します。
           </h2>
-          <p style={{ fontFamily: FONT_SANS, fontSize: '0.84rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.95 }}>
+          <p style={{ fontFamily: FONT_SANS, fontSize: '0.84rem', color: "var(--corp-muted, rgba(255,255,255,0.62))", lineHeight: 1.95 }}>
             3つ答えるだけで、いまのあなたに効く1つと、その理由・料金までお見せします。
             <br />
             登録もメールアドレスも要りません。
@@ -304,15 +304,15 @@ function QuestionView({ q, step, onAnswer, onBack, onCompare }: {
             }}
           />
         ))}
-        <span style={{ fontFamily: FONT_SANS, fontSize: '0.7rem', fontWeight: 700, color: '#7DD3FC', fontVariantNumeric: 'tabular-nums', marginLeft: 4 }}>
+        <span style={{ fontFamily: FONT_SANS, fontSize: '0.7rem', fontWeight: 700, color: "var(--corp-accent, #7DD3FC)", fontVariantNumeric: 'tabular-nums', marginLeft: 4 }}>
           {step + 1} / 3
         </span>
       </div>
 
-      <h3 style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.05rem, 3.6vw, 1.3rem)', fontWeight: 700, color: '#F4F0E6', lineHeight: 1.7, marginBottom: '0.35rem' }}>
+      <h3 style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.05rem, 3.6vw, 1.3rem)', fontWeight: 700, color: "var(--corp-text, #F4F0E6)", lineHeight: 1.7, marginBottom: '0.35rem' }}>
         {q.title}
       </h3>
-      <p style={{ fontFamily: FONT_SANS, fontSize: '0.74rem', color: 'rgba(255,255,255,0.5)', marginBottom: '1.1rem' }}>{q.note}</p>
+      <p style={{ fontFamily: FONT_SANS, fontSize: '0.74rem', color: "var(--corp-muted, rgba(255,255,255,0.5))", marginBottom: '1.1rem' }}>{q.note}</p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
         {q.choices.map(c => (
@@ -323,8 +323,8 @@ function QuestionView({ q, step, onAnswer, onBack, onCompare }: {
             style={{
               minHeight: 56, width: '100%', textAlign: 'left', cursor: 'pointer',
               padding: '0.9rem 1rem', borderRadius: 14,
-              border: '1px solid rgba(255,255,255,0.14)', background: 'rgba(255,255,255,0.04)',
-              color: '#F4F7FC', fontFamily: FONT_SANS, fontSize: '0.92rem', fontWeight: 600, lineHeight: 1.65,
+              border: "1px solid var(--corp-line, rgba(255,255,255,0.14))", background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.04)",
+              color: "var(--corp-text, #F4F7FC)", fontFamily: FONT_SANS, fontSize: '0.92rem', fontWeight: 600, lineHeight: 1.65,
               display: 'flex', alignItems: 'center', gap: '0.7rem',
             }}
           >
@@ -353,8 +353,8 @@ function ResultView({ result, onReset, onCompare }: {
   const external = top.url.startsWith('http');
   const secondExternal = second.url.startsWith('http');
   return (
-    <div style={{ ...cardBase, padding: '1.6rem 1.15rem 1.3rem', borderColor: 'rgba(125,211,252,0.55)', boxShadow: '0 34px 80px -40px rgba(125,211,252,0.5)' }}>
-      <p style={{ fontFamily: FONT_SANS, fontSize: '0.74rem', letterSpacing: '0.1em', color: '#7DD3FC', fontWeight: 800, marginBottom: '1rem' }}>
+    <div style={{ ...cardBase, padding: '1.6rem 1.15rem 1.3rem', borderColor: "var(--corp-line, rgba(125,211,252,0.55))", boxShadow: '0 34px 80px -40px rgba(125,211,252,0.5)' }}>
+      <p style={{ fontFamily: FONT_SANS, fontSize: '0.74rem', letterSpacing: '0.1em', color: "var(--corp-accent, #7DD3FC)", fontWeight: 800, marginBottom: '1rem' }}>
         おすすめの1つ
       </p>
 
@@ -363,20 +363,20 @@ function ResultView({ result, onReset, onCompare }: {
           <TopLogo size={56} withWordmark={false} />
         </span>
         <div style={{ minWidth: 0 }}>
-          <p style={{ fontFamily: FONT_DISPLAY, fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.08em', color: '#EEF2F7', lineHeight: 1.3 }}>
+          <p style={{ fontFamily: FONT_DISPLAY, fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.08em', color: "var(--corp-text, #EEF2F7)", lineHeight: 1.3 }}>
             {top.name}
           </p>
           <p style={{ fontFamily: FONT_SANS, fontVariantNumeric: 'tabular-nums', marginTop: 2 }}>
-            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#BAE6FD' }}>{top.price}</span>
-            <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.55)', marginLeft: 5 }}>{top.priceNote}</span>
+            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: "var(--corp-accent, #BAE6FD)" }}>{top.price}</span>
+            <span style={{ fontSize: '0.72rem', color: "var(--corp-muted, rgba(255,255,255,0.55))", marginLeft: 5 }}>{top.priceNote}</span>
           </p>
         </div>
       </div>
 
       {/* なぜこれなのか（選んだ答えから作る） */}
-      <div style={{ borderRadius: 14, background: 'rgba(125,211,252,0.08)', border: '1px solid rgba(125,211,252,0.22)', padding: '0.95rem 1rem', marginBottom: '1rem' }}>
-        <p style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.08em', color: '#7DD3FC', marginBottom: 6 }}>なぜ、これなのか</p>
-        <p style={{ fontFamily: FONT_SANS, fontSize: '0.86rem', color: 'rgba(255,255,255,0.82)', lineHeight: 1.95 }}>
+      <div style={{ borderRadius: 14, background: 'rgba(125,211,252,0.08)', border: "1px solid var(--corp-line, rgba(125,211,252,0.22))", padding: '0.95rem 1rem', marginBottom: '1rem' }}>
+        <p style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.08em', color: "var(--corp-accent, #7DD3FC)", marginBottom: 6 }}>なぜ、これなのか</p>
+        <p style={{ fontFamily: FONT_SANS, fontSize: '0.86rem', color: "var(--corp-body, rgba(255,255,255,0.82))", lineHeight: 1.95 }}>
           「{painLabel}」——{top.name} は、そこを解くために作りました。
           <br />
           {top.can}。{top.who}のためのものです。
@@ -385,8 +385,8 @@ function ResultView({ result, onReset, onCompare }: {
 
       <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'flex-start', marginBottom: '1.2rem' }}>
         <span style={{ marginTop: 5, display: 'inline-flex', flexShrink: 0 }}><MarkStep /></span>
-        <p style={{ fontFamily: FONT_SANS, fontSize: '0.84rem', color: 'rgba(255,255,255,0.74)', lineHeight: 1.9 }}>
-          <strong style={{ color: '#EEF2F7', fontWeight: 700 }}>はじめの一歩：</strong>{top.firstStep}
+        <p style={{ fontFamily: FONT_SANS, fontSize: '0.84rem', color: "var(--corp-body, rgba(255,255,255,0.74))", lineHeight: 1.9 }}>
+          <strong style={{ color: "var(--corp-text, #EEF2F7)", fontWeight: 700 }}>はじめの一歩：</strong>{top.firstStep}
         </p>
       </div>
 
@@ -398,7 +398,7 @@ function ResultView({ result, onReset, onCompare }: {
           display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 54,
           borderRadius: 999, textDecoration: 'none',
           fontFamily: FONT_SANS, fontSize: '0.92rem', fontWeight: 800, letterSpacing: '0.03em',
-          background: 'linear-gradient(90deg,#BAE6FD,#7DD3FC)', color: '#141414',
+          background: 'linear-gradient(90deg,#BAE6FD,#7DD3FC)', color: "var(--corp-text, #141414)",
         }}
       >
         {top.name} を見る →
@@ -410,13 +410,13 @@ function ResultView({ result, onReset, onCompare }: {
       <div
         style={{
           marginTop: '1.1rem', borderRadius: 14,
-          border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.035)',
+          border: "1px solid var(--corp-line, rgba(255,255,255,0.12))", background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.035)",
           padding: '0.95rem 1rem',
         }}
       >
-        <p style={{ fontFamily: FONT_SANS, fontSize: '0.78rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.9 }}>
+        <p style={{ fontFamily: FONT_SANS, fontSize: '0.78rem', color: "var(--corp-muted, rgba(255,255,255,0.62))", lineHeight: 1.9 }}>
           {channelPhrase}。であれば、
-          <strong style={{ color: '#EEF2F7', fontWeight: 700 }}>次に足すなら {second.name}。</strong>
+          <strong style={{ color: "var(--corp-text, #EEF2F7)", fontWeight: 700 }}>次に足すなら {second.name}。</strong>
           {second.can}（{second.price}{second.priceNote}）。
           <br />
           CORE の8つは、あとからつなげます。最初から全部そろえる必要はありません。
@@ -430,8 +430,8 @@ function ResultView({ result, onReset, onCompare }: {
             marginTop: '0.85rem',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem', minHeight: 48,
             borderRadius: 999, textDecoration: 'none',
-            border: '1px solid rgba(125,211,252,0.45)', background: 'rgba(125,211,252,0.08)',
-            color: '#EEF2F7', fontFamily: FONT_SANS, fontSize: '0.84rem', fontWeight: 700,
+            border: "1px solid var(--corp-line, rgba(125,211,252,0.45))", background: 'rgba(125,211,252,0.08)',
+            color: "var(--corp-text, #EEF2F7)", fontFamily: FONT_SANS, fontSize: '0.84rem', fontWeight: 700,
           }}
         >
           <span style={{ lineHeight: 0, flexShrink: 0 }}><SecondLogo size={20} withWordmark={false} /></span>
@@ -441,7 +441,7 @@ function ResultView({ result, onReset, onCompare }: {
 
       {/* 2026-08-05 夜間: 「税込・いつでも解約」は比較画面にはあったのに、決断にいちばん近い
           この結果画面には無かった。押す直前に金銭の不安を残さないため、同じ文言をここにも置く。 */}
-      <p style={{ fontFamily: FONT_SANS, fontSize: '0.74rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.9, marginTop: '0.9rem', textAlign: 'center' }}>
+      <p style={{ fontFamily: FONT_SANS, fontSize: '0.74rem', color: "var(--corp-muted, rgba(255,255,255,0.62))", lineHeight: 1.9, marginTop: '0.9rem', textAlign: 'center' }}>
         表示はすべて税込です。いつでも解約できます。
       </p>
 
@@ -457,7 +457,7 @@ function CompareView({ onBack }: { onBack: () => void }) {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.9rem' }}>
-        <p style={{ fontFamily: FONT_SANS, fontSize: '0.78rem', fontWeight: 800, color: '#7DD3FC', letterSpacing: '0.06em' }}>8つ、すべて</p>
+        <p style={{ fontFamily: FONT_SANS, fontSize: '0.78rem', fontWeight: 800, color: "var(--corp-accent, #7DD3FC)", letterSpacing: '0.06em' }}>8つ、すべて</p>
         <button type="button" onClick={onBack} style={subtleBtn}>← 3問で選ぶ</button>
       </div>
 
@@ -471,8 +471,8 @@ function CompareView({ onBack }: { onBack: () => void }) {
                 <span style={{ flexShrink: 0, lineHeight: 0, filter: `drop-shadow(0 6px 16px ${s.accent}55)` }}>
                   <Logo size={34} withWordmark={false} />
                 </span>
-                <p style={{ fontFamily: FONT_DISPLAY, fontSize: '1.05rem', fontWeight: 700, letterSpacing: '0.07em', color: '#EEF2F7' }}>{s.name}</p>
-                <span style={{ marginLeft: 'auto', fontFamily: FONT_SANS, fontVariantNumeric: 'tabular-nums', fontSize: '0.95rem', fontWeight: 800, color: '#BAE6FD', whiteSpace: 'nowrap' }}>
+                <p style={{ fontFamily: FONT_DISPLAY, fontSize: '1.05rem', fontWeight: 700, letterSpacing: '0.07em', color: "var(--corp-text, #EEF2F7)" }}>{s.name}</p>
+                <span style={{ marginLeft: 'auto', fontFamily: FONT_SANS, fontVariantNumeric: 'tabular-nums', fontSize: '0.95rem', fontWeight: 800, color: "var(--corp-accent, #BAE6FD)", whiteSpace: 'nowrap' }}>
                   {s.price}
                 </span>
               </div>
@@ -488,8 +488,8 @@ function CompareView({ onBack }: { onBack: () => void }) {
                 rel={external ? 'noopener' : undefined}
                 style={{
                   marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 46,
-                  borderRadius: 999, textDecoration: 'none', border: '1px solid rgba(125,211,252,0.45)',
-                  background: 'rgba(125,211,252,0.08)', color: '#EEF2F7',
+                  borderRadius: 999, textDecoration: 'none', border: "1px solid var(--corp-line, rgba(125,211,252,0.45))",
+                  background: 'rgba(125,211,252,0.08)', color: "var(--corp-text, #EEF2F7)",
                   fontFamily: FONT_SANS, fontSize: '0.82rem', fontWeight: 700,
                 }}
               >
@@ -501,7 +501,7 @@ function CompareView({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* 2026-07-31 巡回: 0.45 は黒地で 4.43:1 と基準未達。税込表記と解約条件は読めないと困る。 */}
-      <p style={{ fontFamily: FONT_SANS, fontSize: '0.74rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.95, marginTop: '1rem', textAlign: 'center' }}>
+      <p style={{ fontFamily: FONT_SANS, fontSize: '0.74rem', color: "var(--corp-muted, rgba(255,255,255,0.62))", lineHeight: 1.95, marginTop: '1rem', textAlign: 'center' }}>
         表示はすべて税込です。いつでも解約できます。
         <br />
         「どれか分からない」ままで大丈夫です。3問に答えるか、そのままご相談ください。
@@ -513,8 +513,8 @@ function CompareView({ onBack }: { onBack: () => void }) {
 function CompareRow({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.1em', color: 'rgba(125,211,252,0.85)', marginBottom: 3 }}>{label}</p>
-      <p style={{ fontFamily: FONT_SANS, fontSize: '0.82rem', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85 }}>{value}</p>
+      <p style={{ fontFamily: FONT_SANS, fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.1em', color: "var(--corp-accent, rgba(125,211,252,0.85))", marginBottom: 3 }}>{label}</p>
+      <p style={{ fontFamily: FONT_SANS, fontSize: '0.82rem', color: "var(--corp-body, rgba(255,255,255,0.78))", lineHeight: 1.85 }}>{value}</p>
     </div>
   );
 }
@@ -522,5 +522,5 @@ function CompareRow({ label, value }: { label: string; value: string }) {
 const subtleBtn: React.CSSProperties = {
   minHeight: 44, padding: '0 0.85rem', cursor: 'pointer',
   background: 'transparent', border: 'none',
-  color: 'rgba(255,255,255,0.6)', fontFamily: FONT_SANS, fontSize: '0.78rem', fontWeight: 700,
+  color: "var(--corp-muted, rgba(255,255,255,0.6))", fontFamily: FONT_SANS, fontSize: '0.78rem', fontWeight: 700,
 };

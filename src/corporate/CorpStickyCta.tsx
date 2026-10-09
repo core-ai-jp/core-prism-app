@@ -11,6 +11,7 @@
 import LpStickyCta from '../components/LpStickyCta';
 import { useFinderPick } from './finderStore';
 import { useCorpTab } from './corpRouteStore';
+import { rememberIntent } from './corpIntent';
 import { rememberSource, track } from './roai/track';
 
 export default function CorpStickyCta() {
@@ -23,6 +24,7 @@ export default function CorpStickyCta() {
 
   // 部品は1つのまま props だけ差し替える（作り直すと出現アニメが巻き戻るため）。
   return (
+    <div className="corp-light corp-sticky-light" onClick={tab === 'advisor' ? () => { rememberIntent('AI顧問', 'ai-advisor'); track('corp_cta_click', 'ai-advisor-sticky'); } : undefined}>
     <LpStickyCta
       /* 見出しにサービス名を入れると、名前が長い回（Resonance）だけ375pxで2行に折れ、
          バーが67px→75pxに伸びて本文を覆う面積が増えた（2026-08-08 本番実測）。
@@ -34,14 +36,16 @@ export default function CorpStickyCta() {
          （2026-08-21 実測）。見出しも副題も1行で収まる長さに切る。 */
       /* 2026-09-03 MASTER PROMPT: 会社サイトの Primary CTA は「ROAIを無料診断する」。
          まだ製品を選んでいない人は診断へ、選び終えた人はその製品へ。 */
-      title={pick ? 'あなたには、これ' : '次にAI投資すべき場所は'}
+      title={tab === 'advisor' ? 'AI顧問・3ヶ月から' : pick ? 'あなたには、これ' : '次にAI投資すべき場所は'}
       /* 決断の直前なので、不安を消す1点だけを置く。 */
-      sub={pick ? '税込・いつでも解約できます' : '約2分・無料・連絡先不要'}
-      cta={pick ? `${pick.name} を見る →` : 'ROAIを無料診断する'}
-      href={pick ? pick.url : '/roai-score'}
+      sub={tab === 'advisor' ? '月額50万円（税別）' : pick ? '税込・いつでも解約できます' : '約2分・無料・連絡先不要'}
+      cta={tab === 'advisor' ? '無料で相談する' : pick ? `${pick.name} を見る →` : 'ROAIを無料診断する'}
+      href={tab === 'advisor' ? '/corp#contact' : pick ? pick.url : '/roai-score'}
       onClick={pick ? undefined : () => { rememberSource('sticky'); track('corp_cta_click', 'sticky'); }}
-      accent1="#E0F2FE"
-      accent2="#38BDF8"
+      accent1="#111827"
+      accent2="#111827"
+      ctaColor="#FFFFFF"
     />
+    </div>
   );
 }

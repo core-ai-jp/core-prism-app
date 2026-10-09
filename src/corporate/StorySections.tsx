@@ -12,7 +12,7 @@
 // ============================================================
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { motion } from 'framer-motion';
-import { FONT_JA, FONT_EN, LINE, INK, INK_2, ctaHero, ctaGhost, sectionH2, sectionLead, reveal } from './corpTheme';
+import { FONT_JA, FONT_EN, LINE, ctaHero, ctaGhost, sectionH2, sectionLead, reveal } from './corpTheme';
 import { Kick } from './roai/HomeRoaiSections';
 import { rememberSource, track } from './roai/track';
 import { rememberIntent } from './corpIntent';
@@ -130,7 +130,7 @@ export function TheChange() {
 export function ProcessContrast() {
   const ref = useInterest('transformation');
   return (
-    <section id="process" ref={ref} className="lp-section-pad" style={{ padding: '6.5rem 1.5rem', background: INK_2, scrollMarginTop: 70 }} aria-labelledby="process-h">
+    <section id="process" ref={ref} className="lp-section-pad" style={{ padding: '6.5rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70 }} aria-labelledby="process-h">
       <div className="ch-wrap">
         <motion.div {...reveal} className="ch-head">
           <Kick>{PROCESS.kicker}</Kick>
@@ -157,7 +157,7 @@ export function ProcessContrast() {
 // ============================================================
 export function OneCore({ onAnchor }: { onAnchor: AnchorHandler }) {
   return (
-    <section id="onecore" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, scrollMarginTop: 70 }} aria-labelledby="onecore-h">
+    <section id="onecore" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70 }} aria-labelledby="onecore-h">
       <div className="ch-wrap">
         <motion.div {...reveal} className="ch-head">
           <Kick>{ONE_CORE.kicker}</Kick>
@@ -196,7 +196,7 @@ export function StudioSection() {
   const ref = useInterest('studio');
   const works = STUDIO_WORK_IDS.map(id => FILM_WORKS.find(w => w.id === id)).filter((w): w is NonNullable<typeof w> => !!w);
   return (
-    <section id="studio" ref={ref} className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK_2, scrollMarginTop: 70 }} aria-labelledby="studio-h">
+    <section id="studio" ref={ref} className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70 }} aria-labelledby="studio-h">
       <div className="ch-wrap">
         <div className="cs-studio-head">
           <motion.div {...reveal} className="ch-head">
@@ -237,7 +237,7 @@ export function StudioSection() {
 export function NeriSection() {
   const ref = useInterest('neri');
   return (
-    <section id="neri" ref={ref} className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, scrollMarginTop: 70 }} aria-labelledby="neri-h">
+    <section id="neri" ref={ref} className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", scrollMarginTop: 70 }} aria-labelledby="neri-h">
       <div className="ch-wrap">
         <motion.div {...reveal} className="ch-head">
           <Kick>{NERI.kicker}</Kick>
@@ -394,7 +394,7 @@ export function EnergyHome({ onAnchor }: { onAnchor: AnchorHandler }) {
 // ============================================================
 export function Connection() {
   return (
-    <section id="connection" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK_2, scrollMarginTop: 70 }} aria-labelledby="connection-h">
+    <section id="connection" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70 }} aria-labelledby="connection-h">
       <div className="ch-wrap cs-connection">
         <motion.div {...reveal}>
           <Kick>{CONNECTION.kicker}</Kick>
@@ -423,7 +423,7 @@ export function Connection() {
 export function Core2035() {
   const ref = useInterest('vision');
   return (
-    <section id="vision" ref={ref} className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK, borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="vision-h">
+    <section id="vision" ref={ref} className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface, #070A10)", borderTop: `1px solid ${LINE}`, scrollMarginTop: 70 }} aria-labelledby="vision-h">
       <div className="ch-wrap">
         <motion.div {...reveal} className="ch-head">
           <Kick>{VISION.kicker}</Kick>
@@ -465,8 +465,8 @@ export function Invitation({ onAnchor }: { onAnchor: AnchorHandler }) {
       <div className="ch-wrap" style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
         <motion.div {...reveal} style={{ maxWidth: 760, margin: '0 auto' }}>
           <Kick center>{INVITE.kicker}</Kick>
-          <h2 id="invite-h" style={{ ...sectionH2, fontSize: 'clamp(2rem, 4.6vw, 3.4rem)', margin: 0, color: '#fff' }}><Lines text={INVITE.h2} /></h2>
-          <p style={{ ...sectionLead, margin: '1.2rem auto 0', color: 'rgba(240,245,252,0.9)' }}>{INVITE.lead}</p>
+          <h2 id="invite-h" style={{ ...sectionH2, fontSize: 'clamp(2rem, 4.6vw, 3.4rem)', margin: 0, color: "var(--corp-text, #fff)" }}><Lines text={INVITE.h2} /></h2>
+          <p style={{ ...sectionLead, margin: '1.2rem auto 0', color: "var(--corp-body, rgba(240,245,252,0.9))" }}>{INVITE.lead}</p>
         </motion.div>
         <motion.div {...reveal} className="cs-intents">
           {INVITE.intents.map(it => (

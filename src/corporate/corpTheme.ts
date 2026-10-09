@@ -40,21 +40,21 @@ export const GOLD_LIGHT = ACCENT_PALE;
 export const GOLD_PALE = '#E0F2FE';
 
 /** 地の色。純黒ではなく、ごくわずかに青みのある紺黒。 */
-export const INK = '#070A10';
-export const INK_2 = '#0B0F17';
-export const INK_3 = '#101826';
-export const PAPER = '#F3F6FB';
+export const INK = 'var(--corp-surface, #070A10)';
+export const INK_2 = 'var(--corp-surface-soft, #0B0F17)';
+export const INK_3 = 'var(--corp-surface-soft, #101826)';
+export const PAPER = 'var(--corp-text, #F3F6FB)';
 
 /** 本文の読める濃さ。0.4 台は AA 落第だったので 0.62 以上を既定にする。 */
-export const TEXT_BODY = 'rgba(226,232,240,0.78)';
-export const TEXT_MUTED = 'rgba(226,232,240,0.62)';
-export const LINE = 'rgba(148,163,184,0.18)';
+export const TEXT_BODY = 'var(--corp-body, rgba(226,232,240,0.78))';
+export const TEXT_MUTED = 'var(--corp-muted, rgba(226,232,240,0.62))';
+export const LINE = 'var(--corp-line, rgba(148,163,184,0.18))';
 export const LINE_STRONG = 'rgba(148,163,184,0.32)';
 
 export const navLink: CSSProperties = {
   fontFamily: FONT_JA,
   fontSize: '0.86rem',
-  color: 'rgba(226,232,240,0.8)',
+  color: "var(--corp-body, rgba(226,232,240,0.8))",
   textDecoration: 'none',
   fontWeight: 500,
   letterSpacing: '0.04em',
@@ -64,11 +64,11 @@ export const ctaSmall: CSSProperties = {
   fontFamily: FONT_JA,
   fontSize: '0.84rem',
   fontWeight: 700,
-  color: '#0B1220',
+  color: "var(--corp-cta-text, #0B1220)",
   textDecoration: 'none',
   padding: '0.7rem 1.2rem',
-  border: '1px solid rgba(255,255,255,0.9)',
-  background: '#FFFFFF',
+  border: "1px solid var(--corp-line, rgba(255,255,255,0.9))",
+  background: "var(--corp-cta, #FFFFFF)",
   borderRadius: 999,
   letterSpacing: '0.04em',
   display: 'inline-flex',
@@ -81,8 +81,8 @@ export const ctaHero: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: 'linear-gradient(135deg,#FFFFFF 0%,#E8F4FF 55%,#BAE6FD 100%)',
-  color: '#0B1220',
+  background: "var(--corp-cta, linear-gradient(135deg,#FFFFFF 0%,#E8F4FF 55%,#BAE6FD 100%))",
+  color: "var(--corp-cta-text, #0B1220)",
   padding: '1rem 2.2rem',
   minHeight: 54,
   borderRadius: 999,
@@ -90,7 +90,7 @@ export const ctaHero: CSSProperties = {
   fontSize: '1rem',
   fontWeight: 800,
   textDecoration: 'none',
-  boxShadow: '0 16px 40px -12px rgba(56,189,248,0.45)',
+  boxShadow: 'var(--corp-cta-shadow, 0 16px 40px -12px rgba(56,189,248,0.45))',
   letterSpacing: '0.04em',
 };
 
@@ -106,10 +106,10 @@ export const ctaGhost: CSSProperties = {
   fontSize: '0.95rem',
   fontWeight: 700,
   letterSpacing: '0.04em',
-  color: '#F3F6FB',
+  color: "var(--corp-text, #F3F6FB)",
   textDecoration: 'none',
-  border: '1px solid rgba(226,232,240,0.35)',
-  background: 'rgba(255,255,255,0.04)',
+  border: "1px solid var(--corp-line, rgba(226,232,240,0.35))",
+  background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.04)",
   cursor: 'pointer',
 };
 
@@ -125,7 +125,7 @@ export const sectionLabelMain: CSSProperties = {
   fontFamily: FONT_JA,
   fontSize: '0.9rem',
   letterSpacing: '0.3em',
-  color: 'rgba(226,232,240,0.92)',
+  color: "var(--corp-body, rgba(226,232,240,0.92))",
   fontWeight: 700,
 };
 
@@ -133,7 +133,7 @@ export const sectionLabelSub: CSSProperties = {
   fontFamily: FONT_EN,
   fontSize: '0.68rem',
   letterSpacing: '0.3em',
-  color: ACCENT_LIGHT,
+  color: "var(--corp-accent, #7DD3FC)",
   fontWeight: 600,
   textTransform: 'uppercase',
 };
@@ -146,13 +146,13 @@ export const sectionH2: CSSProperties = {
   lineHeight: 1.4,
   letterSpacing: '-0.005em',
   marginBottom: '1.25rem',
-  color: PAPER,
+  color: "var(--corp-text, #F3F6FB)",
 };
 
 /** 章のリード文。 */
 export const sectionLead: CSSProperties = {
   fontFamily: FONT_JA,
-  color: TEXT_BODY,
+  color: "var(--corp-body, rgba(226,232,240,0.78))",
   fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)',
   maxWidth: 700,
   margin: '0 auto',
@@ -167,7 +167,7 @@ export const sectionPad: CSSProperties = {
 
 /** 静かなカード。細い線と、ほとんど無色の面。 */
 export const quietCard: CSSProperties = {
-  background: 'linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015))',
+  background: "linear-gradient(180deg, rgba(var(--corp-tint-rgb, 255,255,255), 0.045), rgba(var(--corp-tint-rgb, 255,255,255), 0.015))",
   border: `1px solid ${LINE}`,
   borderRadius: 18,
   padding: 'clamp(1.5rem, 2.6vw, 2.1rem)',
@@ -178,7 +178,7 @@ export const stepNumber: CSSProperties = {
   fontFamily: FONT_EN,
   fontSize: '0.82rem',
   letterSpacing: '0.2em',
-  color: ACCENT,
+  color: "var(--corp-accent, #38BDF8)",
   fontWeight: 700,
 };
 

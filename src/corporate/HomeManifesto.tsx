@@ -13,7 +13,7 @@
 // ============================================================
 import { motion } from 'framer-motion';
 import type { MouseEvent as ReactMouseEvent } from 'react';
-import { FONT_JA, FONT_EN, ACCENT, ACCENT_LIGHT, PAPER, TEXT_BODY, TEXT_MUTED, LINE, INK, INK_2, ctaHero, sectionH2, sectionLead, reveal } from './corpTheme';
+import { FONT_JA, FONT_EN, ACCENT, LINE, ctaHero, sectionH2, sectionLead, reveal } from './corpTheme';
 import { CREED, PEOPLE } from './creedData';
 import { SIZES_CARD, SIZES_FULL, photoSrcSet } from './photoSet';
 
@@ -27,7 +27,7 @@ function Kick({ children, center }: { children: React.ReactNode; center?: boolea
   return (
     <p style={{
       fontFamily: FONT_EN, fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase',
-      color: ACCENT_LIGHT, fontWeight: 600, marginBottom: '1rem', textAlign: center ? 'center' : 'left',
+      color: "var(--corp-accent, #7DD3FC)", fontWeight: 600, marginBottom: '1rem', textAlign: center ? 'center' : 'left',
       display: 'flex', alignItems: 'center', gap: 10, justifyContent: center ? 'center' : 'flex-start',
     }}>
       <span aria-hidden style={{ width: 22, height: 1, background: ACCENT, display: 'inline-block' }} />
@@ -50,23 +50,23 @@ export function Manifesto({ onAnchor }: { onAnchor?: AnchorHandler }) {
               社是 → 答え（核とは、人。）→ 立ち位置（技術の会社だが人を大事にする）→ 使命 → 三行。 */}
           <Kick>Our Creed</Kick>
           <p className="ch-manifesto-tagline" style={{ fontFamily: FONT_JA }}>{CREED.tagline}</p>
-          <h2 className="ch-manifesto-h" style={{ fontFamily: FONT_JA, color: '#fff' }}>
-            核とは、<span style={{ color: ACCENT_LIGHT }}>人。</span>
+          <h2 className="ch-manifesto-h" style={{ fontFamily: FONT_JA, color: "var(--corp-text, #fff)" }}>
+            核とは、<span style={{ color: "var(--corp-accent, #7DD3FC)" }}>人。</span>
           </h2>
-          <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.1rem, 1.9vw, 1.5rem)', fontWeight: 800, color: '#fff', lineHeight: 1.7, margin: '0 0 1.2rem' }}>
+          <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.1rem, 1.9vw, 1.5rem)', fontWeight: 800, color: "var(--corp-text, #fff)", lineHeight: 1.7, margin: '0 0 1.2rem' }}>
             {CREED.stance}
           </p>
-          <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.05rem, 1.7vw, 1.3rem)', lineHeight: 2, color: 'rgba(240,245,252,0.92)', fontWeight: 600, margin: '0 0 1.6rem', maxWidth: 640 }}>
+          <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.05rem, 1.7vw, 1.3rem)', lineHeight: 2, color: "var(--corp-body, rgba(240,245,252,0.92))", fontWeight: 600, margin: '0 0 1.6rem', maxWidth: 640 }}>
             {CREED.lead}
           </p>
-          <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1rem, 1.6vw, 1.3rem)', fontWeight: 800, color: ACCENT_LIGHT, lineHeight: 1.6, margin: '0 0 2.2rem' }}>
+          <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1rem, 1.6vw, 1.3rem)', fontWeight: 800, color: "var(--corp-accent, #7DD3FC)", lineHeight: 1.6, margin: '0 0 2.2rem' }}>
             {CREED.promise}　{CREED.mission}
           </p>
           <ul className="ch-creed-lines" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {CREED.lines.map((l, i) => (
               <motion.li key={l} {...reveal} transition={{ ...reveal.transition, delay: 0.15 + i * 0.12 }}
-                style={{ fontFamily: FONT_JA, fontSize: 'clamp(0.98rem, 1.45vw, 1.12rem)', lineHeight: 1.9, color: PAPER, fontWeight: 700 }}>
-                <span aria-hidden style={{ color: ACCENT, marginRight: 12 }}>—</span>{l}
+                style={{ fontFamily: FONT_JA, fontSize: 'clamp(0.98rem, 1.45vw, 1.12rem)', lineHeight: 1.9, color: "var(--corp-text, #F3F6FB)", fontWeight: 700 }}>
+                <span aria-hidden style={{ color: "var(--corp-accent, #38BDF8)", marginRight: 12 }}>—</span>{l}
               </motion.li>
             ))}
           </ul>
@@ -92,7 +92,7 @@ export function Values() {
     '早く帰宅した父親に、娘が駆け寄っている',
   ];
   return (
-    <section id="values" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: INK_2, scrollMarginTop: 70 }}>
+    <section id="values" className="lp-section-pad" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70 }}>
       <div className="ch-wrap">
         <div className="ch-head">
           <Kick>Our Promises</Kick>
@@ -111,11 +111,11 @@ export function Values() {
               <div className="ch-card-img">
                 <img src={photos[i]} srcSet={photoSrcSet(photos[i])} sizes={SIZES_CARD} alt={alts[i]} loading="lazy" decoding="async" width={1600} height={1200} />
               </div>
-              <p style={{ fontFamily: FONT_EN, fontSize: '0.7rem', letterSpacing: '0.24em', color: ACCENT, fontWeight: 700, margin: '1.4rem 0 0.5rem' }}>
+              <p style={{ fontFamily: FONT_EN, fontSize: '0.7rem', letterSpacing: '0.24em', color: "var(--corp-accent, #38BDF8)", fontWeight: 700, margin: '1.4rem 0 0.5rem' }}>
                 {v.no} — {v.en}
               </p>
-              <h3 style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.2rem, 1.8vw, 1.45rem)', fontWeight: 800, color: PAPER, lineHeight: 1.45, margin: '0 0 0.7rem', letterSpacing: '-0.005em' }}>{v.ja}</h3>
-              <p style={{ fontFamily: FONT_JA, fontSize: '0.92rem', color: TEXT_BODY, lineHeight: 1.95, margin: 0 }}>{v.body}</p>
+              <h3 style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.2rem, 1.8vw, 1.45rem)', fontWeight: 800, color: "var(--corp-text, #F3F6FB)", lineHeight: 1.45, margin: '0 0 0.7rem', letterSpacing: '-0.005em' }}>{v.ja}</h3>
+              <p style={{ fontFamily: FONT_JA, fontSize: '0.92rem', color: "var(--corp-body, rgba(226,232,240,0.78))", lineHeight: 1.95, margin: 0 }}>{v.body}</p>
             </motion.article>
           ))}
         </div>
@@ -135,7 +135,7 @@ export function PeopleMosaic() {
     { img: PEOPLE.arcade, alt: '商店街で談笑する店主たち', cap: '請求書に追われる夜を、店先で話す夕方へ返す。', span: 'wide' },
   ];
   return (
-    <section aria-label="私たちが向き合う人々" style={{ background: INK, padding: '0 0 6rem' }}>
+    <section aria-label="私たちが向き合う人々" style={{ background: "var(--corp-surface, #070A10)", padding: '0 0 6rem' }}>
       <div className="ch-wrap" style={{ padding: '0 1.5rem' }}>
         <div className="ch-mosaic">
           {tiles.map((t, i) => (
@@ -145,7 +145,7 @@ export function PeopleMosaic() {
             </motion.figure>
           ))}
         </div>
-        <p style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: TEXT_MUTED, margin: '1rem 0 0', textAlign: 'right' }}>
+        <p style={{ fontFamily: FONT_JA, fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", margin: '1rem 0 0', textAlign: 'right' }}>
           私たちが測るのは、AIが代わった仕事の数ではなく、人に返った時間です。写真はイメージです。
         </p>
       </div>
@@ -163,18 +163,18 @@ export function CreedBand({ onAnchor }: { onAnchor?: AnchorHandler }) {
       <div className="ch-band-shade" aria-hidden />
       <div style={{ position: 'relative', maxWidth: 860, margin: '0 auto' }}>
         <Kick center>Mission</Kick>
-        <h2 style={{ ...sectionH2, fontSize: 'clamp(1.7rem, 3.6vw, 2.8rem)', margin: 0, color: '#fff', lineHeight: 1.5 }}>
+        <h2 style={{ ...sectionH2, fontSize: 'clamp(1.7rem, 3.6vw, 2.8rem)', margin: 0, color: "var(--corp-text, #fff)", lineHeight: 1.5 }}>
           {CREED.mission}
         </h2>
-        <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', fontWeight: 900, color: ACCENT_LIGHT, margin: '1.6rem 0 0', letterSpacing: '0.02em' }}>
+        <p style={{ fontFamily: FONT_JA, fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', fontWeight: 900, color: "var(--corp-accent, #7DD3FC)", margin: '1.6rem 0 0', letterSpacing: '0.02em' }}>
           {CREED.answer}
         </p>
-        <p style={{ ...sectionLead, margin: '1.4rem auto 0', color: 'rgba(236,242,250,0.85)', maxWidth: 640 }}>
+        <p style={{ ...sectionLead, margin: '1.4rem auto 0', color: "var(--corp-body, rgba(236,242,250,0.85))", maxWidth: 640 }}>
           {CREED.lead}
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '0.8rem', flexWrap: 'wrap', marginTop: '2.2rem' }}>
           {CREED.values.map(v => (
-            <span key={v.no} style={{ fontFamily: FONT_JA, fontSize: '0.84rem', fontWeight: 700, color: PAPER, border: `1px solid ${LINE}`, background: 'rgba(7,10,16,0.55)', borderRadius: 999, padding: '8px 16px', backdropFilter: 'blur(8px)' }}>
+            <span key={v.no} style={{ fontFamily: FONT_JA, fontSize: '0.84rem', fontWeight: 700, color: "var(--corp-text, #F3F6FB)", border: `1px solid ${LINE}`, background: "rgba(var(--corp-surface-rgb, 7,10,16), 0.55)", borderRadius: 999, padding: '8px 16px', backdropFilter: 'blur(8px)' }}>
               {v.ja}
             </span>
           ))}
