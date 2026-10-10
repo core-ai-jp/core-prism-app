@@ -21,3 +21,7 @@ Read existing `CLAUDE.md` if present, `README.md`, relevant design files, packag
 - Inspect `prebuild` as well as `build`: generated plan/route files may be involved. Existing scripts include `build`, `lint`, `smoke`; there is no generic npm test script at the audit snapshot.
 - `.github/workflows/smoke.yml` and smoke tooling can target production. Inspect targets and side effects before running; documentation edits require diff/link checks, not production probes.
 - Preserve current data-source distinctions, pricing sources, server authorization and tracking contracts; consult task-relevant source and knowledge records before changes.
+
+## Efficient execution
+
+For task scoping, targeted reads, retry limits, and concise handoffs, follow [`docs/AGENT_EFFICIENCY.md`](docs/AGENT_EFFICIENCY.md). This supplements rather than overrides the security, knowledge provenance, and validation rules above.
