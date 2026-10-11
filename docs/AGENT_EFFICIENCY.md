@@ -15,5 +15,7 @@ This document supplements `AGENTS.md`; its security, knowledge provenance, and p
 - Avoid unnecessary parallel agents and repeated full-repository scans. Use heavier models or browser automation only when the task requires them.
 - Never claim a quantified token saving without measured before/after usage data.
 - Do not weaken authentication, authorization, privacy, tests, or security controls to save tokens.
-- Never auto-deploy, publish, send external messages, change credentials, delete data, or incur paid usage without explicit authorization.
+- Follow the current owner approval boundary: confirm immediately before money-related execution and production changes to user-visible appearance. Keep external communication, credentials, destructive actions, and permissions within the explicit task and runtime permissions.
 - Do not copy private knowledge or customer data into this public repository.
+## Structured handoffs and Jev
+Use compact JSON only for agent-to-agent handoffs, with only relevant task, state, decision, file, check, and blocker fields; JSON does not guarantee token savings. Jev may batch low-risk classification/routing if already installed and authenticated and expected total cost is lower than the work saved. Do not use Jev for writing, summaries, extraction, complex reasoning, or calculations; do not install it or configure paid credentials automatically.
