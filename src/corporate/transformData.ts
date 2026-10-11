@@ -7,7 +7,6 @@
 //     事業そのものを変革する会社」として全面的に再定義する。
 //
 // 数字はここに書かない（確定値のないものを作らない）。
-// 実数を出すのは coreNumbers だけで、値が無い項目は null にして非表示にする。
 // ============================================================
 
 // ── 01〜04 の事業階層 ────────────────────────────────
@@ -224,21 +223,6 @@ export const INVESTMENT_TIERS: { name: string; nameJa: string; price: string; no
     note: '継続改善契約は別途',
     body: '基幹業務に載るAIシステム。既存システムとの接続を含みます。',
   },
-];
-
-// ── 数字で見る CORE ────────────────────────────────
-/**
- * value が null の項目は表示しない。
- * 確定値のない数字は、絶対に埋めないこと（オーナー指示 2026-08-21）。
- * いま出しているのは、このサイト自身から数えられる実数だけ。
- */
-export const CORE_NUMBERS: { label: string; labelJa: string; value: string | null; note?: string }[] = [
-  { label: 'AI PRODUCTS', labelJa: '自社開発AIプロダクト', value: '8', note: '本番稼働中' },
-  { label: 'INDUSTRIES', labelJa: '業界特化AI', value: '5', note: '建設・アニメ制作・広告・林業・バックオフィス' },
-  { label: 'AI AGENTS', labelJa: 'AIエージェント', value: '7', note: 'CORE Prism 上で稼働' },
-  { label: 'PROJECTS', labelJa: '支援プロジェクト', value: null },
-  { label: 'CLIENTS', labelJa: '導入企業', value: null },
-  { label: 'CONTINUOUS RATE', labelJa: '継続契約率', value: null },
 ];
 
 // ── 進め方・体制（ENGAGEMENT）─────────────────────

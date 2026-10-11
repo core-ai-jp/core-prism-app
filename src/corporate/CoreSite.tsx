@@ -35,7 +35,7 @@ import {
   PhilosophyCore, CompanyOsSection,
   UseCasesSection, ServiceLayersSection, BusinessDevSection,
   IndustryOsSection, PartnerSection, AiNativeSection, TechnologySection,
-  CoreNumbersSection, InvestmentSection,
+  InvestmentSection,
   EngagementSection, SecuritySection,
 } from './TransformSections';
 import { ContactSection } from './CorpContactForm';
@@ -221,7 +221,7 @@ const SECTION_TAB: Record<string, CoreTabKey> = {
   'vertical-ultima': 'products', 'vertical-anima': 'products',
   'vertical-veritas': 'products', 'vertical-soma': 'products',
   // 会社
-  'philosophy-core': 'company', numbers: 'company',
+  'philosophy-core': 'company',
   mission: 'company', executive: 'company', journey: 'company', about: 'company',
   contact: 'contact', faq: 'contact',
   advisor: 'advisor', 'advisor-price': 'advisor',
@@ -1460,7 +1460,7 @@ export default function CoreSite() {
       )}
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
-      {/*  13 変わらないもの ＋ 14 数字で見る CORE */}
+      {/*  13 変わらないもの */}
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       {tab === 'company' && (
       <>
@@ -1468,7 +1468,6 @@ export default function CoreSite() {
         <ProofStrip onAnchor={handleAnchor} />
         <CreedBand onAnchor={handleAnchor} />
         <PhilosophyCore />
-        <CoreNumbersSection />
       </>
       )}
 
@@ -1766,36 +1765,10 @@ export default function CoreSite() {
             <InfoRow label="代表取締役" subLabel="CEO"           value={COMPANY.ceoJa}    subValue={COMPANY.ceoEn} />
             <InfoRow label="本社所在地" subLabel="Headquarters" value={COMPANY.addressJa} subValue={COMPANY.addressEn} />
             <InfoRow label="事業内容"   subLabel="Business"     value="エージェントAIを中心とした SaaS の開発・運営" />
-            <InfoRow label="提供サービス" subLabel="Products"   value="CORE NERI（話すだけで会社が動く Company OS）／ CORE Universe（AIに任せられる仕事の宇宙図）／ CORE Prism（事業家向け）／ CORE Iris（インフルエンサー向け）／ CORE Resonance（店舗・サロン・教室向け）／ CORE Lume（クリエイター向け）／ Crystal（AI コンシェルジュ・接客サイト向け）／ CORE Pulse（からだ見守りAI）" isLast />
+            <InfoRow label="提供サービス" subLabel="Products"   value="NERI（話すだけで会社が動く Company OS）／ Universe（AIに任せられる仕事の宇宙図）／ PRISM（事業家向け）／ IRIS（インフルエンサー向け）／ RESONANCE（店舗・サロン・教室向け）／ LUME（クリエイター向け）／ Crystal（AI コンシェルジュ・接客サイト向け）／ PULSE（からだ見守りAI）" isLast />
           </dl>
           </MobileFold>
 
-          {/* 現在の提供状況について（feedback_lp_selling_structure §8 と同型。各サービスのFAQ/約款で
-              既に開示済みの事実のみを転記し、法人サイト側にも同じ開示を横展開する。新規の数字・約束は作らない） */}
-          <div style={{ marginTop: '3.5rem' }}>
-            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.28em', color: "var(--corp-accent, #7DD3FC)", textTransform: 'uppercase', marginBottom: '0.8rem', textAlign: 'center' }}>
-              Current Status
-            </p>
-            <h3 style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.25rem, 2.3vw, 1.6rem)', fontWeight: 700, textAlign: 'center', marginBottom: '0.8rem', letterSpacing: '0.03em' }}>
-              現在の提供状況について
-            </h3>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: "var(--corp-muted, rgba(226,232,240,0.68))", lineHeight: 1.9, textAlign: 'center', maxWidth: 620, margin: '0 auto 2.2rem' }}>
-              各サービスを正しくご検討いただけるよう、現在対応が完了していない点も含めて開示します。
-            </p>
-            <div style={{ display: 'grid', gap: '0.9rem' }}>
-              {[
-                { t: '株式会社COREとして運営しています', d: '法人化にともない、運営体制は株式会社CORE（代表 井出直毅）に切り替わりました。安心してお試しいただけるよう、各サービスに無料お試し期間といつでも解約可能な仕組みを設けています。' },
-                { t: '「絶対に継続する」とはお約束できません', d: 'これはどの事業者にも共通する点です。解約はいつでも各サービスの画面から行え、電話等での引き止めは行いません。' },
-                { t: '導入実績・効果数値は、公開できる段階のもののみ記載しています', d: '「導入◯◯社」「効果◯◯%」といった数字は、実績として公開できる段階に至るまでは記載しません。公開可能になり次第、各サービスのページに掲載します。' },
-                { t: '一部の管理機能は開発中です', d: '例えば Prism では、アプリ内での領収書発行画面が現時点では未実装です。必要な方はメールにてご連絡いただければ個別に対応します。' },
-              ].map((c) => (
-                <div key={c.t} style={{ padding: '1.4rem 1.6rem', borderRadius: 14, border: "1px solid var(--corp-line, rgba(125,211,252,0.24))", background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.025)" }}>
-                  <p style={{ fontFamily: FONT_SERIF_JA, fontWeight: 600, fontSize: '0.95rem', color: "var(--corp-text, #F3F6FB)", lineHeight: 1.8, marginBottom: '0.5rem' }}>{c.t}</p>
-                  <p style={{ fontFamily: FONT_SANS, fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", lineHeight: 1.9 }}>{c.d}</p>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
       )}
@@ -1974,11 +1947,6 @@ export default function CoreSite() {
             <a href="/faq" style={{ color: "var(--corp-accent, #BAE6FD)", textDecoration: 'underline', textUnderlineOffset: 3, display: 'inline-block', padding: '13px 4px' }}>よくある質問</a>
             {' '}に、誰が作っているか・料金・解約・データの扱いをまとめています。
           </p>
-          {/* 2026-08-03: 「動いているのか」を確かめる場所を、問い合わせる前に置く */}
-          <p style={{ fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.60))", marginTop: '0.6rem', fontFamily: FONT_SERIF_JA, lineHeight: 1.8 }}>
-            <a href="/status" style={{ color: "var(--corp-accent, #BAE6FD)", textDecoration: 'underline', textUnderlineOffset: 3, display: 'inline-block', padding: '13px 4px' }}>いまの稼働状況</a>
-            {' '}では、7つのサービスがこの瞬間ひらけるかを実際に測って出しています。
-          </p>
         </div>
       </ContactSection>
       )}
@@ -1998,10 +1966,10 @@ export default function CoreSite() {
             maxWidth: 1280,
             margin: '0 auto',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
             gap: '2rem',
             marginBottom: '2.75rem',
           }}
+          className="corp-footer-grid"
         >
           <div>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, lineHeight: 1 }}>
@@ -2034,14 +2002,14 @@ export default function CoreSite() {
           </div>
           <div>
             <p style={footHead}>プロダクト</p>
-            <a href={neriLpUrl('corp-foot')} target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link" onClick={() => track('corp_cta_click', 'foot-neri')}>CORE NERI</a>
-            <a href="/?lp=1" style={footLink} className="lp-tap-link">CORE Prism</a>
-            <a href="/iris?lp=1" style={footLink} className="lp-tap-link">CORE Iris</a>
-            <a href="https://guild-gauches-projects.vercel.app/?lp=1" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">CORE Guild</a>
-            <a href="https://resonancebot-ivory.vercel.app/lp" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">CORE Resonance</a>
-            <a href="https://lume-deploy-five.vercel.app/" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">CORE Lume</a>
+            <a href={neriLpUrl('corp-foot')} target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link" onClick={() => track('corp_cta_click', 'foot-neri')}>NERI</a>
+            <a href="/?lp=1" style={footLink} className="lp-tap-link">PRISM</a>
+            <a href="/iris?lp=1" style={footLink} className="lp-tap-link">IRIS</a>
+            <a href="https://guild-gauches-projects.vercel.app/?lp=1" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">GUILD</a>
+            <a href="https://resonancebot-ivory.vercel.app/lp" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">RESONANCE</a>
+            <a href="https://lume-deploy-five.vercel.app/" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">LUME</a>
             <a href="https://crystal-nine-self.vercel.app/" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">Crystal</a>
-            <a href="/pulse" style={footLink} className="lp-tap-link">CORE Pulse</a>
+            <a href="/pulse" style={footLink} className="lp-tap-link">PULSE</a>
           </div>
           <div>
             <p style={footHead}>サービス</p>
@@ -2077,13 +2045,9 @@ export default function CoreSite() {
               {COMPANY.addressJa}
             </p>
           </div>
-          {/* 2026-08-03: 競合 board は「稼働状況・更新履歴・ロードマップ」を常設で持っている。
-              CORE は /status と /trust を作ってあったのに、どのページからもリンクが無く
-              誰も辿り着けなかった。約束ではなく「いまどうなっているか」を常設で置く。 */}
           <div>
             <p style={footHead}>安心のために</p>
             <a href="/faq" style={footLink} className="lp-tap-link">よくある質問</a>
-            <a href="/status" style={footLink} className="lp-tap-link">いまの稼働状況</a>
             <a href="/trust" style={footLink} className="lp-tap-link">データの取り扱い</a>
           </div>
           <div>

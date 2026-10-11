@@ -94,6 +94,10 @@
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
+.corp-footer-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+@media (min-width: 1400px) {
+  .corp-footer-grid { grid-template-columns: minmax(220px, 1.5fr) repeat(6, minmax(0, 1fr)); }
+}
 @media (forced-colors: active) {
   .corp-light :is(.ch-manifesto-tagline, .ch-manifesto-h > span, .ro-band-en > span) {
     background: none; -webkit-text-fill-color: CanvasText;
