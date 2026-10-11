@@ -15,7 +15,7 @@
 //   ・本文は既存の transformData を使い回す（言葉の正本を増やさない）。
 //   ・書体は Noto Sans JP の太字＋Inter。金・明朝は使わない（corpTheme 2026-09-02）。
 // ============================================================
-import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
+import { useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { motion } from 'framer-motion';
 import {
   FONT_JA, FONT_EN, ACCENT, ACCENT_LIGHT, LINE, ctaHero, ctaGhost, sectionH2, sectionLead, reveal,
@@ -58,46 +58,34 @@ const IMG = {
 } as const;
 
 // ============================================================
-//  HERO — ブランドフィルム（2026-09-06 オーナー指示で短い軽量ループへ差し替え）
+//  HERO — ブランドフィルム
 //
-//  ・元の縦型ブランド動画（54秒・音あり・4.7MB）は初回描画を遅らせていた
-//    （実測 2026-09-06・Lighthouse mobile: FCP 11.9s / LCP 15.1s）。
-//    そこから6秒だけを切り出し、音を外して456KBまで圧縮したループに差し替える
-//    （public/corp-hero-loop.mp4）。軽いので遅延読み込みの仕掛けや音声ボタンは不要。
+//  ・54秒の縦型フィルムを、音声付きで全編再生する。
+//    音声はユーザーが再生ボタンを押した操作に続けて開始する。
 //  ・いちばん大きい言葉は社是「いつの時代も、変わらない核を。」（H1）。
 //    「核とは、人。」はその答えとして一段小さく置く（前は逆で、答えの方が大きかった）。
 //  ・下にあった事実の帯（神戸／2026年／8／4）は「謎のタブ」に見えるので廃止。
 //  ・PC: 左に言葉、右に縦型フィルム（ポスターをぼかした地の上）。
 //    スマホ: 縦型の動画がそのまま画面いっぱい＝言葉は下に重ねる（CSS .ch-hero--film）。
-//  ・省データ/動きを減らす設定の人には自動再生しない。画面外に出たら止める。
 // ============================================================
 const FILM = {
-  src: '/corp-hero-loop.mp4',
+  src: '/corp-creed-portrait.mp4',
   poster: '/corp-creed-poster.webp',
 } as const;
 
 export function HomeHero({ onAnchor }: { onAnchor: AnchorHandler }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [canPlay, setCanPlay] = useState(true);
+  const [filmStarted, setFilmStarted] = useState(false);
+  const [filmError, setFilmError] = useState(false);
 
-  useEffect(() => {
-    const reduce = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const nav = navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } };
-    // 省データ・動きを減らす設定の人には、そもそも取りに行かない（ポスターのまま）。
-    if (reduce || nav.connection?.saveData) setCanPlay(false);
-  }, []);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v || !canPlay) return;
-    // 画面外では止める（電池と回線の節約）。
-    if (typeof IntersectionObserver !== 'function') { void v.play().catch(() => {}); return; }
-    const io = new IntersectionObserver(([en]) => {
-      if (en.isIntersecting) void v.play().catch(() => {}); else v.pause();
-    }, { threshold: 0.15 });
-    io.observe(v);
-    return () => io.disconnect();
-  }, [canPlay]);
+  const playFilmWithSound = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.currentTime = 0;
+    video.muted = false;
+    setFilmStarted(true);
+    void video.play().then(() => setFilmError(false)).catch(() => setFilmError(true));
+  };
 
   return (
     <section id="top" className="ch-hero ch-hero--film lp-safe">
@@ -129,15 +117,21 @@ export function HomeHero({ onAnchor }: { onAnchor: AnchorHandler }) {
             className="ch-film-video"
             src={FILM.src}
             poster={FILM.poster}
-            autoPlay={canPlay}
-            muted
-            loop
             playsInline
-            preload={canPlay ? 'auto' : 'none'}
+            controls={filmStarted}
+            preload="metadata"
             width={720}
             height={1280}
+            id="corp-brand-film"
             aria-label="株式会社COREのブランドフィルム。いつの時代も、変わらない核を。"
+            onPlay={() => setFilmStarted(true)}
           />
+          {!filmStarted && (
+            <button type="button" className="ch-film-play" aria-controls="corp-brand-film" onClick={playFilmWithSound}>
+              音声付きで全編を再生
+            </button>
+          )}
+          {filmError && <p className="ch-film-error" role="status">再生できません。動画内の再生ボタンをお試しください。</p>}
         </motion.figure>
       </div>
     </section>
@@ -147,7 +141,7 @@ export function HomeHero({ onAnchor }: { onAnchor: AnchorHandler }) {
 // ============================================================
 //  PROOF STRIP — 自社プロダクトの名前の帯（開発・運用の実体を先に示す）
 // ============================================================
-const PRODUCT_NAMES = ['NERI', 'Prism', 'Resonance', 'Crystal', 'Iris', 'Lume', 'Guild', 'Pulse'];
+const PRODUCT_NAMES = ['NERI', 'PRISM', 'RESONANCE', 'CRYSTAL', 'IRIS', 'LUME', 'GUILD', 'PULSE'];
 
 export function ProofStrip({ onAnchor }: { onAnchor: AnchorHandler }) {
   return (
@@ -159,7 +153,7 @@ export function ProofStrip({ onAnchor }: { onAnchor: AnchorHandler }) {
         <ul className="ch-logos" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
           {PRODUCT_NAMES.map(n => (
             <li key={n} style={{ fontFamily: FONT_EN, fontSize: '1.02rem', fontWeight: 700, letterSpacing: '0.06em', color: "var(--corp-body, rgba(236,242,250,0.72))" }}>
-              <span style={{ color: "var(--corp-muted, rgba(236,242,250,0.4))", fontWeight: 500, marginRight: 4 }}>CORE</span>{n}
+              {n}
             </li>
           ))}
         </ul>

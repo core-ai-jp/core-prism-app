@@ -21,7 +21,7 @@ import {
   SERVICE_LAYERS, DIFF_GENERIC, DIFF_CORE, COMPANY_OS_NODES,
   ASSESSMENT_TARGETS, ASSESSMENT_STEPS, USE_CASES, AI_NATIVE_STEPS,
   TECH_GROUPS, BIZDEV_ITEMS, PARTNER_TARGETS, PARTNER_FORMS,
-  INVESTMENT_TIERS, CORE_NUMBERS,
+  INVESTMENT_TIERS,
   ENGAGEMENT_STEPS, ENGAGEMENT_TERMS, SECURITY_ITEMS, CORP_FAQ, INDUSTRY_NEXT,
 } from './transformData';
 import { VERTICALS } from '../vertical/verticalData';
@@ -994,56 +994,6 @@ export function TechnologySection() {
         ))}
       </div>
       <Kicker en="Technology is a means, not the goal." />
-    </Section>
-  );
-}
-
-// ============================================================
-//  14 数字で見る CORE
-//  確定値のない項目は value: null。全部 null なら章ごと出さない。
-// ============================================================
-export function CoreNumbersSection() {
-  const shown = CORE_NUMBERS.filter(n => n.value !== null);
-  if (shown.length === 0) return null;
-  return (
-    <Section
-      id="numbers"
-      background="#070A10"
-      labelJa="数&nbsp;字"
-      labelEn="CORE&nbsp;IN&nbsp;NUMBERS"
-      title={<>稼働しているものだけを、数えています。</>}
-      lead={<>導入社数や効果率など、裏づけの取れない数字は掲載していません。</>}
-      narrow
-    >
-      <div className="corp-grid-3">
-        {shown.map((n, i) => (
-          <motion.div
-            key={n.label}
-            {...reveal}
-            transition={{ ...reveal.transition, delay: i * 0.08 }}
-            style={{ ...quietCard, textAlign: 'center' }}
-          >
-            <p style={{
-              fontFamily: FONT_DISPLAY, fontSize: 'clamp(2.6rem, 6vw, 3.6rem)', fontWeight: 700, lineHeight: 1,
-              background: "linear-gradient(120deg,var(--corp-surface-raised, #FFFFFF),#BAE6FD 55%,#7DD3FC)",
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>
-              {n.value}
-            </p>
-            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.64rem', letterSpacing: '0.26em', color: "var(--corp-accent, #7DD3FC)", marginTop: '0.9rem', fontWeight: 600 }}>
-              {n.label}
-            </p>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.86rem', color: "var(--corp-text, #EEF2F7)", marginTop: '0.4rem', letterSpacing: '0.06em' }}>
-              {n.labelJa}
-            </p>
-            {n.note && (
-              <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.74rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", marginTop: '0.5rem', lineHeight: 1.8 }}>
-                {n.note}
-              </p>
-            )}
-          </motion.div>
-        ))}
-      </div>
     </Section>
   );
 }
