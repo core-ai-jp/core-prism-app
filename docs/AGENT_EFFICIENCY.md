@@ -19,3 +19,5 @@ This document supplements `AGENTS.md`; its security, knowledge provenance, and p
 - Do not copy private knowledge or customer data into this public repository.
 ## Structured handoffs and Jev
 Use compact JSON only for agent-to-agent handoffs, with only relevant task, state, decision, file, check, and blocker fields; JSON does not guarantee token savings. Jev may batch low-risk classification/routing if already installed and authenticated and expected total cost is lower than the work saved. Do not use Jev for writing, summaries, extraction, complex reasoning, or calculations; do not install it or configure paid credentials automatically.
+
+- Match model and reasoning effort to task difficulty; use the lightest reliable option for routine work and escalate only when complexity, uncertainty, or risk needs it.
