@@ -28,7 +28,7 @@ For task scoping, targeted reads, retry limits, and concise handoffs, follow [`d
 
 ## Efficient AI-assisted development
 
-For the shared workflow, see the private `core-knowledge` guide `AI-COMPANY/AI_DEVELOPMENT_OS/WORKFLOWS/TOKEN_EFFICIENT_DEVELOPMENT.md` when available. Keep these repository instructions and all local security, data, and validation contracts in force.
+For the shared workflow, see the private `core-ai-jp/core-knowledge` guide `AI-COMPANY/AI_DEVELOPMENT_OS/WORKFLOWS/TOKEN_EFFICIENT_DEVELOPMENT.md` when available. Keep these repository instructions and all local security, data, and validation contracts in force.
 
 - Scope the task first. Search paths and diffs, then read only the source, tests, and decisions needed to establish the relevant facts. Reuse verified context and avoid rereading unchanged material; do not omit required company decisions or security context.
 - Keep changes narrow. Use compact JSON only when handing work to another agent, with relevant fields such as `repo`, `task`, `state`, `decisions`, `files`, `checks`, and `blockers`. JSON does not itself reduce tokens; omit irrelevant history.
