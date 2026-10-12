@@ -171,11 +171,11 @@ const TAB_META: Record<CoreTabKey, { title: string; desc: string; path: string }
 const CORE_TABS: { key: CoreTabKey; label: string; short: string; sub: string }[] = [
   { key: 'home', label: 'CORE', short: 'CORE', sub: 'PHILOSOPHY' },
   { key: 'services', label: 'AI変革', short: 'AI変革', sub: 'TRANSFORMATION' },
+  { key: 'advisor', label: 'AI顧問', short: 'AI顧問', sub: 'AI ADVISORY' },
   { key: 'ashitaka', label: 'ASHITAKA', short: '地域', sub: 'REGION' },
   { key: 'energy', label: 'ENERGY', short: 'ENERGY', sub: 'FUTURE' },
   { key: 'company', label: '会社について', short: '会社', sub: 'COMPANY' },
   { key: 'contact', label: 'ご相談', short: '相談', sub: 'CONTACT' },
-  { key: 'advisor', label: 'AI顧問', short: 'AI顧問', sub: 'AI ADVISORY' },
 ];
 /** バーに無いタブ（roai / score / os / products）を開いているとき、どの札を点灯させるか。 */
 const TAB_CHIP: Partial<Record<CoreTabKey, CoreTabKey>> = { roai: 'services', score: 'services', os: 'services', products: 'services' };
