@@ -15,7 +15,7 @@
 //   ・本文は既存の transformData を使い回す（言葉の正本を増やさない）。
 //   ・書体は Noto Sans JP の太字＋Inter。金・明朝は使わない（corpTheme 2026-09-02）。
 // ============================================================
-import { useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { motion } from 'framer-motion';
 import {
   FONT_JA, FONT_EN, ACCENT, ACCENT_LIGHT, LINE, ctaHero, ctaGhost, sectionH2, sectionLead, reveal,
@@ -58,15 +58,8 @@ const IMG = {
 } as const;
 
 // ============================================================
-//  HERO — ブランドフィルム
-//
-//  ・54秒の縦型フィルムを、音声付きで全編再生する。
-//    音声はユーザーが再生ボタンを押した操作に続けて開始する。
-//  ・いちばん大きい言葉は社是「いつの時代も、変わらない核を。」（H1）。
-//    「核とは、人。」はその答えとして一段小さく置く（前は逆で、答えの方が大きかった）。
-//  ・下にあった事実の帯（神戸／2026年／8／4）は「謎のタブ」に見えるので廃止。
-//  ・PC: 左に言葉、右に縦型フィルム（ポスターをぼかした地の上）。
-//    スマホ: 縦型の動画がそのまま画面いっぱい＝言葉は下に重ねる（CSS .ch-hero--film）。
+//  HERO — 映像を最初に全幅で見せ、理念とROAIはその下に置く。
+//  縦型の原画を切らず、無音で自動再生。音声はアイコンで切り替える。
 // ============================================================
 const FILM = {
   src: '/corp-creed-portrait.mp4',
@@ -75,64 +68,81 @@ const FILM = {
 
 export function HomeHero({ onAnchor }: { onAnchor: AnchorHandler }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [filmStarted, setFilmStarted] = useState(false);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [muted, setMuted] = useState(true);
+  const [paused, setPaused] = useState(false);
   const [filmError, setFilmError] = useState(false);
 
-  const playFilmWithSound = () => {
+  useEffect(() => {
+    const header = document.querySelector('header');
+    const stage = stageRef.current;
+    if (!header || !stage) return;
+    const resize = () => stage.style.setProperty('--film-header-height', `${header.getBoundingClientRect().height}px`);
+    resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
+
+  const play = () => {
+    void videoRef.current?.play().then(() => setFilmError(false)).catch(() => setPaused(true));
+  };
+  const toggleSound = () => {
     const video = videoRef.current;
     if (!video) return;
-    video.currentTime = 0;
-    video.muted = false;
-    setFilmStarted(true);
-    void video.play().then(() => setFilmError(false)).catch(() => setFilmError(true));
+    video.muted = !video.muted;
+    setMuted(video.muted);
+    if (video.paused) play();
   };
 
   return (
-    <section id="top" className="ch-hero ch-hero--film lp-safe">
-      <img src={FILM.poster} alt="" aria-hidden className="ch-film-ambient" width={720} height={1280} decoding="async" />
-      <div className="ch-hero-shade" aria-hidden />
-      <div className="ch-wrap ch-hero-inner ch-hero-grid">
-        <motion.div className="ch-hero-copy" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
-          <Kick>AI Transformation Company — Kobe, Japan</Kick>
-          {/* 言葉の正本は creedData / companyInfo.philosophy */}
-          <h1 className="ch-h1 ch-h1--creed" style={{ fontFamily: FONT_JA, color: "var(--corp-text, #FFFFFF)" }}>
-            いつの時代も、
-            <br />
-            変わらない核を。
-          </h1>
-          {/* 2026-09-06 CORE WEB 2035: 社是の直下に「何の会社か」の一行。
-              社是だけでは10秒後に「AIで仕組みを再設計する会社」が残らなかった（08_HERO_CONCEPTS A）。 */}
-          <p className="ch-hero-line" style={{ fontFamily: FONT_JA }}>{HERO.line}</p>
-          <div className="ch-cta-row">
-            <a href="/roai-score" onClick={e => { rememberSource('home-hero'); track('corp_cta_click', 'home-hero'); onAnchor(e, '/roai-score'); }} style={ctaHero}>{HERO.primary}</a>
-            <a href="#invite" onClick={e => { track('corp_cta_click', 'home-hero-invite'); onAnchor(e, '#invite'); }} style={{ ...ctaGhost, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
-              {HERO.secondary}
-            </a>
-          </div>
-        </motion.div>
-
-        <motion.figure className="ch-film" initial={{ opacity: 0, scale: 0.985 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}>
+    <section id="top" className="corp-film-first">
+      <div ref={stageRef} className="corp-film-stage">
+        <img src={FILM.poster} alt="" aria-hidden="true" className="corp-film-backdrop" width={720} height={1280} />
+        <div className="corp-film-frame">
           <video
             ref={videoRef}
-            className="ch-film-video"
+            className="corp-film-player"
             src={FILM.src}
             poster={FILM.poster}
-            playsInline
-            controls={filmStarted}
-            preload="metadata"
-            width={720}
-            height={1280}
+            autoPlay muted={muted} loop playsInline preload="auto"
+            width={720} height={1280}
             id="corp-brand-film"
-            aria-label="株式会社COREのブランドフィルム。いつの時代も、変わらない核を。"
-            onPlay={() => setFilmStarted(true)}
+            aria-label="株式会社COREのブランドフィルム"
+            onPlay={() => setPaused(false)}
+            onPause={() => setPaused(true)}
+            onLoadedData={e => { setPaused(e.currentTarget.paused); play(); }}
+            onVolumeChange={e => setMuted(e.currentTarget.muted)}
+            onError={() => { setFilmError(true); setPaused(true); }}
           />
-          {!filmStarted && (
-            <button type="button" className="ch-film-play" aria-controls="corp-brand-film" onClick={playFilmWithSound}>
-              音声付きで全編を再生
+          <div className="corp-film-controls">
+            <button type="button" onClick={() => paused ? play() : videoRef.current?.pause()}
+              aria-label={paused ? '映像を再生する' : '映像を一時停止する'} aria-controls="corp-brand-film">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                {paused ? <path d="M8 4l12 8-12 8V4Z" fill="currentColor" /> : <path d="M8 5v14M16 5v14" stroke="currentColor" strokeWidth="3" />}
+              </svg>
             </button>
-          )}
-          {filmError && <p className="ch-film-error" role="status">再生できません。動画内の再生ボタンをお試しください。</p>}
-        </motion.figure>
+            <button type="button" onClick={toggleSound} aria-label={muted ? '音声をオンにする' : '音声をオフにする'}
+              aria-pressed={!muted} aria-controls="corp-brand-film">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4V5Z" />
+                {muted ? <path d="m16 9 5 6m0-6-5 6" /> : <><path d="M15 8a6 6 0 0 1 0 8" /><path d="M18 5a10 10 0 0 1 0 14" /></>}
+              </svg>
+            </button>
+          </div>
+          {filmError && <p className="ch-film-error" role="status">動画を読み込めませんでした。ページを再読み込みしてください。</p>}
+        </div>
+      </div>
+      <div className="ch-wrap corp-film-intro">
+        <Kick>AI Transformation Company — Kobe, Japan</Kick>
+        <h1 className="ch-h1 ch-h1--creed" style={{ fontFamily: FONT_JA, color: "var(--corp-text, #FFFFFF)" }}>
+          いつの時代も、<br />変わらない核を。
+        </h1>
+        <p className="ch-hero-line" style={{ fontFamily: FONT_JA }}>{HERO.line}</p>
+        <div className="ch-cta-row">
+          <a href="/roai-score" onClick={e => { rememberSource('home-hero'); track('corp_cta_click', 'home-hero'); onAnchor(e, '/roai-score'); }} style={ctaHero}>{HERO.primary}</a>
+          <a href="#invite" onClick={e => { track('corp_cta_click', 'home-hero-invite'); onAnchor(e, '#invite'); }} style={ctaGhost}>{HERO.secondary}</a>
+        </div>
       </div>
     </section>
   );
