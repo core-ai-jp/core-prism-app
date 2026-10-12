@@ -87,11 +87,12 @@ function Chip({ on, children, onClick }: { on: boolean; children: React.ReactNod
   );
 }
 
-export default function CorpContactForm() {
+export default function CorpContactForm({ advisor = false }: { advisor?: boolean } = {}) {
   const [company, setCompany] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [tel, setTel] = useState('');
+  const [industry, setIndustry] = useState('');
   const [size, setSize] = useState('');
   // 2026-09-06 CORE WEB 2035: 招待（企業を変えたい／地域を変えたい／協業したい）や
   // ASHITAKA・ENERGY の相談ボタンで選んだ意図を、希望内容の事前選択として受け取る。
@@ -131,7 +132,7 @@ export default function CorpContactForm() {
     });
   }, [phase]);
 
-  const valid = name.trim().length > 0 && email.includes('@') && message.trim().length >= 5;
+  const valid = (!advisor || (company.trim().length > 0 && industry.trim().length > 0)) && name.trim().length > 0 && email.includes('@') && message.trim().length >= 5;
 
   /** 送信本文。届かなかったときに mailto へそのまま渡せるよう関数にしておく。 */
   const buildBody = () => [
@@ -139,6 +140,7 @@ export default function CorpContactForm() {
     `氏名: ${name}`,
     `メール: ${email}`,
     `電話: ${tel || '(未記入)'}`,
+    ...(advisor ? [`業種: ${industry}`, '希望内容: CORE AI Advisory 初回無料相談'] : []),
     `会社規模: ${size || '(未選択)'}`,
     `希望内容: ${interests.length ? interests.join(' / ') : '(未選択)'}`,
     `予算感: ${budget || '(未選択)'}`,
@@ -259,10 +261,10 @@ export default function CorpContactForm() {
       <div className="corp-form-grid">
         <div>
           <label style={labelStyle} htmlFor="corp-company">会社名</label>
-          <input id="corp-company" maxLength={MAX.company} style={fieldStyle} value={company} onChange={e => setCompany(e.target.value)} autoComplete="organization" placeholder="株式会社CORE" />
+          <input id="corp-company" maxLength={MAX.company} style={fieldStyle} value={company} onChange={e => setCompany(e.target.value)} autoComplete="organization" placeholder="株式会社〇〇" required={advisor} />
         </div>
         <div>
-          <label style={labelStyle} htmlFor="corp-name">お名前 <span style={{ color: "var(--corp-accent, #BAE6FD)" }}>*</span></label>
+          <label style={labelStyle} htmlFor="corp-name">{advisor ? '担当者名' : 'お名前'} <span style={{ color: "var(--corp-accent, #BAE6FD)" }}>*</span></label>
           <input id="corp-name" maxLength={MAX.name} style={fieldStyle} value={name} onChange={e => setName(e.target.value)} autoComplete="name" placeholder="井出 直毅" required />
         </div>
         <div>
@@ -275,6 +277,8 @@ export default function CorpContactForm() {
         </div>
       </div>
 
+      {advisor && <div style={{ marginTop: '1.8rem' }}><label style={labelStyle} htmlFor="corp-industry">業種 *</label><select id="corp-industry" style={fieldStyle} value={industry} onChange={e => setIndustry(e.target.value)} required><option value="">業種を選択してください</option>{['製造業', '建設業', '飲食業', 'サービス業', 'その他'].map(v => <option key={v}>{v}</option>)}</select></div>}
+      {!advisor && <>
       <div style={{ marginTop: '1.8rem' }}>
         <span style={labelStyle}>会社規模</span>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
@@ -305,6 +309,7 @@ export default function CorpContactForm() {
         </p>
       </div>
 
+      </>}
       <div style={{ marginTop: '1.8rem' }}>
         <label style={labelStyle} htmlFor="corp-message">ご相談内容 <span style={{ color: "var(--corp-accent, #BAE6FD)" }}>*</span></label>
         <textarea
@@ -318,6 +323,7 @@ export default function CorpContactForm() {
         />
       </div>
 
+      {advisor && <p style={{ fontSize: 14, marginTop: 20, lineHeight: 1.8 }}>ご入力情報はご相談への対応に利用します。<a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--corp-accent)', textDecoration: 'underline' }}>プライバシーポリシー（別タブ）</a>をご確認のうえお申し込みください。</p>}
       {/* 結果はボタンの真上。押した指の近くで分かるように。 */}
       <div ref={resultRef} style={{ minHeight: phase === 'error' ? undefined : 0, marginTop: phase === 'error' ? '1.4rem' : 0 }}>
         {phase === 'error' && (
@@ -347,10 +353,10 @@ export default function CorpContactForm() {
             transition: 'background 0.25s, color 0.25s',
           }}
         >
-          {phase === 'sending' ? '送信しています…' : 'この内容で相談する'}
+          {phase === 'sending' ? '送信しています…' : (advisor ? '無料相談を申し込む' : 'この内容で相談する')}
         </button>
         <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.76rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", marginTop: '0.9rem', lineHeight: 1.9 }}>
-          お名前・メール・ご相談内容の3つでお送りいただけます。
+          {advisor ? '初回相談は完全無料です。電話番号は任意です。' : 'お名前・メール・ご相談内容の3つでお送りいただけます。'}
           <br />
           しつこい営業はいたしません。
         </p>
