@@ -153,7 +153,7 @@ const TAB_META: Record<CoreTabKey, { title: string; desc: string; path: string }
   ashitaka: { title: 'ASHITAKA PROJECT × REGIONAL OS — 文化を入口に、街と村のDXへ | 株式会社CORE', desc: '文化で接点をつくる ASHITAKA PROJECT と、自治体・地域事業者の業務をAI前提で再設計する REGIONAL OS。演奏するのは代表取締役本人。自治体・地域事業者へいま提供できることと、構想段階のものを分けて伝えます。', path: '/ashitaka' },
   energy: { title: 'CORE ENERGY — AIの電力需要に、地域の分散資源で応える | 株式会社CORE', desc: 'エネルギー事業者との協業領域。Energy Intelligence、AI最適化（需要予測・需給最適化・DR/VPP・設備保全）、地域プロジェクトの組成、計測。資産を持たず、AI・データ解析・設計・地域との合意形成から始めます。', path: '/energy' },
   company: { title: '会社について | 株式会社CORE', desc: 'いつの時代も、変わらない核を。核とは、人。会社概要・理念・代表。', path: '/corp#company' },
-  advisor: { title: 'AI顧問 — 月額50万円・3ヶ月から | 株式会社CORE', desc: 'CORE AI Advisory。AI戦略から現場実装、業務自動化、AIエージェント、継続改善、ROAI測定まで。月額50万円（税別）／税込55万円、原則3か月。初回相談完全無料。', path: '/corp#advisor' },
+  advisor: { title: 'AI顧問・FDE — 月額55万円（税込） | 株式会社CORE', desc: 'CORE AI Advisory。AI戦略から現場実装、業務自動化、AIエージェント、継続改善、ROAI測定まで。月額50万円（税別）／税込55万円、原則3か月。初回相談完全無料。', path: '/corp#advisor' },
   contact: { title: '無料AI業務診断・ご相談 | 株式会社CORE', desc: '業種と業務を選び、年間工数・時間価値・AI実装適性・30日間の検証順序を約5分で整理。登録不要の無料診断。', path: '/corp#contact' },
 };
 
@@ -624,6 +624,28 @@ export default function CoreSite() {
         <ExecutiveQuestion onAnchor={handleAnchor} />
         <Differentiation />
         <WhyCore />
+        <section className="lp-section-pad" aria-labelledby="core-portfolio-heading" style={{ padding: '64px 24px', background: 'var(--corp-surface-soft)', color: 'var(--corp-text)' }}>
+          <div style={{ maxWidth: 1080, margin: '0 auto' }}>
+            <p style={sectionLabel}>CORE BUSINESS PORTFOLIO</p>
+            <h2 id="core-portfolio-heading" style={{ fontFamily: FONT_SANS, fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.5 }}>経営の課題から、<br />実装と成長まで。</h2>
+            <p style={{ lineHeight: 1.9 }}>神戸発のAI Transformation Company。AIを導入するのではない。AI前提で企業を再設計する。5つの事業領域をつなぎ、継続的な経営成果を支えます。</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 20, marginTop: 32 }}>
+              {[
+                { name: 'CORE Advisory', state: 'ご相談受付中', text: 'AI顧問・FDE・業務改革。経営の優先順位から、現場で動く仕組みと継続改善まで。', price: '標準 月550,000円（税込）／範囲限定ライト 月330,000円（税込）。初回相談無料。', href: '/corp#advisor', cta: 'AI顧問・FDEを見る' },
+                { name: 'CORE Intelligence', state: '製品ごとに提供状況が異なります', text: 'AI経営OS、業務エージェント、社内情報検索、自動化。Nexusは現在CORE NERIとしてご案内しています。連携可否は対象環境ごとに確認します。', price: '製品の現行料金・利用条件は各サービスでご案内。構想・検証中の機能は提供済み機能と区別します。', href: neriLpUrl('corp-portfolio'), cta: 'CORE NERIを見る' },
+                { name: 'CORE Academy', state: '教育・定着支援のご相談／プラットフォーム構想', text: '法人AI教育、活用定着、ガバナンス、セキュリティ教育、活用度評価。診断・教育・評価をつなぐ仕組みを検証します。', price: '1ユーザー月990円（税込）は検証中の目安価格です。正式提供条件・教材構成は個別にご相談ください。', href: '/corp#contact', cta: '教育・定着を相談する' },
+                { name: 'CORE Studio', state: '制作のご相談受付中', text: 'AI動画、広告クリエイティブ、SNS・マーケティング支援。事業の価値が伝わる表現と体験を設計します。', price: '制作内容・現行料金はCORE Studioでご案内します。', href: '/studio', cta: '制作内容・料金を見る' },
+                { name: 'CORE Ventures', state: '将来構想', text: '業界特化SaaS、ロボティクス、M&A、事業投資、新規事業開発。顧客課題から検証し、実装可能性と事業性を見極めます。', price: '未提供の構想を販売中とは扱いません。協業の可能性についてご相談を承ります。', href: '/corp#contact', cta: '協業について相談する' },
+              ].map(item => <article key={item.name} style={{ padding: 26, borderRadius: 14, background: 'var(--corp-surface)', border: '1px solid var(--corp-line)', display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <p style={{ margin: 0, color: 'var(--corp-accent)', fontSize: 13 }}>{item.state}</p>
+                <h3 style={{ margin: 0, fontFamily: FONT_SANS, fontSize: 23 }}>{item.name}</h3>
+                <p style={{ margin: 0, lineHeight: 1.9 }}>{item.text}</p>
+                <p style={{ margin: 0, lineHeight: 1.8, fontSize: 15, color: 'var(--corp-muted)' }}>{item.price}</p>
+                <a href={item.href} onClick={event => handleAnchor(event, item.href)} style={{ color: 'var(--corp-accent)', minHeight: 44, display: 'inline-flex', alignItems: 'center', marginTop: 'auto' }}>{item.cta} →</a>
+              </article>)}
+            </div>
+          </div>
+        </section>
         <ServicesEditorial onAnchor={handleAnchor} />
         <ApproachSection />
         <ScoreTeaser onAnchor={handleAnchor} />
