@@ -33,7 +33,7 @@ import {
 import { useIsMobile } from './useIsMobile';
 import {
   PhilosophyCore, CompanyOsSection,
-  UseCasesSection, ServiceLayersSection, BusinessDevSection,
+  UseCasesSection, BusinessDevSection,
   IndustryOsSection, PartnerSection, AiNativeSection, TechnologySection,
   InvestmentSection,
   EngagementSection, SecuritySection,
@@ -54,6 +54,7 @@ import { TheChange, ProcessContrast, OneCore, StudioSection, NeriSection, Bridge
 import AshitakaPage from './AshitakaPage';
 import EnergyPage from './EnergyPage';
 import AiAdvisorTab from './AiAdvisorTab';
+import { VisualPortfolio, VisualImpact, VisualDisclosure } from './VisualStrategy';
 import { track } from './roai/track';
 import { neriLpUrl } from '../lib/coreLinks';
 
@@ -99,11 +100,19 @@ const PLATFORM_PLANS: Array<{
 //  ここではヘッダーの実測高を引くので、常に見出しの真上に着地する。
 //  17,908px を smooth で流すと数秒かかるため、ジャンプは即時にする。
 // ============================================================
+function revealDisclosure(element: HTMLElement) {
+  let parent = element.parentElement;
+  while (parent) {
+    if (parent instanceof HTMLDetailsElement) parent.open = true;
+    parent = parent.parentElement;
+  }
+}
 function jumpToHash(e: ReactMouseEvent<HTMLAnchorElement>, href: string) {
   if (!href.startsWith('#')) return;
   const el = document.getElementById(href.slice(1));
   if (!el) return;
   e.preventDefault();
+  revealDisclosure(el);
   const header = document.querySelector('header');
   const offset = (header?.getBoundingClientRect().height ?? 64) + 8;
   window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'auto' });
@@ -332,6 +341,7 @@ export default function CoreSite() {
       requestAnimationFrame(() => {
         const el = document.getElementById(hash.replace('#', ''));
         if (!el) { window.scrollTo({ top: 0, behavior: 'auto' }); return; }
+        revealDisclosure(el);
         const header = document.querySelector('header');
         const offset = (header?.getBoundingClientRect().height ?? 64) + 8;
         window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'auto' });
@@ -344,6 +354,8 @@ export default function CoreSite() {
 
   // 追従CTA（App.tsx 側）とページの計測に、いまのタブを知らせる
   useEffect(() => {
+    const initialTarget = document.getElementById(window.location.hash.slice(1));
+    if (initialTarget) revealDisclosure(initialTarget);
     setCorpTab(tab);
     track('corp_page_view', tab);
     const m = TAB_META[tab];
@@ -368,6 +380,7 @@ export default function CoreSite() {
    * （フッタの「会社概要」やヒーローの「プロダクトを見る」を殺さないため）
    */
   const handleAnchor = (e: ReactMouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('/corp#')) href = href.slice(5);
     // 独立パスのタブ（/return-on-ai・/roai-score）はページ遷移せずタブを切り替える
     const pathTab = PATH_TAB[href.replace(/\/$/, '')];
     if (pathTab) {
@@ -402,6 +415,7 @@ export default function CoreSite() {
       requestAnimationFrame(() => {
         const el = id ? document.getElementById(id) : null;
         if (!el) { window.scrollTo({ top: 0, behavior: 'instant' }); return; }
+        revealDisclosure(el);
         const header = document.querySelector('header');
         const offset = (header?.getBoundingClientRect().height ?? 64) + 8;
         window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'instant' });
@@ -569,19 +583,26 @@ export default function CoreSite() {
             PeopleMosaic / ProofStrip / FinalCta）は AI変革タブ・会社タブ・/return-on-ai に残る。 */}
         <Manifesto onAnchor={handleAnchor} />
         <Values />
-        <TheChange />
-        <RoaiBand onAnchor={handleAnchor} />
-        <ProcessContrast />
-        <RoaiModelSection onAnchor={handleAnchor} compact />
-        <ScoreTeaser onAnchor={handleAnchor} />
-        <OneCore onAnchor={handleAnchor} />
+        <VisualImpact onAnchor={handleAnchor} />
+        <VisualDisclosure title="AIで企業をどう変えるか" subtitle="経営成果から逆算する、COREの考え方">
+          <TheChange />
+          <RoaiBand onAnchor={handleAnchor} />
+          <ExecutiveQuestion onAnchor={handleAnchor} />
+          <Differentiation />
+          <ProcessContrast />
+          <RoaiModelSection onAnchor={handleAnchor} compact />
+          <ScoreTeaser onAnchor={handleAnchor} />
+          <OneCore onAnchor={handleAnchor} />
+        </VisualDisclosure>
         <StudioSection />
         <NeriSection />
-        <Bridge />
         <AshitakaHome onAnchor={handleAnchor} />
         <EnergyHome onAnchor={handleAnchor} />
-        <Connection />
-        <Core2035 />
+        <VisualDisclosure title="地域と未来への構想" subtitle="企業の変革から、地域・社会の仕組みへ">
+          <Bridge />
+          <Connection />
+          <Core2035 />
+        </VisualDisclosure>
         <ProductsProof onAnchor={handleAnchor} />
         <FounderMessage onAnchor={handleAnchor} />
         <CompanyOverview onAnchor={handleAnchor} />
@@ -619,46 +640,24 @@ export default function CoreSite() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       {tab === 'services' && (
       <>
-        {/* 2026-09-06: ホームから移した章。AI変革タブは「ROAI → 順序の違い → なぜCORE → 何をするか → 進め方」で始まる。 */}
-        <RoaiBand onAnchor={handleAnchor} />
-        <ExecutiveQuestion onAnchor={handleAnchor} />
-        <Differentiation />
-        <WhyCore />
-        <section className="lp-section-pad" aria-labelledby="core-portfolio-heading" style={{ padding: '64px 24px', background: 'var(--corp-surface-soft)', color: 'var(--corp-text)' }}>
-          <div style={{ maxWidth: 1080, margin: '0 auto' }}>
-            <p style={sectionLabel}>CORE BUSINESS PORTFOLIO</p>
-            <h2 id="core-portfolio-heading" style={{ fontFamily: FONT_SANS, fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.5 }}>経営の課題から、<br />実装と成長まで。</h2>
-            <p style={{ lineHeight: 1.9 }}>神戸発のAI Transformation Company。AIを導入するのではない。AI前提で企業を再設計する。5つの事業領域をつなぎ、継続的な経営成果を支えます。</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 20, marginTop: 32 }}>
-              {[
-                { name: 'CORE Advisory', state: 'ご相談受付中', text: 'AI顧問・FDE・業務改革。経営の優先順位から、現場で動く仕組みと継続改善まで。', price: '標準 月550,000円（税込）／範囲限定ライト 月330,000円（税込）。初回相談無料。', href: '/corp#advisor', cta: 'AI顧問・FDEを見る' },
-                { name: 'CORE Intelligence', state: '製品ごとに提供状況が異なります', text: 'AI経営OS、業務エージェント、社内情報検索、自動化。Nexusは現在CORE NERIとしてご案内しています。連携可否は対象環境ごとに確認します。', price: '製品の現行料金・利用条件は各サービスでご案内。構想・検証中の機能は提供済み機能と区別します。', href: neriLpUrl('corp-portfolio'), cta: 'CORE NERIを見る' },
-                { name: 'CORE Academy', state: '教育・定着支援のご相談／プラットフォーム構想', text: '法人AI教育、活用定着、ガバナンス、セキュリティ教育、活用度評価。診断・教育・評価をつなぐ仕組みを検証します。', price: '1ユーザー月990円（税込）は検証中の目安価格です。正式提供条件・教材構成は個別にご相談ください。', href: '/corp#contact', cta: '教育・定着を相談する' },
-                { name: 'CORE Studio', state: '制作のご相談受付中', text: 'AI動画、広告クリエイティブ、SNS・マーケティング支援。事業の価値が伝わる表現と体験を設計します。', price: '制作内容・現行料金はCORE Studioでご案内します。', href: '/studio', cta: '制作内容・料金を見る' },
-                { name: 'CORE Ventures', state: '将来構想', text: '業界特化SaaS、ロボティクス、M&A、事業投資、新規事業開発。顧客課題から検証し、実装可能性と事業性を見極めます。', price: '未提供の構想を販売中とは扱いません。協業の可能性についてご相談を承ります。', href: '/corp#contact', cta: '協業について相談する' },
-              ].map(item => <article key={item.name} style={{ padding: 26, borderRadius: 14, background: 'var(--corp-surface)', border: '1px solid var(--corp-line)', display: 'flex', flexDirection: 'column', gap: 14 }}>
-                <p style={{ margin: 0, color: 'var(--corp-accent)', fontSize: 13 }}>{item.state}</p>
-                <h3 style={{ margin: 0, fontFamily: FONT_SANS, fontSize: 23 }}>{item.name}</h3>
-                <p style={{ margin: 0, lineHeight: 1.9 }}>{item.text}</p>
-                <p style={{ margin: 0, lineHeight: 1.8, fontSize: 15, color: 'var(--corp-muted)' }}>{item.price}</p>
-                <a href={item.href} onClick={event => handleAnchor(event, item.href)} style={{ color: 'var(--corp-accent)', minHeight: 44, display: 'inline-flex', alignItems: 'center', marginTop: 'auto' }}>{item.cta} →</a>
-              </article>)}
-            </div>
-          </div>
-        </section>
-        <ServicesEditorial onAnchor={handleAnchor} />
-        <ApproachSection />
-        <ScoreTeaser onAnchor={handleAnchor} />
-        <ServiceLayersSection />
-        {/* 「何ができるか」の直後に「どう進むか・やめられるか」を置く（稟議に持ち込める形にする） */}
-        <EngagementSection onAnchor={handleAnchor} />
-        <AiNativeSection />
-        <TechnologySection />
-        {/* 技術の話の直後に「その情報はどこへ行くのか」を置く */}
-        <SecuritySection />
-        <BusinessDevSection />
-        <PartnerSection onAnchor={handleAnchor} />
-        <InvestmentSection onAnchor={handleAnchor} />
+        <VisualPortfolio onAnchor={handleAnchor} />
+        <VisualImpact onAnchor={handleAnchor} />
+        <VisualDisclosure title="支援内容と進め方" subtitle="戦略・開発・運用／契約・成果物・進行">
+          <ServicesEditorial onAnchor={handleAnchor} />
+          <EngagementSection onAnchor={handleAnchor} />
+        </VisualDisclosure>
+        <VisualDisclosure title="技術・セキュリティ" subtitle="AIの組み込み方と、情報を守る仕組み">
+          <AiNativeSection />
+          <TechnologySection />
+          <SecuritySection />
+        </VisualDisclosure>
+        <VisualDisclosure title="COREの支援体制・協業" subtitle="事業開発・パートナー・投資規模を詳しく">
+          <WhyCore />
+          <ApproachSection />
+          <BusinessDevSection />
+          <PartnerSection onAnchor={handleAnchor} />
+          <InvestmentSection onAnchor={handleAnchor} />
+        </VisualDisclosure>
         <FinalCta onAnchor={handleAnchor} />
       </>
       )}
