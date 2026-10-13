@@ -475,7 +475,7 @@ export function FounderMessage({ onAnchor }: { onAnchor: AnchorHandler }) {
 export function CompanyOverview({ onAnchor }: { onAnchor: AnchorHandler }) {
   const rows: { k: string; en: string; v: React.ReactNode }[] = [
     { k: '会社名', en: 'Company', v: <>{COMPANY_INFO.name}<span className="ch-dl-sub">{COMPANY_INFO.nameEn}</span></> },
-    { k: '設立', en: 'Founded', v: COMPANY_INFO.founded },
+    { k: '設立年月日', en: 'Date Established', v: COMPANY_INFO.founded },
     { k: '資本金', en: 'Capital', v: COMPANY_INFO.capitalDisplay },
     { k: '代表取締役', en: 'CEO', v: <>{COMPANY_INFO.representative}<span className="ch-dl-sub">{COMPANY_INFO.representativeEn}</span></> },
     { k: '本社所在地', en: 'Headquarters', v: <>{COMPANY_INFO.addressJa}<span className="ch-dl-sub">{COMPANY_INFO.addressEn}</span></> },

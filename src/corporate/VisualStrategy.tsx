@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode } from 'react';
+import { useId, type MouseEvent, type ReactNode } from 'react';
 import { ArrowRight, Compass, Network, GraduationCap, Film, Orbit, TrendingUp, Timer, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { neriLpUrl } from '../lib/coreLinks';
 import './visualStrategy.css';
@@ -8,56 +8,64 @@ type ArtKind = 'advisory' | 'intelligence' | 'academy' | 'studio' | 'ventures';
 
 /** Original lightweight vector scenes. Decorative: adjacent copy carries the meaning. */
 export function ServiceArt({ kind, className = '' }: { kind: ArtKind; className?: string }) {
+  const gradientId = `cv-brand-${useId().replace(/:/g, '')}`;
   return <svg className={'cv-art ' + className} viewBox="0 0 360 200" fill="none" aria-hidden="true" focusable="false">
-    <ellipse cx="180" cy="176" rx="130" ry="13" fill="#dceaf5" opacity=".65" />
-    <circle cx="184" cy="95" r="83" fill="#eaf5fd" />
-    <g stroke="#bad2e5" strokeWidth="1"><path d="M24 145H336M44 165H316" strokeDasharray="3 7" /></g>
+    <defs>
+      <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#0075F5" />
+        <stop offset="55%" stopColor="#0064D8" />
+        <stop offset="100%" stopColor="#1034B5" />
+      </linearGradient>
+    </defs>
+    <ellipse cx="180" cy="176" rx="130" ry="13" fill="#D9E0F4" opacity=".65" />
+    <circle cx="184" cy="95" r="83" fill="#EEF2FF" />
+    <g stroke="#C2D0ED" strokeWidth="1"><path d="M24 145H336M44 165H316" strokeDasharray="3 7" /></g>
     {kind === 'advisory' && <g strokeLinejoin="round" strokeLinecap="round">
       <rect x="94" y="35" width="178" height="121" rx="12" fill="white" stroke="#c8ddeb" strokeWidth="2"/>
-      <path d="M112 57H166M112 66H143" stroke="#abc4d7" strokeWidth="4"/>
-      <path d="M117 134V101M150 134V88M183 134V105M216 134V74" stroke="#d4eaf8" strokeWidth="15"/>
-      <path d="M113 107L148 87L181 93L231 57M217 57H231V71" stroke="#087dc1" strokeWidth="4"/>
-      <rect x="45" y="108" width="80" height="54" rx="9" fill="#087dc1"/>
+      <path d="M112 57H166M112 66H143" stroke="#A6B4D8" strokeWidth="4"/>
+      <path d="M117 134V101M150 134V88M183 134V105M216 134V74" stroke="#D4DEFF" strokeWidth="15"/>
+      <path d="M113 107L148 87L181 93L231 57M217 57H231V71" stroke="url(#${gradientId})" strokeWidth="4"/>
+      <rect x="45" y="108" width="80" height="54" rx="9" fill="url(#${gradientId})" className="cv-highlight"/>
       <circle cx="64" cy="127" r="5" fill="white"/><path d="M77 127H109M60 142H106" stroke="#b9e5ff" strokeWidth="3"/>
-      <circle cx="279" cy="124" r="26" fill="white" stroke="#b8d9ef" strokeWidth="2"/>
-      <path d="M267 124L276 133L292 115" stroke="#0897b0" strokeWidth="4"/>
-      <path d="M168 157V172M148 173H220" stroke="#8fb4cd" strokeWidth="3"/>
+      <circle cx="279" cy="124" r="26" fill="white" stroke="#AFC1FF" strokeWidth="2"/>
+      <path d="M267 124L276 133L292 115" stroke="#0075F5" strokeWidth="4"/>
+      <path d="M168 157V172M148 173H220" stroke="#879FCC" strokeWidth="3"/>
     </g>}
     {kind === 'intelligence' && <g strokeLinejoin="round" strokeLinecap="round">
       <path d="M81 57L178 97L285 52M81 150L178 97L285 153" stroke="#81b9df" strokeWidth="2" strokeDasharray="5 5"/>
-      <rect x="138" y="58" width="82" height="82" rx="22" fill="#087dc1"/>
+      <rect x="138" y="58" width="82" height="82" rx="22" fill="url(#${gradientId})" className="cv-highlight"/>
       <rect x="154" y="74" width="50" height="50" rx="13" stroke="white" strokeWidth="2"/>
       <path d="M165 99H193M179 85V113" stroke="white" strokeWidth="3"/>
-      {[[58,35],[263,30],[55,128],[263,130]].map(([x,y],i)=><g key={i}><rect x={x} y={y} width="46" height="44" rx="10" fill="white" stroke="#bbd6e9" strokeWidth="2"/><path d={`M${x+12} ${y+15}H${x+34}M${x+12} ${y+23}H${x+29}M${x+12} ${y+31}H${x+22}`} stroke="#62a6ce" strokeWidth="3"/></g>)}
-      <circle cx="237" cy="89" r="5" fill="#1ab8ca"/><circle cx="121" cy="125" r="4" fill="#1ab8ca"/>
+      {[[58,35],[263,30],[55,128],[263,130]].map(([x,y],i)=><g key={i}><rect x={x} y={y} width="46" height="44" rx="10" fill="white" stroke="#B8C8F0" strokeWidth="2"/><path d={`M${x+12} ${y+15}H${x+34}M${x+12} ${y+23}H${x+29}M${x+12} ${y+31}H${x+22}`} stroke="#477DEB" strokeWidth="3"/></g>)}
+      <circle cx="237" cy="89" r="5" fill="#0075F5"/><circle cx="121" cy="125" r="4" fill="#0075F5"/>
     </g>}
     {kind === 'academy' && <g strokeLinejoin="round" strokeLinecap="round">
-      <path d="M67 75Q116 53 165 78V155Q116 130 67 148ZM165 78Q214 53 263 75V148Q214 130 165 155Z" fill="white" stroke="#b9d6e9" strokeWidth="2"/>
-      <path d="M84 89Q116 77 146 90M84 104Q116 92 146 105M84 119Q109 109 134 117" stroke="#9fc4dd" strokeWidth="3"/>
-      <path d="M185 104L207 116L244 88" stroke="#0785c6" strokeWidth="5"/>
-      <path d="M219 43L255 27L291 43L255 60Z" fill="#087dc1"/><path d="M234 54V68Q255 81 276 68V54" fill="#65b9df"/>
-      <path d="M291 43V71" stroke="#087dc1" strokeWidth="3"/>
-      <circle cx="76" cy="48" r="9" fill="#c3e7f5"/><path d="M73 48H79M76 45V51" stroke="#087dc1" strokeWidth="2"/>
+      <path d="M67 75Q116 53 165 78V155Q116 130 67 148ZM165 78Q214 53 263 75V148Q214 130 165 155Z" fill="white" stroke="#B8C8F0" strokeWidth="2"/>
+      <path d="M84 89Q116 77 146 90M84 104Q116 92 146 105M84 119Q109 109 134 117" stroke="#9DB5FF" strokeWidth="3"/>
+      <path d="M185 104L207 116L244 88" stroke="#0064D8" strokeWidth="5"/>
+      <path d="M219 43L255 27L291 43L255 60Z" fill="url(#${gradientId})" className="cv-highlight"/><path d="M234 54V68Q255 81 276 68V54" fill="#4E91FF"/>
+      <path d="M291 43V71" stroke="url(#${gradientId})" strokeWidth="3"/>
+      <circle cx="76" cy="48" r="9" fill="#C8D9FF"/><path d="M73 48H79M76 45V51" stroke="url(#${gradientId})" strokeWidth="2"/>
     </g>}
     {kind === 'studio' && <g strokeLinejoin="round" strokeLinecap="round">
-      <rect x="70" y="37" width="211" height="118" rx="11" fill="white" stroke="#bfd9ea" strokeWidth="2"/>
-      <rect x="82" y="49" width="187" height="80" rx="5" fill="#d9eff9"/>
-      <path d="M82 118L134 70L178 110L216 82L269 118V129H82Z" fill="#9cd2eb"/>
+      <rect x="70" y="37" width="211" height="118" rx="11" fill="white" stroke="#B8C8F0" strokeWidth="2"/>
+      <rect x="82" y="49" width="187" height="80" rx="5" fill="#E3EBFF"/>
+      <path d="M82 118L134 70L178 110L216 82L269 118V129H82Z" fill="#AFC4FF"/>
       <circle cx="230" cy="68" r="10" fill="white"/>
-      <circle cx="174" cy="88" r="25" fill="#087dc1"/><path d="M168 76L186 88L168 100Z" fill="white"/>
-      <path d="M85 141H255" stroke="#d0e5f0" strokeWidth="5"/><path d="M85 141H170" stroke="#168cc9" strokeWidth="5"/>
-      <rect x="220" y="116" width="74" height="55" rx="7" fill="#087dc1"/><path d="M233 132H281M233 144H256M233 155H272" stroke="#bce7fa" strokeWidth="3"/>
-      <path d="M49 94L55 82L61 94L73 100L61 106L55 118L49 106L37 100Z" fill="#a0d9ed"/>
+      <circle cx="174" cy="88" r="25" fill="url(#${gradientId})" className="cv-highlight"/><path d="M168 76L186 88L168 100Z" fill="white"/>
+      <path d="M85 141H255" stroke="#D7DEEF" strokeWidth="5"/><path d="M85 141H170" stroke="#168cc9" strokeWidth="5"/>
+      <rect x="220" y="116" width="74" height="55" rx="7" fill="url(#${gradientId})" className="cv-highlight"/><path d="M233 132H281M233 144H256M233 155H272" stroke="#C4D4FF" strokeWidth="3"/>
+      <path d="M49 94L55 82L61 94L73 100L61 106L55 118L49 106L37 100Z" fill="#93A8F0"/>
     </g>}
     {kind === 'ventures' && <g strokeLinejoin="round" strokeLinecap="round">
-      <ellipse cx="175" cy="105" rx="114" ry="49" transform="rotate(-22 175 105)" stroke="#9ac5df" strokeWidth="2" strokeDasharray="5 6"/>
-      <path d="M151 107Q160 56 224 36Q238 94 190 126Z" fill="white" stroke="#8fbfdd" strokeWidth="2"/>
-      <path d="M196 49Q209 42 224 36Q228 52 225 67Z" fill="#087dc1"/>
-      <circle cx="200" cy="80" r="13" fill="#d6eef9" stroke="#087dc1" strokeWidth="2"/>
-      <path d="M155 94L125 99L118 134L151 119M196 120L194 151L160 163L174 130" fill="#087dc1"/>
+      <ellipse cx="175" cy="105" rx="114" ry="49" transform="rotate(-22 175 105)" stroke="#93A8F0" strokeWidth="2" strokeDasharray="5 6"/>
+      <path d="M151 107Q160 56 224 36Q238 94 190 126Z" fill="white" stroke="#829CE0" strokeWidth="2"/>
+      <path d="M196 49Q209 42 224 36Q228 52 225 67Z" fill="url(#${gradientId})" className="cv-highlight"/>
+      <circle cx="200" cy="80" r="13" fill="#E9EFFF" stroke="url(#${gradientId})" strokeWidth="2"/>
+      <path d="M155 94L125 99L118 134L151 119M196 120L194 151L160 163L174 130" fill="url(#${gradientId})" className="cv-highlight"/>
       <path d="M143 136L121 158M153 146L141 166" stroke="#20a8c5" strokeWidth="5"/>
-      <circle cx="277" cy="92" r="9" fill="#a0d8eb"/><circle cx="81" cy="111" r="5" fill="#087dc1"/>
-      <path d="M100 42V54M94 48H106M285 142V152M280 147H290" stroke="#7fb9d7" strokeWidth="2"/>
+      <circle cx="277" cy="92" r="9" fill="#AFC4FF"/><circle cx="81" cy="111" r="5" fill="url(#${gradientId})" className="cv-highlight"/>
+      <path d="M100 42V54M94 48H106M285 142V152M280 147H290" stroke="#7E99F0" strokeWidth="2"/>
     </g>}
   </svg>;
 }
