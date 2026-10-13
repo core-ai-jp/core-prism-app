@@ -92,6 +92,7 @@ const VerticalHub = lazy(() => import('./vertical/VerticalHub'));
 const UltimaLanding = lazy(() => import('./vertical/UltimaLanding'));
 const ConciergePage = lazy(() => import('./prism/concierge/ConciergePage'));
 import { useBillingUser, PRISM_PLANS, isAuthorized as isAuthorizedFn, isMasterAuth, isTrialExpired, syncSubscriptionState, type Plan } from './lib/billing';
+import { getPendingReferral } from './lib/referral';
 import { isDemoActive } from './lib/onboarding';
 import TrialExpiredLock from './components/TrialExpiredLock';
 import { PrismBackground } from './components/PrismBackground';
@@ -829,15 +830,18 @@ function AppRoutes() {
   }, [billingUser?.subscriptionId]);
 
   const handleEnterApp = useCallback(() => {
-    if (hasEnteredApp()) {
+    // 招待リンクを踏んだ未登録者は、以前デモを見た端末でも必ず登録へ進める。
+    // hasEnteredApp() だけを見るとオンボーディングへ直行し、招待コードが redeem されない。
+    const mustRedeemReferral = !billingUser && !!getPendingReferral();
+    if (hasEnteredApp() && !mustRedeemReferral) {
       markAppEntered();
       setView(settings.onboardingComplete ? 'selection' : 'onboarding');
     } else {
-      // 未認証: 14 日無料トライアルプランで Checkout を起動
+      // 未認証、または未登録の紹介受取人: 無料トライアルの Checkout を起動
       const trial = PRISM_PLANS.find(p => p.id === 'free') || PRISM_PLANS[0];
       setCheckoutPlan(trial);
     }
-  }, [settings.onboardingComplete]);
+  }, [billingUser, settings.onboardingComplete]);
 
   const handleCheckoutSuccess = useCallback(() => {
     markAppEntered();

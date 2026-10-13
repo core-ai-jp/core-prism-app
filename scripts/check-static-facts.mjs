@@ -137,7 +137,7 @@ console.log('\n[5] 招待ページの個人メッセージ');
     const nodes = {
       'inviter-heading': { textContent: '友達から招待されました' },
       'invite-message': { textContent: '', hidden: true },
-      cta: { href: 'https://core-prism-app.vercel.app/', setAttribute(name, value) { this[name] = value; } },
+      cta: { href: 'https://core-prism-app.vercel.app/?lp=1', setAttribute(name, value) { this[name] = value; } },
     };
     runInNewContext(script, {
       URL,
@@ -152,7 +152,7 @@ console.log('\n[5] 招待ページの個人メッセージ');
   const personalized = runInvite('https://example.test/invite.html?ref=ABC234&from=%E3%81%AA%E3%81%8A%E3%81%8D&msg=%E3%81%93%E3%82%8C%E4%BE%BF%E5%88%A9%E3%81%A0%E3%81%A3%E3%81%9F%E3%82%88');
   ok('招待者名を受取画面に表示する', personalized.nodes['inviter-heading'].textContent === 'なおき さんから招待されました');
   ok('一言メッセージを受取画面に表示する', personalized.nodes['invite-message'].textContent === '「これ便利だったよ」' && personalized.nodes['invite-message'].hidden === false);
-  ok('名前と一言を Prism の登録先へ引き継ぐ', personalized.nodes.cta.href === 'https://core-prism-app.vercel.app/?ref=ABC234&from=%E3%81%AA%E3%81%8A%E3%81%8D&msg=%E3%81%93%E3%82%8C%E4%BE%BF%E5%88%A9%E3%81%A0%E3%81%A3%E3%81%9F%E3%82%88');
+  ok('紹介 LP を強制し、名前と一言を Prism の登録先へ引き継ぐ', personalized.nodes.cta.href === 'https://core-prism-app.vercel.app/?lp=1&ref=ABC234&from=%E3%81%AA%E3%81%8A%E3%81%8D&msg=%E3%81%93%E3%82%8C%E4%BE%BF%E5%88%A9%E3%81%A0%E3%81%A3%E3%81%9F%E3%82%88');
   ok('招待の内容を読む前に自動転送しない', personalized.redirects.length === 0);
 
   const hostile = runInvite('https://example.test/invite.html?ref=ABC234&from=%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E&msg=%3Cscript%3Ealert(1)%3C%2Fscript%3E');
@@ -197,6 +197,14 @@ console.log('\n[7] 紹介経由 LP の無料日数表示');
       && landing.includes('{freeDays}日間、すべての機能を無料で。'));
   ok('モバイルの紹介バナーは右上のテーマ切替ボタンと重ならない余白を持つ',
     landing.includes("padding: '0.85rem 4.5rem 0.85rem 1rem'"));
+}
+
+console.log('\n[8] 紹介受取人を登録へ戻す');
+{
+  const app = read('src/App.tsx');
+  ok('以前デモを見た未登録者も紹介コードを redeem できる Checkout へ進む',
+    app.includes('const mustRedeemReferral = !billingUser && !!getPendingReferral()')
+      && app.includes('if (hasEnteredApp() && !mustRedeemReferral)'));
 }
 
 console.log('');
