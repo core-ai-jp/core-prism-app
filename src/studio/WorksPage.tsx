@@ -95,27 +95,30 @@ export default function WorksPage({ go }: { go: Go }) {
 
 // ---- 映像制作の実績 (旧 StudioSite.tsx の FilmWorksBand を移設) ----
 function FilmWorksBand({ go }: { go: Go }) {
-  const [lead, ...rest] = FILM_WORKS;
-  if (!lead) return null;
+  const featured = FILM_WORKS.slice(0, 2);
+  const rest = FILM_WORKS.slice(2);
+  if (!featured.length) return null;
   const openFilm = () => { track('studio_works_to_film', { from: 'works-page' }); go('film'); };
 
   return (
     <Band dark wide pad="46px 0 40px">
       <H2 dark en="Film" sub="商品広告・ブランドムービー・ショートドラマまで。すべて当社が制作し、実際に納品した映像です。">映像制作の実績</H2>
-      <div className="st-fw">
-        <button type="button" className="st-fw-shot" onClick={openFilm}
-          aria-label={`${lead.client} の制作事例を映像制作のページで見る`}>
-          {lead.poster && <img src={lead.poster} alt={`${lead.client} の制作事例`} loading="lazy" />}
-        </button>
-        <div className="st-fw-info">
-          <span className="st-label" style={{ color: D.gold, fontSize: 10.5 }}>{lead.category}</span>
-          <h3 className="st-serif" style={{ fontSize: 'clamp(20px, 5vw, 27px)', fontWeight: 700, color: D.ink, lineHeight: 1.5, margin: '11px 0 0' }}>{lead.client}</h3>
-          <p style={{ fontSize: 13.5, lineHeight: 2.05, color: D.body, margin: '12px 0 18px', maxWidth: 460 }}>{lead.purpose}</p>
-          <button className="st-btn" onClick={openFilm}
-            style={{ background: D.gold, color: '#17130A', border: `1px solid ${D.gold}`, fontWeight: 700 }}>
-            映像を再生して見る
-          </button>
-        </div>
+      <div style={{ display: 'grid', gap: 48 }}>
+        {featured.map(w => (
+          <article className="st-fw" key={w.id}>
+            <video className="st-fw-shot" src={w.videoUrl} poster={w.poster}
+              controls playsInline preload="none"
+              aria-label={`${w.client} の制作映像`}
+              onPlay={() => track('studio_film_work_play', { work: w.id })}
+              style={{ display: 'block', objectFit: 'contain', background: '#000' }} />
+            <div className="st-fw-info">
+              <span className="st-label" style={{ color: D.gold, fontSize: 12 }}>{w.category}</span>
+              <h3 className="st-serif" style={{ fontSize: 'clamp(20px, 5vw, 27px)', fontWeight: 700, color: D.ink, lineHeight: 1.5, margin: '11px 0 0' }}>{w.client}</h3>
+              <p style={{ fontSize: 17, lineHeight: 1.9, color: D.body, margin: '12px 0 18px', maxWidth: 460 }}>{w.purpose}</p>
+              {w.result && <p style={{ fontSize: 15, lineHeight: 1.8, color: D.gold }}>{w.result}</p>}
+            </div>
+          </article>
+        ))}
       </div>
       {rest.length > 0 && (
         <div style={{ marginTop: 26 }}>

@@ -520,6 +520,8 @@ PAGES.push(
             <h2>制作実績</h2>
             <p>すべて当社が制作し、実際に納品した映像です。掲載は貴社の許可をいただいたもののみで、非公開のご希望があれば一切掲載しません。</p>
             <ul>
+              <li><strong>株式会社TOAI｜ジャンカラ Bal Utao</strong>／BRAND FILM — 空間と楽しさを伝える縦型プロモーション映像。</li>
+              <li><strong>北野メディウム邸「真珠の館」</strong>／BRAND FILM — 公式で使用されている縦型映像。</li>
               <li><strong>Laguna Beauté（ラグナボーテ）</strong>／PRODUCT — 百貨店の化粧品売場に店舗を構える神戸のエイジングケアブランド様の商品広告。化粧水「LAGUNA DERMA WATER」の透明感と水の質感を軸に、ブランドの世界観を保ったまま縦型1本に収めました。</li>
               <li><strong>株式会社CORE（自社）</strong>／BRAND FILM — 社是「いつの時代も、変わらない核を。」を軸にした企業紹介映像。</li>
               <li><strong>ライブイベント主催者様</strong>／EVENT BRANDING — 開催前に当日の熱量を見せる告知映像。</li>
@@ -712,8 +714,8 @@ PAGES.push(
   },
   {
     file: 'studio-works.html', theme: 'studio', url: `${STUDIO}/studio/works`,
-    title: '制作実績 — 映像・ウェブ・システム 14件（すべて公開中） | CORE Studio',
-    description: 'CORE Studio が制作し、実際に公開されている実績の一覧。映像はLaguna Beauté（商品広告）、株式会社CORE（ブランドフィルム）、ライブイベント告知、株式会社グローバルジョイントコミットメント、JRC 日本記録協会。ウェブ・システムはヘッドスパ「天国」、株式会社クロスオーバー、GAUCHEチェロ音楽教室、朝日館、RAD HOOKAH、ANIMA、SOMA、モデル個人サイト。',
+    title: '制作実績 — 映像・ウェブ・システム 16件（すべて公開中） | CORE Studio',
+    description: 'CORE Studio が制作し、実際に公開されている実績の一覧。映像は株式会社TOAIのジャンカラ Bal Utao、北野メディウム邸「真珠の館」、Laguna Beauté（商品広告）、株式会社CORE（ブランドフィルム）、ライブイベント告知、株式会社グローバルジョイントコミットメント、JRC 日本記録協会。ウェブ・システムはヘッドスパ「天国」、株式会社クロスオーバー、GAUCHEチェロ音楽教室、朝日館、RAD HOOKAH、ANIMA、SOMA、モデル個人サイト。',
     keywords: '制作実績,ホームページ制作 事例,動画制作 事例,ウェブ制作 実績,システム開発 実績,CORE Studio,神戸',
     og: `${STUDIO}/og-studio-v4.png`,
     ld: [
@@ -730,6 +732,8 @@ PAGES.push(
           <section>
             <h2>映像の制作実績</h2>
             <ul>
+              <li><strong>株式会社TOAI｜ジャンカラ Bal Utao</strong>／BRAND FILM — 空間と楽しさを伝える縦型プロモーション映像。</li>
+              <li><strong>北野メディウム邸「真珠の館」</strong>／BRAND FILM — 公式で使用されている縦型映像。</li>
               <li><strong>Laguna Beauté（ラグナボーテ）</strong>／PRODUCT — 神戸のエイジングケアブランド様の商品広告。化粧水「LAGUNA DERMA WATER」の透明感と水の質感を軸に縦型1本に。</li>
               <li><strong>株式会社CORE（自社）</strong>／BRAND FILM — 社是「いつの時代も、変わらない核を。」を軸にした企業紹介映像。</li>
               <li><strong>ライブイベント主催者様</strong>／EVENT BRANDING — 開催前に当日の熱量を見せる告知映像。</li>

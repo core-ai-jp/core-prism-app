@@ -36,7 +36,26 @@ export type FilmWork = {
 };
 
 export const FILM_WORKS: FilmWork[] = [
-  // 2026-08-31 追加・先頭固定。百貨店の化粧品売場に店舗を構えるブランドの商品広告で、
+  // Client names, delivery and official use confirmed by the owner on 2026-10-15.
+  {
+    id: 'work-toai-bal-utao-01',
+    client: '株式会社TOAI｜ジャンカラ Bal Utao',
+    category: 'BRAND FILM',
+    purpose: 'ジャンカラ Bal Utaoの空間と楽しさを伝える縦型のプロモーション映像を制作しました。',
+    result: '実際に制作・納品した映像です。',
+    poster: '/studio/film/toai-bal-utao.jpg',
+    videoUrl: '/studio/film/toai-bal-utao.mp4',
+  },
+  {
+    id: 'work-kitano-medium-pearl-01',
+    client: '北野メディウム邸「真珠の館」',
+    category: 'BRAND FILM',
+    purpose: '北野メディウム邸「真珠の館」の世界観を伝える縦型映像を制作しました。',
+    result: '公式で使用されている制作映像です。',
+    poster: '/studio/film/kitano-medium-pearl.jpg',
+    videoUrl: '/studio/film/kitano-medium-pearl.mp4',
+  },
+  // 2026-08-31 追加（2026-10-15に新規実績2件を先頭に追加）。百貨店の化粧品売場に店舗を構えるブランドの商品広告で、
   // 当社の実績のうち最も「発注を検討している法人」に効く1本。先頭は FilmWorks 側で
   // 大きく1件だけ出す枠 (flagship) に入るので、並べ替える時はこの順序の意味に注意する。
   {
