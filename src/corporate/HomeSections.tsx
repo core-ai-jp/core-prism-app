@@ -17,6 +17,8 @@
 // ============================================================
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { motion } from 'framer-motion';
+import { Maximize, Pause, Play, Volume2, VolumeX } from 'lucide-react';
+import { CORE_BRAND_FILM } from '../data/coreBrandFilm';
 import {
   FONT_JA, FONT_EN, ACCENT, ACCENT_LIGHT, LINE, ctaHero, ctaGhost, sectionH2, sectionLead, reveal,
 } from './corpTheme';
@@ -57,87 +59,82 @@ const IMG = {
   datacenter: '/corp/datacenter.webp',
 } as const;
 
-// ============================================================
-//  HERO — 映像を最初に全幅で見せ、理念とROAIはその下に置く。
-//  縦型の原画を切らず、無音で自動再生。音声はアイコンで切り替える。
-// ============================================================
-const FILM = {
-  src: '/corp-creed-portrait.mp4',
-  poster: '/corp-creed-poster.webp',
-} as const;
-
+// Full-length owner-supplied film. Keep the original framing and move copy below it.
 export function HomeHero({ onAnchor }: { onAnchor: AnchorHandler }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const [autoPlay, setAutoPlay] = useState(() => {
+    const nav = navigator as Navigator & { connection?: { saveData?: boolean } };
+    return !window.matchMedia('(prefers-reduced-motion: reduce)').matches && !nav.connection?.saveData;
+  });
+  const [paused, setPaused] = useState(true);
   const [muted, setMuted] = useState(true);
-  const [paused, setPaused] = useState(false);
-  const [filmError, setFilmError] = useState(false);
 
   useEffect(() => {
+    // The sticky two-row header changes height with viewport width and font loading.
     const header = document.querySelector('header');
-    const stage = stageRef.current;
-    if (!header || !stage) return;
-    const resize = () => stage.style.setProperty('--film-header-height', `${header.getBoundingClientRect().height}px`);
-    resize();
-    const observer = new ResizeObserver(resize);
-    observer.observe(header);
+    const update = () => stageRef.current?.style.setProperty('--film-header-height', `${header?.getBoundingClientRect().height ?? 0}px`);
+    update();
+    const observer = new ResizeObserver(update);
+    if (header) observer.observe(header);
     return () => observer.disconnect();
   }, []);
 
-  const play = () => {
-    void videoRef.current?.play().then(() => setFilmError(false)).catch(() => setPaused(true));
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) v.pause();
+      else if (autoPlay && !document.hidden) void v.play().catch(() => {});
+    }, { threshold: 0.15 });
+    io.observe(v);
+    const onVisibility = () => { if (document.hidden) v.pause(); };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => { io.disconnect(); document.removeEventListener('visibilitychange', onVisibility); };
+  }, [autoPlay]);
+
+  const togglePlay = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    setAutoPlay(false);
+    if (v.paused) void v.play().catch(() => {}); else v.pause();
   };
   const toggleSound = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = !video.muted;
-    setMuted(video.muted);
-    if (video.paused) play();
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = !v.muted;
+    setMuted(v.muted);
+    if (v.paused) void v.play().catch(() => {});
+  };
+  const enterFullscreen = () => {
+    const v = videoRef.current as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null;
+    if (!v) return;
+    // iPhone Safari exposes native video fullscreen rather than element fullscreen.
+    if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+    else if (v.requestFullscreen) void v.requestFullscreen().catch(() => { v.controls = true; });
+    else v.controls = true;
   };
 
   return (
-    <section id="top" className="corp-film-first">
-      <div ref={stageRef} className="corp-film-stage">
-        <img src={FILM.poster} alt="" aria-hidden="true" className="corp-film-backdrop" width={720} height={1280} />
-        <div className="corp-film-frame">
-          <video
-            ref={videoRef}
-            className="corp-film-player"
-            src={FILM.src}
-            poster={FILM.poster}
-            autoPlay muted={muted} loop playsInline preload="auto"
-            width={720} height={1280}
-            id="corp-brand-film"
-            aria-label="株式会社COREのブランドフィルム"
-            onPlay={() => setPaused(false)}
-            onPause={() => setPaused(true)}
-            onLoadedData={e => { setPaused(e.currentTarget.paused); play(); }}
-            onVolumeChange={e => setMuted(e.currentTarget.muted)}
-            onError={() => { setFilmError(true); setPaused(true); }}
-          />
-          <div className="corp-film-controls">
-            <button type="button" onClick={() => paused ? play() : videoRef.current?.pause()}
-              aria-label={paused ? '映像を再生する' : '映像を一時停止する'} aria-controls="corp-brand-film">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                {paused ? <path d="M8 4l12 8-12 8V4Z" fill="currentColor" /> : <path d="M8 5v14M16 5v14" stroke="currentColor" strokeWidth="3" />}
-              </svg>
-            </button>
-            <button type="button" onClick={toggleSound} aria-label={muted ? '音声をオンにする' : '音声をオフにする'}
-              aria-pressed={!muted} aria-controls="corp-brand-film">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M11 5 6 9H3v6h3l5 4V5Z" />
-                {muted ? <path d="m16 9 5 6m0-6-5 6" /> : <><path d="M15 8a6 6 0 0 1 0 8" /><path d="M18 5a10 10 0 0 1 0 14" /></>}
-              </svg>
-            </button>
-          </div>
-          {filmError && <p className="ch-film-error" role="status">動画を読み込めませんでした。ページを再読み込みしてください。</p>}
+    <section id="top" className="ch-brand-hero">
+      <div className="ch-brand-stage" ref={stageRef}>
+        <img src={CORE_BRAND_FILM.poster} alt="" aria-hidden className="ch-brand-ambient" width={720} height={1280} fetchPriority="high" />
+        <video ref={videoRef} className="ch-brand-video" poster={CORE_BRAND_FILM.poster}
+          autoPlay={autoPlay} muted={muted} loop playsInline preload={autoPlay ? 'auto' : 'none'}
+          width={1080} height={1920} aria-label="株式会社コアの宣伝動画"
+          onPlay={() => setPaused(false)} onPause={() => setPaused(true)} onVolumeChange={e => setMuted(e.currentTarget.muted)}>
+          <source src={CORE_BRAND_FILM.mobileSrc} media="(max-width: 860px)" type="video/mp4" />
+          <source src={CORE_BRAND_FILM.src} type="video/mp4" />
+        </video>
+        <div className="ch-brand-controls" role="group" aria-label="動画の操作">
+          <button type="button" onClick={togglePlay} aria-label={paused ? '動画を再生' : '動画を一時停止'} title={paused ? '再生' : '一時停止'}>{paused ? <Play size={20} /> : <Pause size={20} />}</button>
+          <button type="button" onClick={toggleSound} aria-label={muted ? '音声をオン' : '音声をオフ'} aria-pressed={!muted} title={muted ? '音声をオン' : '音声をオフ'}>{muted ? <VolumeX size={20} /> : <Volume2 size={20} />}</button>
+          <button type="button" onClick={enterFullscreen} aria-label="動画を全画面で見る" title="全画面"><Maximize size={20} /></button>
         </div>
       </div>
-      <div className="ch-wrap corp-film-intro">
-        <Kick>AI Transformation Company — Kobe, Japan</Kick>
-        <h1 className="ch-h1 ch-h1--creed" style={{ fontFamily: FONT_JA, color: "var(--corp-text, #FFFFFF)" }}>
-          いつの時代も、<br />変わらない核を。
-        </h1>
+      <div className="ch-wrap ch-brand-intro">
+        <Kick>CORE — Kobe, Japan</Kick>
+        <h1 className="ch-brand-title" style={{ fontFamily: FONT_JA }}>いつの時代も、<br />変わらない核を。</h1>
         <p className="ch-hero-line" style={{ fontFamily: FONT_JA }}>{HERO.line}</p>
         <div className="ch-cta-row">
           <a href="/roai-score" onClick={e => { rememberSource('home-hero'); track('corp_cta_click', 'home-hero'); onAnchor(e, '/roai-score'); }} style={ctaHero}>{HERO.primary}</a>
