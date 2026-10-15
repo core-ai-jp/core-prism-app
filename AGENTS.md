@@ -26,7 +26,7 @@ Read existing `CLAUDE.md` if present, `README.md`, relevant design files, packag
 
 - Read shared `AI-COMPANY/AI_DEVELOPMENT_OS/WORKFLOWS/CORE_AI_OS.md` in the authenticated private `core-ai-jp/core-knowledge` checkout, recording branch and commit while it is unmerged. Keep project-specific contracts above.
 - Work on an isolated development branch. Preserve existing CLAUDE/Fable sources, data-source distinctions, pricing, server authorization and tracking contracts.
-- Production changes/publication, deletion, permission changes, money execution and PR merge require owner approval for this rollout. Do not dispatch production smoke/cron workflows or deploy as part of local verification.
+- Production changes/publication, deletion, permission changes, money execution and PR merge require applicable owner authorization. The 2026-10-15 AI OS release was explicitly approved; check its private decision record and reuse approval only for the same scoped artifacts. Unattended smoke checks must not call paid/write APIs.
 - Keep private company workflow bodies and customer content out of this public repository. Shared implementation status is not proof of adoption on main.
 
 ## Efficient execution
