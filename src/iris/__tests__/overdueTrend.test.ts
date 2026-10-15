@@ -4,10 +4,10 @@ import {
   OVERDUE_TREND_MAX_DAYS, type OverdueSnapshot,
 } from '../overdueTrend';
 
-const day = (iso: string) => new Date(iso);
-const D1 = day('2026-08-27T09:00:00+09:00');
-const D2 = day('2026-08-29T09:00:00+09:00');
-const D2_LATER = day('2026-08-29T21:00:00+09:00');
+// Fixtures use the device's local time, matching the production contract.
+const D1 = new Date(2026, 7, 27, 9);
+const D2 = new Date(2026, 7, 29, 9);
+const D2_LATER = new Date(2026, 7, 29, 21);
 
 describe('1日以上ほったらかしの予約を数え続ける記録', () => {
   it('その日の1回目が「前」になり、2回目以降は「いま」だけが動く', () => {
@@ -59,7 +59,7 @@ describe('1日以上ほったらかしの予約を数え続ける記録', () => 
 
   it('数えはじめた日と比べる（途中の日を混ぜない）', () => {
     let h = recordSnapshot([], 5, D1);
-    h = recordSnapshot(h, 4, day('2026-08-28T09:00:00+09:00'));
+    h = recordSnapshot(h, 4, new Date(2026, 7, 28, 9));
     const t = summarizeTrend(h, 0, D2);
     expect(t?.since).toEqual({ day: '2026-08-27', count: 5 });
     expect(trendSentence(t)).toBe('1日以上ほったらかしの予約は、いま0件です（8月27日に数えはじめたときは5件）');
@@ -71,7 +71,7 @@ describe('1日以上ほったらかしの予約を数え続ける記録', () => 
   });
 
   it('日付キーはローカル時刻（ISO の slice で前日にずれない）', () => {
-    expect(localDayKey(new Date('2026-08-29T00:30:00+09:00'))).toBe('2026-08-29');
+    expect(localDayKey(new Date(2026, 7, 29, 0, 30))).toBe('2026-08-29');
     expect(formatTrendDay('2026-08-27')).toBe('8月27日');
     expect(formatTrendDay('こわれてる')).toBe('こわれてる');
   });

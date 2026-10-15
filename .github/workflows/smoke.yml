@@ -1,6 +1,8 @@
 name: E2E Smoke
 
 on:
+  pull_request:
+    branches: [main]
   # 手動実行
   workflow_dispatch:
     inputs:
@@ -20,6 +22,7 @@ on:
 
 jobs:
   smoke:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -34,6 +37,7 @@ jobs:
       - name: Run smoke
         env:
           SMOKE_BASE_URL: ${{ github.event.inputs.base_url || vars.SMOKE_BASE_URL || 'https://core-prism-app.vercel.app' }}
+          SMOKE_ALLOW_PAID_PROBES: 'false'
           SMOKE_MASTER_KEY: ${{ secrets.SMOKE_MASTER_KEY }}
         run: |
           # main への push の場合、Vercel のデプロイが終わるまで少し待つ
@@ -64,4 +68,13 @@ jobs:
         run: npm ci
 
       - name: Test
-        run: npm test
+        env:
+          TZ: UTC
+        run: |
+          npm test
+          node scripts/check-smoke-safety.mjs
+
+      - name: Local-date timezone regression
+        run: |
+          TZ=Asia/Tokyo npm exec -- vitest run src/iris/__tests__/overdueTrend.test.ts
+          TZ=America/Los_Angeles npm exec -- vitest run src/iris/__tests__/overdueTrend.test.ts
