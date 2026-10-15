@@ -10,6 +10,7 @@
 // チェック項目:
 //   1. LP / トップが 200
 //   2. /iris が 200
+//   Default: page reads only. Paid/Stripe probes require SMOKE_ALLOW_PAID_PROBES=true.
 //   3. /api/ai が master キー付き haiku-4-5 で 200 + 文字列を返す
 //   4. /api/stripe/checkout が url を返す (Iris lite monthly)
 //   5. /api/stripe/sync が 200
@@ -18,6 +19,8 @@
 const BASE = (process.env.SMOKE_BASE_URL || 'https://core-prism-app.vercel.app').replace(/\/$/, '');
 const MASTER_KEY = process.env.SMOKE_MASTER_KEY || 'GAUCHE2026';
 const TIMEOUT_MS = Number(process.env.SMOKE_TIMEOUT_MS || 30_000);
+
+const ALLOW_PAID_PROBES = process.env.SMOKE_ALLOW_PAID_PROBES === 'true';
 
 const results = [];
 let failed = 0;
@@ -167,9 +170,13 @@ async function main() {
 
   await checkLP();
   await checkIris();
-  await checkAi();
-  await checkStripeCheckout();
-  await checkStripeSync();
+  if (ALLOW_PAID_PROBES) {
+    await checkAi();
+    await checkStripeCheckout();
+    await checkStripeSync();
+  } else {
+    console.log('[SKIP] AI and Stripe probes require explicit SMOKE_ALLOW_PAID_PROBES=true');
+  }
 
   console.log('');
   console.log(`# summary: ${results.length - failed}/${results.length} passed`);
