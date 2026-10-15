@@ -24,7 +24,7 @@ User provides an original video in chat or a specifically authorized Drive folde
 
 ## Style: CORE beginner AI education
 - Clear Japanese; engaging first 3–5 seconds without clickbait.
-- Minimal clean blue/white CORE styling, with large readable captions and purposeful screen recordings.
+- Follow the private CORE Design Router and project-approved styling; use readable Japanese captions and purposeful screen recordings. Do not treat this draft as global brand approval.
 - Prioritize comprehensibility and genuine demonstrations over flashy transitions.
 - Keep original speech unless user approves rewriting/dubbing. Do not generate a synthetic likeness or voice without consent.
 

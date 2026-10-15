@@ -4,7 +4,7 @@ import {
   OVERDUE_TREND_MAX_DAYS, type OverdueSnapshot,
 } from '../overdueTrend';
 
-// Fixtures use the device's local time, matching the production contract.
+// These fixtures describe the browser's local calendar day in every test timezone.
 const D1 = new Date(2026, 7, 27, 9);
 const D2 = new Date(2026, 7, 29, 9);
 const D2_LATER = new Date(2026, 7, 29, 21);
@@ -74,6 +74,14 @@ describe('1日以上ほったらかしの予約を数え続ける記録', () => 
     expect(localDayKey(new Date(2026, 7, 29, 0, 30))).toBe('2026-08-29');
     expect(formatTrendDay('2026-08-27')).toBe('8月27日');
     expect(formatTrendDay('こわれてる')).toBe('こわれてる');
+  });
+
+  it.each([
+    [new Date(2026, 0, 1, 0, 1), '2026-01-01'],
+    [new Date(2026, 7, 31, 23, 59), '2026-08-31'],
+    [new Date(2026, 11, 31, 23, 59), '2026-12-31'],
+  ])('端末の年・月・日境界を保つ: %s', (date, expected) => {
+    expect(localDayKey(date)).toBe(expected);
   });
 
   it('文言に責める語を入れない', () => {

@@ -2,7 +2,7 @@
 
 ## 共通の開発知識
 
-Read the private repository `gauchecellist1201-png/core-knowledge` before relying on organization-wide context:
+Read the private repository `core-ai-jp/core-knowledge` before relying on organization-wide context:
 - `AI_CONTEXT.md`
 - relevant decisions under `09_DECISIONS/`, then `50_記憶/索引.md` and related project / handover records
 - `AI-COMPANY/AI_DEVELOPMENT_OS/AI_DEVELOPMENT_OS.md`
@@ -18,23 +18,17 @@ Read existing `CLAUDE.md` if present, `README.md`, relevant design files, packag
 
 - This repository is public. Keep private business records, customer data and local environment details in the private knowledge layer.
 - Read README.md as context and verify current dependencies in package.json and the lockfile. README's older React/version/pricing descriptions are not sufficient evidence of current behavior.
-- Inspect `prebuild` as well as `build`: generated plan/route files may be involved. Existing scripts include `build`, `lint`, `smoke`; there is no generic npm test script at the audit snapshot.
+- Inspect `prebuild` as well as `build`: generated plan/route files may be involved. Current scripts include `test` (Vitest + static facts), `build`, `lint` and `smoke`; read package.json for the actual commands. Test local-calendar behavior under UTC and Asia/Tokyo, without changing production behavior to satisfy a fixture.
 - `.github/workflows/smoke.yml` and smoke tooling can target production. Inspect targets and side effects before running; documentation edits require diff/link checks, not production probes.
 - Preserve current data-source distinctions, pricing sources, server authorization and tracking contracts; consult task-relevant source and knowledge records before changes.
 
+## CORE AI OS development scope
+
+- Read shared `AI-COMPANY/AI_DEVELOPMENT_OS/WORKFLOWS/CORE_AI_OS.md` in the authenticated private `core-ai-jp/core-knowledge` checkout, recording branch and commit while it is unmerged. Keep project-specific contracts above.
+- Work on an isolated development branch. Preserve existing CLAUDE/Fable sources, data-source distinctions, pricing, server authorization and tracking contracts.
+- Production changes/publication, deletion, permission changes, money execution and PR merge require applicable owner authorization. The 2026-10-15 AI OS release was explicitly approved; check its private decision record and reuse approval only for the same scoped artifacts. Unattended smoke checks must not call paid/write APIs.
+- Keep private company workflow bodies and customer content out of this public repository. Shared implementation status is not proof of adoption on main.
+
 ## Efficient execution
 
-For task scoping, targeted reads, retry limits, and concise handoffs, follow [`docs/AGENT_EFFICIENCY.md`](docs/AGENT_EFFICIENCY.md). This supplements rather than overrides the security, knowledge provenance, and validation rules above.
-
-## Efficient AI-assisted development
-
-For the shared workflow, see the private `core-ai-jp/core-knowledge` guide `AI-COMPANY/AI_DEVELOPMENT_OS/WORKFLOWS/TOKEN_EFFICIENT_DEVELOPMENT.md` when available. Keep these repository instructions and all local security, data, and validation contracts in force.
-
-- Scope the task first. Search paths and diffs, then read only the source, tests, and decisions needed to establish the relevant facts. Reuse verified context and avoid rereading unchanged material; do not omit required company decisions or security context.
-- Match the model and reasoning effort to the task: use the lightest option that can complete routine searches or documentation reliably, and escalate only when complexity, uncertainty, or risk requires it. Pass only the relevant evidence when handing work off.
-- Keep changes narrow. Use compact JSON only when handing work to another agent, with relevant fields such as `repo`, `task`, `state`, `decisions`, `files`, `checks`, and `blockers`. JSON does not itself reduce tokens; omit irrelevant history.
-- Do not repeat identical failed calls. Diagnose the result first; at most one materially changed retry for a safe, read-only operation. Before retrying a write, check whether it already succeeded.
-- Run this repository's required checks and the checks that cover changed behavior. For documentation-only edits, verify the diff, links, and privacy. Do not run production probes just to validate documentation.
-- Jev is optional for batched, low-risk classification or routing only when already available and authenticated, and only when its total call cost is expected to be lower than the work it saves. Use one batch; review low-confidence or consequential items. Do not use it for writing, summaries, extraction, complex reasoning, or calculations. Do not install it, configure credentials, or invoke a paid API automatically.
-- Follow the current owner approval boundary in `core-knowledge`: confirm immediately before money-related execution and before a production change to user-visible appearance. Keep other actions within the explicit task and runtime permissions; preserve technical security safeguards and do not send external messages, expose secrets, or overwrite others' work without authorization.
-- Report changes, checks, and unresolved items briefly. Token or credit savings remain unmeasured until usage is compared.
+Read [the project efficiency guide](docs/AGENT_EFFICIENCY.md) for task scoping, model choice, limited retries, conditional Jev and concise handoffs. It supplements project contracts and the private shared workflow; existing security and current owner authorization take precedence.
