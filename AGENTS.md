@@ -28,3 +28,7 @@ Read existing `CLAUDE.md` if present, `README.md`, relevant design files, packag
 - Work on an isolated development branch. Preserve existing CLAUDE/Fable sources, data-source distinctions, pricing, server authorization and tracking contracts.
 - Production changes/publication, deletion, permission changes, money execution and PR merge require owner approval for this rollout. Do not dispatch production smoke/cron workflows or deploy as part of local verification.
 - Keep private company workflow bodies and customer content out of this public repository. Shared implementation status is not proof of adoption on main.
+
+## Efficient execution
+
+Read [the project efficiency guide](docs/AGENT_EFFICIENCY.md) for task scoping, model choice, limited retries, conditional Jev and concise handoffs. It supplements project contracts and the private shared workflow; existing security and current owner authorization take precedence.
