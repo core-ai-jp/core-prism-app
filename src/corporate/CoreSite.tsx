@@ -53,6 +53,8 @@ import { setCorpTab } from './corpRouteStore';
 import { TheChange, ProcessContrast, OneCore, StudioSection, NeriSection, Bridge, AshitakaHome, EnergyHome, Connection, Core2035, Invitation } from './StorySections';
 import AshitakaPage from './AshitakaPage';
 import EnergyPage from './EnergyPage';
+import DivisionPage from './DivisionPage';
+import divisionData from './divisions.json';
 import AiAdvisorTab from './AiAdvisorTab';
 import { VisualPortfolio, VisualImpact, VisualDisclosure } from './VisualStrategy';
 import { track } from './roai/track';
@@ -135,15 +137,15 @@ function jumpToHash(e: ReactMouseEvent<HTMLAnchorElement>, href: string) {
 //      SECTION_TAB でどの章がどのタブに載っているかを引き、
 //      必要ならタブを切り替えてからその章へ送る。
 // ============================================================
-export type CoreTabKey = 'home' | 'roai' | 'score' | 'os' | 'services' | 'products' | 'ashitaka' | 'energy' | 'company' | 'contact' | 'advisor';
+export type CoreTabKey = 'home' | 'roai' | 'score' | 'os' | 'services' | 'products' | 'ashitaka' | 'energy' | 'company' | 'contact' | 'advisor' | 'advisory' | 'intelligence' | 'academy' | 'studio' | 'ventures';
 
 /**
  * 2026-09-03 MASTER PROMPT: Return on AI と CORE ROAI SCORE は中心的な知的資産なので、
  * ハッシュではなく独立したパスを持つ（検索・共有・AI検索のため）。中身は同じ CoreSite のタブ。
  */
 /** 2026-09-06 CORE WEB 2035: ASHITAKA PROJECT と CORE Energy も独立パス（検索・共有のため）。 */
-const TAB_PATH: Partial<Record<CoreTabKey, string>> = { roai: '/return-on-ai', score: '/roai-score', ashitaka: '/ashitaka', energy: '/energy' };
-const PATH_TAB: Record<string, CoreTabKey> = { '/return-on-ai': 'roai', '/roai-score': 'score', '/ashitaka': 'ashitaka', '/energy': 'energy' };
+const TAB_PATH: Partial<Record<CoreTabKey, string>> = { ...Object.fromEntries(divisionData.map(d => [d.id, `/corp/${d.id}`])), roai: '/return-on-ai', score: '/roai-score', ashitaka: '/ashitaka', energy: '/energy' };
+const PATH_TAB: Record<string, CoreTabKey> = { ...Object.fromEntries(divisionData.flatMap(d => [[`/corp/${d.id}`, d.id as CoreTabKey], [`/corp-${d.id}`, d.id as CoreTabKey]])), '/return-on-ai': 'roai', '/roai-score': 'score', '/ashitaka': 'ashitaka', '/energy': 'energy' };
 function tabFromPath(): CoreTabKey | null {
   if (typeof window === 'undefined') return null;
   // `/ashitaka.html` のように入口ファイル名で直接開かれても同じタブへ（vite preview・共有URLの取り違え対策）
@@ -153,6 +155,7 @@ function tabFromPath(): CoreTabKey | null {
 
 /** タブごとの title / description / canonical（SEO・AI検索向け） */
 const TAB_META: Record<CoreTabKey, { title: string; desc: string; path: string }> = {
+  ...Object.fromEntries(divisionData.map(d => [d.id, { title: `CORE ${d.name} | 株式会社CORE`, desc: d.summary, path: `/corp/${d.id}` }])) as Record<'advisory' | 'intelligence' | 'academy' | 'studio' | 'ventures', { title: string; desc: string; path: string }>,
   home: { title: '株式会社CORE | いつの時代も、変わらない核を。— AI Transformation Company', desc: 'いつの時代も、変わらない核を。AI前提で、企業・地域・社会の仕組みを再設計する神戸のAI Transformation Company。AI投資を経営成果（Return on AI）へ。企業から地域へ、地域からエネルギーへ。', path: '/corp' },
   roai: { title: 'Return on AI とは | 株式会社CORE', desc: 'AI投資は目的ではない。AIが何を返したかを、売上・コスト・時間・リスク・新しい価値で測る。CORE ROAI MODEL・ROAIの計算・損失回避・投資余力の逆算・Transformation Loop。', path: '/return-on-ai' },
   score: { title: 'CORE ROAI SCORE — 約2分のAI投資優先順位診断 | 株式会社CORE', desc: '約2分で、あなたの会社の次にAI投資すべき場所・削減できる時間・経済価値の概算・AI Readiness・投資余力の目安を可視化。連絡先不要、算定根拠つき。', path: '/roai-score' },
@@ -582,6 +585,7 @@ export default function CoreSite() {
             ホームから外した章（ExecutiveQuestion / Differentiation / WhyCore / ServicesEditorial / ApproachSection /
             PeopleMosaic / ProofStrip / FinalCta）は AI変革タブ・会社タブ・/return-on-ai に残る。 */}
         <Manifesto onAnchor={handleAnchor} />
+        <VisualPortfolio onAnchor={handleAnchor} home />
         <Values />
         <VisualImpact onAnchor={handleAnchor} />
         <VisualDisclosure title="AIで企業をどう変えるか" subtitle="経営成果から逆算する、COREの考え方">
@@ -616,6 +620,7 @@ export default function CoreSite() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       {tab === 'ashitaka' && <AshitakaPage onAnchor={handleAnchor} />}
       {tab === 'energy' && <EnergyPage onAnchor={handleAnchor} />}
+      {divisionData.some(d => d.id === tab) && <DivisionPage id={tab} />}
       {tab === 'advisor' && <AiAdvisorTab onAnchor={handleAnchor} />}
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
