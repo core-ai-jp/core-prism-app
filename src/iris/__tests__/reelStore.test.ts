@@ -58,7 +58,7 @@ const blob = () => new Blob(['x'], { type: 'image/png' });
 // ============================================================
 
 /** getAllKeys / delete / clear まで動く、最小の偽 IndexedDB (ストアは Map) */
-function memIndexedDb(stores: Record<string, Map<string, any>>) {
+function memIndexedDb(stores: Record<string, Map<string, any>>, requestDelayMs = 0) {
   return {
     open() {
       const req: Record<string, any> = { result: null, error: null };
@@ -69,6 +69,25 @@ function memIndexedDb(stores: Record<string, Map<string, any>>) {
           close: () => undefined,
           transaction() {
             const tx: Record<string, any> = { error: null };
+            let pending = 0;
+            let completed = false;
+            const finishIfIdle = () => queueMicrotask(() => {
+              if (pending === 0 && !completed) {
+                completed = true;
+                tx.oncomplete?.();
+              }
+            });
+            const request = (result: any) => {
+              const r: Record<string, any> = { result };
+              pending++;
+              setTimeout(() => {
+                r.onsuccess?.();
+                pending--;
+                // Promise continuations can queue another IndexedDB request first.
+                finishIfIdle();
+              }, requestDelayMs);
+              return r;
+            };
             tx.objectStore = (name: string) => {
               const m = stores[name] || (stores[name] = new Map());
               return {
@@ -76,24 +95,18 @@ function memIndexedDb(stores: Record<string, Map<string, any>>) {
                 delete: (k: any) => { m.delete(String(k)); },
                 clear: () => { m.clear(); },
                 get: (k: any) => {
-                  const r: Record<string, any> = { result: m.get(String(k)) };
-                  setTimeout(() => r.onsuccess?.(), 0);
-                  return r;
+                  return request(m.get(String(k)));
                 },
                 getAll: () => {
-                  const r: Record<string, any> = { result: Array.from(m.values()) };
-                  setTimeout(() => r.onsuccess?.(), 0);
-                  return r;
+                  return request(Array.from(m.values()));
                 },
                 getAllKeys: () => {
-                  const r: Record<string, any> = { result: Array.from(m.keys()) };
-                  setTimeout(() => r.onsuccess?.(), 0);
-                  return r;
+                  return request(Array.from(m.keys()));
                 },
               };
             };
-            // getAllKeys 等の onsuccess より後に complete させる
-            setTimeout(() => tx.oncomplete?.(), 5);
+            // Complete when the request queue drains, never after an arbitrary clock delay.
+            finishIfIdle();
             return tx;
           },
         };
@@ -282,6 +295,17 @@ describe('作ったリールが全部残る', () => {
     expect(stores.assets.has('x2')).toBe(true);
     expect(stores.assets.has('orphan')).toBe(false);
   });
+
+  it('遅いリクエストでも掃除の完了を待ち、他のリールの素材を保護する', async () => {
+    const stores = setup();
+    (globalThis as any).indexedDB = memIndexedDb(stores, 20);
+    stores.assets.set('kept', { id: 'kept' });
+    stores.assets.set('orphan', { id: 'orphan' });
+    stores.project.set('proj:a', { id: 'a', clips: [clip('kept')], captions: [], savedAt: 100 });
+    await pruneReelAssets([]);
+    expect(stores.assets.has('kept')).toBe(true);
+    expect(stores.assets.has('orphan')).toBe(false);
+  }, 1500);
 
   it('クリップを全部消しても、保存した過去のリールは残る', async () => {
     const stores = setup();
