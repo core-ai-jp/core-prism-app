@@ -7,7 +7,7 @@
 // 文言・数字は plans.ts / works.ts が正本。ここにはレイアウトだけを書く。
 // ============================================================
 import { WORKS, CONTACT, thumbOf, type Work } from './plans';
-import { FILM_WORKS } from './works';
+import { FILM_WORKS, FEATURED_FILM_WORKS, OTHER_FILM_WORKS } from './works';
 import { C, D } from './theme';
 import { Band, H2, LineCta, IconArrow } from './ui';
 import { PageStyle, PageHero, ClosingCta } from './PageHero';
@@ -95,8 +95,8 @@ export default function WorksPage({ go }: { go: Go }) {
 
 // ---- 映像制作の実績 (旧 StudioSite.tsx の FilmWorksBand を移設) ----
 function FilmWorksBand({ go }: { go: Go }) {
-  const featured = FILM_WORKS.slice(0, 2);
-  const rest = FILM_WORKS.slice(2);
+  const featured = FEATURED_FILM_WORKS;
+  const rest = OTHER_FILM_WORKS;
   if (!featured.length) return null;
   const openFilm = () => { track('studio_works_to_film', { from: 'works-page' }); go('film'); };
 

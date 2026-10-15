@@ -117,3 +117,18 @@ export const FILM_WORKS: FilmWork[] = [
     url: 'https://www.instagram.com/gauche_cellist/',
   },
 ];
+
+// Shared featured order for the works and film pages.
+const FEATURED_FILM_IDS = [
+  'work-laguna-beaute-01',
+  'work-toai-bal-utao-01',
+  'work-kitano-medium-pearl-01',
+  'work-asahikawa-villa-01',
+  'work-jrc-01',
+] as const;
+export const FEATURED_FILM_WORKS = FEATURED_FILM_IDS.flatMap(id =>
+  FILM_WORKS.filter(work => work.id === id),
+);
+export const OTHER_FILM_WORKS = FILM_WORKS.filter(work =>
+  !FEATURED_FILM_WORKS.includes(work),
+);

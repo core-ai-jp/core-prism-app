@@ -23,7 +23,7 @@ import {
 // /api/track/studio へビーコンを飛ばす (外部サービスは追加しない)。
 import { track } from './track';
 // 実績データの正本は works.ts (実績タブと映像タブの両方が使う)
-import { FILM_WORKS } from './works';
+import { FILM_WORKS, FEATURED_FILM_WORKS, OTHER_FILM_WORKS } from './works';
 
 // 遠い行き先へ smooth を指定するとブラウザが移動そのものを諦め、押しても何も起きない
 // (実測: ヒーローから 10,700px 下の相談欄へ smooth 指定 → scrollY が 0 のまま)。
@@ -647,7 +647,7 @@ function MobileStickyCta() {
 // その時に何も起きない静止画で終わらせないため、停止中は必ず再生ボタンを出す。
 // ============================================================
 // 同じ相手から複数本いただいている場合に社名が2度並ぶと、件数を水増ししているように見える。
-const HERO_CLIENTS = [...new Set(FILM_WORKS.map(w => w.client))];
+const HERO_CLIENTS = [...new Set([...FEATURED_FILM_WORKS, ...OTHER_FILM_WORKS].map(w => w.client))];
 
 function FilmHero() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -1680,12 +1680,8 @@ function Pricing({ mode, onMode, openPlan, onOpenPlan }: {
 // ============================================================
 // 制作実績
 // ============================================================
-// 2026-08-31 改訂 (2点)。
-//  1. 4件を同じ大きさで横に並べる形をやめ、先頭1件だけを名前と一緒に大きく出す枠 (fm-flag) と、
-//     残りの横スクロールに分けた。実績は「何件あるか」より「誰の仕事をしたか」が効く。
-//  2. この章の地を白 (#F7F7F5) から暗部へ移した。映像は暗い地の上でないと黒が締まらず、
-//     白地に並べると4本ともコントラストの浅い映像に見える。
-//     結果、ヒーロー〜実績までが1つの暗い章、価格〜FAQが明部、最後のCTAで再び暗部、という並びになる。
+// 2026-10-16: 指定の5件を代表実績として大きく順に掲載する。
+// 掲載順は works.ts の FEATURED_FILM_WORKS を実績ページと共有する。
 
 // 停止中であることを、映像の上に小さく出す。
 // ホバーで再生する仕掛けは指では起きないため、印が無いと静止画に見える。
@@ -1780,12 +1776,16 @@ function WorkCard({ w }: { w: (typeof FILM_WORKS)[number] }) {
 // 2026-08-27: 先頭にあったイベントブランディングの説明 (1段落) は撤去した。
 // 同じ内容を「作れるもの」の1行に畳んであり、ここに残すと同じ話を2度読ませることになる。
 function FilmWorks() {
-  const [flagship, ...rest] = FILM_WORKS;
+  const rest = OTHER_FILM_WORKS;
   return (
     <section id="film-works" style={{ background: D.bg, padding: '10px 0 60px', scrollMarginTop: 96 }}>
       <div className="st-inner">
         <Reveal><H2 dark en="Works" sub="すべて当社が制作し、実際に納品した映像です。掲載は貴社の許可をいただいたもののみで、非公開のご希望があれば一切掲載しません。">制作実績</H2></Reveal>
-        {flagship && <Reveal delay={60}><FlagshipWork w={flagship} /></Reveal>}
+        <div style={{ display: 'grid', gap: 56 }}>
+          {FEATURED_FILM_WORKS.map(w => (
+            <Reveal key={w.id}><FlagshipWork w={w} /></Reveal>
+          ))}
+        </div>
       </div>
       {rest.length > 0 && (
         <Reveal delay={90}>
