@@ -58,87 +58,91 @@ const IMG = {
 } as const;
 
 // ============================================================
-//  HERO — ブランドフィルム（2026-09-06 オーナー指示で短い軽量ループへ差し替え）
-//
-//  ・元の縦型ブランド動画（54秒・音あり・4.7MB）は初回描画を遅らせていた
-//    （実測 2026-09-06・Lighthouse mobile: FCP 11.9s / LCP 15.1s）。
-//    そこから6秒だけを切り出し、音を外して456KBまで圧縮したループに差し替える
-//    （public/corp-hero-loop.mp4）。軽いので遅延読み込みの仕掛けや音声ボタンは不要。
-//  ・いちばん大きい言葉は社是「いつの時代も、変わらない核を。」（H1）。
-//    「核とは、人。」はその答えとして一段小さく置く（前は逆で、答えの方が大きかった）。
-//  ・下にあった事実の帯（神戸／2026年／8／4）は「謎のタブ」に見えるので廃止。
-//  ・PC: 左に言葉、右に縦型フィルム（ポスターをぼかした地の上）。
-//    スマホ: 縦型の動画がそのまま画面いっぱい＝言葉は下に重ねる（CSS .ch-hero--film）。
-//  ・省データ/動きを減らす設定の人には自動再生しない。画面外に出たら止める。
+//  HERO — 映像を最初に全幅で見せ、理念とROAIはその下に置く。
+//  縦型の原画を切らず、無音で自動再生。音声はアイコンで切り替える。
 // ============================================================
 const FILM = {
-  src: '/corp-hero-loop.mp4',
+  src: '/corp-creed-portrait.mp4',
   poster: '/corp-creed-poster.webp',
 } as const;
 
 export function HomeHero({ onAnchor }: { onAnchor: AnchorHandler }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [canPlay, setCanPlay] = useState(true);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [muted, setMuted] = useState(true);
+  const [paused, setPaused] = useState(false);
+  const [filmError, setFilmError] = useState(false);
 
   useEffect(() => {
-    const reduce = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const nav = navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } };
-    // 省データ・動きを減らす設定の人には、そもそも取りに行かない（ポスターのまま）。
-    if (reduce || nav.connection?.saveData) setCanPlay(false);
+    const header = document.querySelector('header');
+    const stage = stageRef.current;
+    if (!header || !stage) return;
+    const resize = () => stage.style.setProperty('--film-header-height', `${header.getBoundingClientRect().height}px`);
+    resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(header);
+    return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v || !canPlay) return;
-    // 画面外では止める（電池と回線の節約）。
-    if (typeof IntersectionObserver !== 'function') { void v.play().catch(() => {}); return; }
-    const io = new IntersectionObserver(([en]) => {
-      if (en.isIntersecting) void v.play().catch(() => {}); else v.pause();
-    }, { threshold: 0.15 });
-    io.observe(v);
-    return () => io.disconnect();
-  }, [canPlay]);
+  const play = () => {
+    void videoRef.current?.play().then(() => setFilmError(false)).catch(() => setPaused(true));
+  };
+  const toggleSound = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !video.muted;
+    setMuted(video.muted);
+    if (video.paused) play();
+  };
 
   return (
-    <section id="top" className="ch-hero ch-hero--film lp-safe">
-      <img src={FILM.poster} alt="" aria-hidden className="ch-film-ambient" width={720} height={1280} decoding="async" />
-      <div className="ch-hero-shade" aria-hidden />
-      <div className="ch-wrap ch-hero-inner ch-hero-grid">
-        <motion.div className="ch-hero-copy" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
-          <Kick>AI Transformation Company — Kobe, Japan</Kick>
-          {/* 言葉の正本は creedData / companyInfo.philosophy */}
-          <h1 className="ch-h1 ch-h1--creed" style={{ fontFamily: FONT_JA, color: "var(--corp-text, #FFFFFF)" }}>
-            いつの時代も、
-            <br />
-            変わらない核を。
-          </h1>
-          {/* 2026-09-06 CORE WEB 2035: 社是の直下に「何の会社か」の一行。
-              社是だけでは10秒後に「AIで仕組みを再設計する会社」が残らなかった（08_HERO_CONCEPTS A）。 */}
-          <p className="ch-hero-line" style={{ fontFamily: FONT_JA }}>{HERO.line}</p>
-          <div className="ch-cta-row">
-            <a href="/roai-score" onClick={e => { rememberSource('home-hero'); track('corp_cta_click', 'home-hero'); onAnchor(e, '/roai-score'); }} style={ctaHero}>{HERO.primary}</a>
-            <a href="#invite" onClick={e => { track('corp_cta_click', 'home-hero-invite'); onAnchor(e, '#invite'); }} style={{ ...ctaGhost, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
-              {HERO.secondary}
-            </a>
-          </div>
-        </motion.div>
-
-        <motion.figure className="ch-film" initial={{ opacity: 0, scale: 0.985 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}>
+    <section id="top" className="corp-film-first">
+      <div ref={stageRef} className="corp-film-stage">
+        <img src={FILM.poster} alt="" aria-hidden="true" className="corp-film-backdrop" width={720} height={1280} />
+        <div className="corp-film-frame">
           <video
             ref={videoRef}
-            className="ch-film-video"
+            className="corp-film-player"
             src={FILM.src}
             poster={FILM.poster}
-            autoPlay={canPlay}
-            muted
-            loop
-            playsInline
-            preload={canPlay ? 'auto' : 'none'}
-            width={720}
-            height={1280}
-            aria-label="株式会社COREのブランドフィルム。いつの時代も、変わらない核を。"
+            autoPlay muted={muted} loop playsInline preload="auto"
+            width={720} height={1280}
+            id="corp-brand-film"
+            aria-label="株式会社COREのブランドフィルム"
+            onPlay={() => setPaused(false)}
+            onPause={() => setPaused(true)}
+            onLoadedData={e => { setPaused(e.currentTarget.paused); play(); }}
+            onVolumeChange={e => setMuted(e.currentTarget.muted)}
+            onError={() => { setFilmError(true); setPaused(true); }}
           />
-        </motion.figure>
+          <div className="corp-film-controls">
+            <button type="button" onClick={() => paused ? play() : videoRef.current?.pause()}
+              aria-label={paused ? '映像を再生する' : '映像を一時停止する'} aria-controls="corp-brand-film">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                {paused ? <path d="M8 4l12 8-12 8V4Z" fill="currentColor" /> : <path d="M8 5v14M16 5v14" stroke="currentColor" strokeWidth="3" />}
+              </svg>
+            </button>
+            <button type="button" onClick={toggleSound} aria-label={muted ? '音声をオンにする' : '音声をオフにする'}
+              aria-pressed={!muted} aria-controls="corp-brand-film">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4V5Z" />
+                {muted ? <path d="m16 9 5 6m0-6-5 6" /> : <><path d="M15 8a6 6 0 0 1 0 8" /><path d="M18 5a10 10 0 0 1 0 14" /></>}
+              </svg>
+            </button>
+          </div>
+          {filmError && <p className="ch-film-error" role="status">動画を読み込めませんでした。ページを再読み込みしてください。</p>}
+        </div>
+      </div>
+      <div className="ch-wrap corp-film-intro">
+        <Kick>AI Transformation Company — Kobe, Japan</Kick>
+        <h1 className="ch-h1 ch-h1--creed" style={{ fontFamily: FONT_JA, color: "var(--corp-text, #FFFFFF)" }}>
+          いつの時代も、<br />変わらない核を。
+        </h1>
+        <p className="ch-hero-line" style={{ fontFamily: FONT_JA }}>{HERO.line}</p>
+        <div className="ch-cta-row">
+          <a href="/roai-score" onClick={e => { rememberSource('home-hero'); track('corp_cta_click', 'home-hero'); onAnchor(e, '/roai-score'); }} style={ctaHero}>{HERO.primary}</a>
+          <a href="#invite" onClick={e => { track('corp_cta_click', 'home-hero-invite'); onAnchor(e, '#invite'); }} style={ctaGhost}>{HERO.secondary}</a>
+        </div>
       </div>
     </section>
   );
@@ -147,7 +151,7 @@ export function HomeHero({ onAnchor }: { onAnchor: AnchorHandler }) {
 // ============================================================
 //  PROOF STRIP — 自社プロダクトの名前の帯（開発・運用の実体を先に示す）
 // ============================================================
-const PRODUCT_NAMES = ['NERI', 'Prism', 'Resonance', 'Crystal', 'Iris', 'Lume', 'Guild', 'Pulse'];
+const PRODUCT_NAMES = ['NERI', 'PRISM', 'RESONANCE', 'CRYSTAL', 'IRIS', 'LUME', 'GUILD', 'PULSE'];
 
 export function ProofStrip({ onAnchor }: { onAnchor: AnchorHandler }) {
   return (
@@ -159,7 +163,7 @@ export function ProofStrip({ onAnchor }: { onAnchor: AnchorHandler }) {
         <ul className="ch-logos" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
           {PRODUCT_NAMES.map(n => (
             <li key={n} style={{ fontFamily: FONT_EN, fontSize: '1.02rem', fontWeight: 700, letterSpacing: '0.06em', color: "var(--corp-body, rgba(236,242,250,0.72))" }}>
-              <span style={{ color: "var(--corp-muted, rgba(236,242,250,0.4))", fontWeight: 500, marginRight: 4 }}>CORE</span>{n}
+              {n}
             </li>
           ))}
         </ul>
@@ -471,7 +475,7 @@ export function FounderMessage({ onAnchor }: { onAnchor: AnchorHandler }) {
 export function CompanyOverview({ onAnchor }: { onAnchor: AnchorHandler }) {
   const rows: { k: string; en: string; v: React.ReactNode }[] = [
     { k: '会社名', en: 'Company', v: <>{COMPANY_INFO.name}<span className="ch-dl-sub">{COMPANY_INFO.nameEn}</span></> },
-    { k: '設立', en: 'Founded', v: COMPANY_INFO.founded },
+    { k: '設立年月日', en: 'Date Established', v: COMPANY_INFO.founded },
     { k: '資本金', en: 'Capital', v: COMPANY_INFO.capitalDisplay },
     { k: '代表取締役', en: 'CEO', v: <>{COMPANY_INFO.representative}<span className="ch-dl-sub">{COMPANY_INFO.representativeEn}</span></> },
     { k: '本社所在地', en: 'Headquarters', v: <>{COMPANY_INFO.addressJa}<span className="ch-dl-sub">{COMPANY_INFO.addressEn}</span></> },

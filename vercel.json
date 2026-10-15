@@ -422,6 +422,26 @@
       "destination": "/corp.html"
     },
     {
+      "source": "/corp/advisory",
+      "destination": "/corp-advisory.html"
+    },
+    {
+      "source": "/corp/intelligence",
+      "destination": "/corp-intelligence.html"
+    },
+    {
+      "source": "/corp/academy",
+      "destination": "/corp-academy.html"
+    },
+    {
+      "source": "/corp/studio",
+      "destination": "/corp-studio.html"
+    },
+    {
+      "source": "/corp/ventures",
+      "destination": "/corp-ventures.html"
+    },
+    {
       "source": "/corp/(.*)",
       "destination": "/corp.html"
     },

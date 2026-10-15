@@ -10,7 +10,7 @@ export const COMPANY_INFO = {
   nameEn: 'CORE Inc.',
   representative: '井出 直毅',
   representativeEn: 'Naoki Ide',
-  founded: '2026年',
+  founded: '2026年9月29日',
   capital: 2_000_000,
   capitalDisplay: '200万円',
   addressJa: '〒658-0025 兵庫県神戸市東灘区魚崎南町7丁目11番7号',

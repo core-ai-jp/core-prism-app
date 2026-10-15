@@ -17,7 +17,7 @@
 // 生成物は git に入れる（Vite の入口として build 時に必要なため）。
 // ★このファイルが正本。生成されたHTMLを直接編集しても次の build で消える。
 // ============================================================================
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -850,6 +850,21 @@ PAGES.push(
     footer: studioFooter,
   },
 );
+
+// Five division pages share public content with the React view.
+const divisions = JSON.parse(readFileSync(resolve(ROOT, 'src/corporate/divisions.json'), 'utf8'));
+for (const d of divisions) PAGES.push({
+  file: `corp-${d.id}.html`, theme: 'corp', url: `${CORP}/corp/${d.id}`,
+  title: `CORE ${d.name} | 株式会社CORE`, description: d.summary,
+  keywords: `CORE ${d.name},${d.services.map(s => s[0]).join(',')}`, og: `${CORP}/og-core-logo-white-v9.png`,
+  ld: [crumbs(`${CORP}/corp/${d.id}`, [['CORE', `${CORP}/corp`], [`CORE ${d.name}`, `${CORP}/corp/${d.id}`]])],
+  body: `<p class="k">CORE ${d.name}</p><h1>${d.title}</h1><p>${d.summary}</p><p>${d.status}</p>
+    <h2>サービス概要</h2>${d.services.map(([title,text])=>`<h3>${title}</h3><p>${text}</p>`).join('')}
+    <h2>活用イメージ</h2><p>${d.example}</p><p>想定する活用例です。導入実績や成果保証を示すものではありません。</p>
+    <h2>導入・協業のメリット</h2><ul>${d.benefits.map(b=>`<li>${b}</li>`).join('')}</ul>
+    <h2>${d.price}</h2><p>${d.note}</p>${d.links.map(([label,href])=>`<p><a href="${href}">${label}</a></p>`).join('')}`,
+  footer: '<a href="/corp">CORE ホーム</a> · <a href="/corp#contact">初回無料相談</a>',
+});
 
 // ──────────────────────────────── 書き出し ────────────────────────────────
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

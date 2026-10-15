@@ -40,7 +40,7 @@ export default function CorpStickyCta() {
       /* 決断の直前なので、不安を消す1点だけを置く。 */
       sub={tab === 'advisor' ? '月額50万円（税別）' : pick ? '税込・いつでも解約できます' : '約2分・無料・連絡先不要'}
       cta={tab === 'advisor' ? '無料で相談する' : pick ? `${pick.name} を見る →` : 'ROAIを無料診断する'}
-      href={tab === 'advisor' ? '/corp#contact' : pick ? pick.url : '/roai-score'}
+      href={tab === 'advisor' ? '/corp#advisor-consult' : pick ? pick.url : '/roai-score'}
       onClick={pick ? undefined : () => { rememberSource('sticky'); track('corp_cta_click', 'sticky'); }}
       accent1="#111827"
       accent2="#111827"

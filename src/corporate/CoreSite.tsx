@@ -33,9 +33,9 @@ import {
 import { useIsMobile } from './useIsMobile';
 import {
   PhilosophyCore, CompanyOsSection,
-  UseCasesSection, ServiceLayersSection, BusinessDevSection,
+  UseCasesSection, BusinessDevSection,
   IndustryOsSection, PartnerSection, AiNativeSection, TechnologySection,
-  CoreNumbersSection, InvestmentSection,
+  InvestmentSection,
   EngagementSection, SecuritySection,
 } from './TransformSections';
 import { ContactSection } from './CorpContactForm';
@@ -53,7 +53,10 @@ import { setCorpTab } from './corpRouteStore';
 import { TheChange, ProcessContrast, OneCore, StudioSection, NeriSection, Bridge, AshitakaHome, EnergyHome, Connection, Core2035, Invitation } from './StorySections';
 import AshitakaPage from './AshitakaPage';
 import EnergyPage from './EnergyPage';
+import DivisionPage from './DivisionPage';
+import divisionData from './divisions.json';
 import AiAdvisorTab from './AiAdvisorTab';
+import { VisualPortfolio, VisualImpact, VisualDisclosure } from './VisualStrategy';
 import { track } from './roai/track';
 import { neriLpUrl } from '../lib/coreLinks';
 
@@ -99,11 +102,19 @@ const PLATFORM_PLANS: Array<{
 //  ここではヘッダーの実測高を引くので、常に見出しの真上に着地する。
 //  17,908px を smooth で流すと数秒かかるため、ジャンプは即時にする。
 // ============================================================
+function revealDisclosure(element: HTMLElement) {
+  let parent = element.parentElement;
+  while (parent) {
+    if (parent instanceof HTMLDetailsElement) parent.open = true;
+    parent = parent.parentElement;
+  }
+}
 function jumpToHash(e: ReactMouseEvent<HTMLAnchorElement>, href: string) {
   if (!href.startsWith('#')) return;
   const el = document.getElementById(href.slice(1));
   if (!el) return;
   e.preventDefault();
+  revealDisclosure(el);
   const header = document.querySelector('header');
   const offset = (header?.getBoundingClientRect().height ?? 64) + 8;
   window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'auto' });
@@ -126,15 +137,15 @@ function jumpToHash(e: ReactMouseEvent<HTMLAnchorElement>, href: string) {
 //      SECTION_TAB でどの章がどのタブに載っているかを引き、
 //      必要ならタブを切り替えてからその章へ送る。
 // ============================================================
-export type CoreTabKey = 'home' | 'roai' | 'score' | 'os' | 'services' | 'products' | 'ashitaka' | 'energy' | 'company' | 'contact' | 'advisor';
+export type CoreTabKey = 'home' | 'roai' | 'score' | 'os' | 'services' | 'products' | 'ashitaka' | 'energy' | 'company' | 'contact' | 'advisor' | 'advisory' | 'intelligence' | 'academy' | 'studio' | 'ventures';
 
 /**
  * 2026-09-03 MASTER PROMPT: Return on AI と CORE ROAI SCORE は中心的な知的資産なので、
  * ハッシュではなく独立したパスを持つ（検索・共有・AI検索のため）。中身は同じ CoreSite のタブ。
  */
 /** 2026-09-06 CORE WEB 2035: ASHITAKA PROJECT と CORE Energy も独立パス（検索・共有のため）。 */
-const TAB_PATH: Partial<Record<CoreTabKey, string>> = { roai: '/return-on-ai', score: '/roai-score', ashitaka: '/ashitaka', energy: '/energy' };
-const PATH_TAB: Record<string, CoreTabKey> = { '/return-on-ai': 'roai', '/roai-score': 'score', '/ashitaka': 'ashitaka', '/energy': 'energy' };
+const TAB_PATH: Partial<Record<CoreTabKey, string>> = { ...Object.fromEntries(divisionData.map(d => [d.id, `/corp/${d.id}`])), roai: '/return-on-ai', score: '/roai-score', ashitaka: '/ashitaka', energy: '/energy' };
+const PATH_TAB: Record<string, CoreTabKey> = { ...Object.fromEntries(divisionData.flatMap(d => [[`/corp/${d.id}`, d.id as CoreTabKey], [`/corp-${d.id}`, d.id as CoreTabKey]])), '/return-on-ai': 'roai', '/roai-score': 'score', '/ashitaka': 'ashitaka', '/energy': 'energy' };
 function tabFromPath(): CoreTabKey | null {
   if (typeof window === 'undefined') return null;
   // `/ashitaka.html` のように入口ファイル名で直接開かれても同じタブへ（vite preview・共有URLの取り違え対策）
@@ -144,6 +155,7 @@ function tabFromPath(): CoreTabKey | null {
 
 /** タブごとの title / description / canonical（SEO・AI検索向け） */
 const TAB_META: Record<CoreTabKey, { title: string; desc: string; path: string }> = {
+  ...Object.fromEntries(divisionData.map(d => [d.id, { title: `CORE ${d.name} | 株式会社CORE`, desc: d.summary, path: `/corp/${d.id}` }])) as Record<'advisory' | 'intelligence' | 'academy' | 'studio' | 'ventures', { title: string; desc: string; path: string }>,
   home: { title: '株式会社CORE | いつの時代も、変わらない核を。— AI Transformation Company', desc: 'いつの時代も、変わらない核を。AI前提で、企業・地域・社会の仕組みを再設計する神戸のAI Transformation Company。AI投資を経営成果（Return on AI）へ。企業から地域へ、地域からエネルギーへ。', path: '/corp' },
   roai: { title: 'Return on AI とは | 株式会社CORE', desc: 'AI投資は目的ではない。AIが何を返したかを、売上・コスト・時間・リスク・新しい価値で測る。CORE ROAI MODEL・ROAIの計算・損失回避・投資余力の逆算・Transformation Loop。', path: '/return-on-ai' },
   score: { title: 'CORE ROAI SCORE — 約2分のAI投資優先順位診断 | 株式会社CORE', desc: '約2分で、あなたの会社の次にAI投資すべき場所・削減できる時間・経済価値の概算・AI Readiness・投資余力の目安を可視化。連絡先不要、算定根拠つき。', path: '/roai-score' },
@@ -153,7 +165,7 @@ const TAB_META: Record<CoreTabKey, { title: string; desc: string; path: string }
   ashitaka: { title: 'ASHITAKA PROJECT × REGIONAL OS — 文化を入口に、街と村のDXへ | 株式会社CORE', desc: '文化で接点をつくる ASHITAKA PROJECT と、自治体・地域事業者の業務をAI前提で再設計する REGIONAL OS。演奏するのは代表取締役本人。自治体・地域事業者へいま提供できることと、構想段階のものを分けて伝えます。', path: '/ashitaka' },
   energy: { title: 'CORE ENERGY — AIの電力需要に、地域の分散資源で応える | 株式会社CORE', desc: 'エネルギー事業者との協業領域。Energy Intelligence、AI最適化（需要予測・需給最適化・DR/VPP・設備保全）、地域プロジェクトの組成、計測。資産を持たず、AI・データ解析・設計・地域との合意形成から始めます。', path: '/energy' },
   company: { title: '会社について | 株式会社CORE', desc: 'いつの時代も、変わらない核を。核とは、人。会社概要・理念・代表。', path: '/corp#company' },
-  advisor: { title: 'AI顧問 — 月額50万円・3ヶ月から | 株式会社CORE', desc: 'CORE AI Transformation Partner。社外AI変革責任者として戦略・業務診断・小規模AI実装・研修・相談・ROAI測定を支援。月額50万円（税別）、最低3ヶ月。', path: '/corp#advisor' },
+  advisor: { title: 'AI顧問・FDE — 月額55万円（税込） | 株式会社CORE', desc: 'CORE AI Advisory。AI戦略から現場実装、業務自動化、AIエージェント、継続改善、ROAI測定まで。月額50万円（税別）／税込55万円、原則3か月。初回相談完全無料。', path: '/corp#advisor' },
   contact: { title: '無料AI業務診断・ご相談 | 株式会社CORE', desc: '業種と業務を選び、年間工数・時間価値・AI実装適性・30日間の検証順序を約5分で整理。登録不要の無料診断。', path: '/corp#contact' },
 };
 
@@ -171,11 +183,11 @@ const TAB_META: Record<CoreTabKey, { title: string; desc: string; path: string }
 const CORE_TABS: { key: CoreTabKey; label: string; short: string; sub: string }[] = [
   { key: 'home', label: 'CORE', short: 'CORE', sub: 'PHILOSOPHY' },
   { key: 'services', label: 'AI変革', short: 'AI変革', sub: 'TRANSFORMATION' },
+  { key: 'advisor', label: 'AI顧問', short: 'AI顧問', sub: 'AI ADVISORY' },
   { key: 'ashitaka', label: 'ASHITAKA', short: '地域', sub: 'REGION' },
   { key: 'energy', label: 'ENERGY', short: 'ENERGY', sub: 'FUTURE' },
   { key: 'company', label: '会社について', short: '会社', sub: 'COMPANY' },
   { key: 'contact', label: 'ご相談', short: '相談', sub: 'CONTACT' },
-  { key: 'advisor', label: 'AI顧問', short: 'AI顧問', sub: 'AI ADVISORY' },
 ];
 /** バーに無いタブ（roai / score / os / products）を開いているとき、どの札を点灯させるか。 */
 const TAB_CHIP: Partial<Record<CoreTabKey, CoreTabKey>> = { roai: 'services', score: 'services', os: 'services', products: 'services' };
@@ -221,10 +233,10 @@ const SECTION_TAB: Record<string, CoreTabKey> = {
   'vertical-ultima': 'products', 'vertical-anima': 'products',
   'vertical-veritas': 'products', 'vertical-soma': 'products',
   // 会社
-  'philosophy-core': 'company', numbers: 'company',
+  'philosophy-core': 'company',
   mission: 'company', executive: 'company', journey: 'company', about: 'company',
   contact: 'contact', faq: 'contact',
-  advisor: 'advisor', 'advisor-price': 'advisor',
+  advisor: 'advisor', 'advisor-price': 'advisor', 'advisor-consult': 'advisor',
 };
 
 /**
@@ -332,6 +344,7 @@ export default function CoreSite() {
       requestAnimationFrame(() => {
         const el = document.getElementById(hash.replace('#', ''));
         if (!el) { window.scrollTo({ top: 0, behavior: 'auto' }); return; }
+        revealDisclosure(el);
         const header = document.querySelector('header');
         const offset = (header?.getBoundingClientRect().height ?? 64) + 8;
         window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'auto' });
@@ -344,6 +357,8 @@ export default function CoreSite() {
 
   // 追従CTA（App.tsx 側）とページの計測に、いまのタブを知らせる
   useEffect(() => {
+    const initialTarget = document.getElementById(window.location.hash.slice(1));
+    if (initialTarget) revealDisclosure(initialTarget);
     setCorpTab(tab);
     track('corp_page_view', tab);
     const m = TAB_META[tab];
@@ -368,6 +383,7 @@ export default function CoreSite() {
    * （フッタの「会社概要」やヒーローの「プロダクトを見る」を殺さないため）
    */
   const handleAnchor = (e: ReactMouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('/corp#')) href = href.slice(5);
     // 独立パスのタブ（/return-on-ai・/roai-score）はページ遷移せずタブを切り替える
     const pathTab = PATH_TAB[href.replace(/\/$/, '')];
     if (pathTab) {
@@ -402,6 +418,7 @@ export default function CoreSite() {
       requestAnimationFrame(() => {
         const el = id ? document.getElementById(id) : null;
         if (!el) { window.scrollTo({ top: 0, behavior: 'instant' }); return; }
+        revealDisclosure(el);
         const header = document.querySelector('header');
         const offset = (header?.getBoundingClientRect().height ?? 64) + 8;
         window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'instant' });
@@ -568,20 +585,28 @@ export default function CoreSite() {
             ホームから外した章（ExecutiveQuestion / Differentiation / WhyCore / ServicesEditorial / ApproachSection /
             PeopleMosaic / ProofStrip / FinalCta）は AI変革タブ・会社タブ・/return-on-ai に残る。 */}
         <Manifesto onAnchor={handleAnchor} />
+        <VisualPortfolio onAnchor={handleAnchor} home />
         <Values />
-        <TheChange />
-        <RoaiBand onAnchor={handleAnchor} />
-        <ProcessContrast />
-        <RoaiModelSection onAnchor={handleAnchor} compact />
-        <ScoreTeaser onAnchor={handleAnchor} />
-        <OneCore onAnchor={handleAnchor} />
+        <VisualImpact onAnchor={handleAnchor} />
+        <VisualDisclosure title="AIで企業をどう変えるか" subtitle="経営成果から逆算する、COREの考え方">
+          <TheChange />
+          <RoaiBand onAnchor={handleAnchor} />
+          <ExecutiveQuestion onAnchor={handleAnchor} />
+          <Differentiation />
+          <ProcessContrast />
+          <RoaiModelSection onAnchor={handleAnchor} compact />
+          <ScoreTeaser onAnchor={handleAnchor} />
+          <OneCore onAnchor={handleAnchor} />
+        </VisualDisclosure>
         <StudioSection />
         <NeriSection />
-        <Bridge />
         <AshitakaHome onAnchor={handleAnchor} />
         <EnergyHome onAnchor={handleAnchor} />
-        <Connection />
-        <Core2035 />
+        <VisualDisclosure title="地域と未来への構想" subtitle="企業の変革から、地域・社会の仕組みへ">
+          <Bridge />
+          <Connection />
+          <Core2035 />
+        </VisualDisclosure>
         <ProductsProof onAnchor={handleAnchor} />
         <FounderMessage onAnchor={handleAnchor} />
         <CompanyOverview onAnchor={handleAnchor} />
@@ -595,6 +620,7 @@ export default function CoreSite() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       {tab === 'ashitaka' && <AshitakaPage onAnchor={handleAnchor} />}
       {tab === 'energy' && <EnergyPage onAnchor={handleAnchor} />}
+      {divisionData.some(d => d.id === tab) && <DivisionPage id={tab} />}
       {tab === 'advisor' && <AiAdvisorTab onAnchor={handleAnchor} />}
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
@@ -619,24 +645,24 @@ export default function CoreSite() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       {tab === 'services' && (
       <>
-        {/* 2026-09-06: ホームから移した章。AI変革タブは「ROAI → 順序の違い → なぜCORE → 何をするか → 進め方」で始まる。 */}
-        <RoaiBand onAnchor={handleAnchor} />
-        <ExecutiveQuestion onAnchor={handleAnchor} />
-        <Differentiation />
-        <WhyCore />
-        <ServicesEditorial onAnchor={handleAnchor} />
-        <ApproachSection />
-        <ScoreTeaser onAnchor={handleAnchor} />
-        <ServiceLayersSection />
-        {/* 「何ができるか」の直後に「どう進むか・やめられるか」を置く（稟議に持ち込める形にする） */}
-        <EngagementSection onAnchor={handleAnchor} />
-        <AiNativeSection />
-        <TechnologySection />
-        {/* 技術の話の直後に「その情報はどこへ行くのか」を置く */}
-        <SecuritySection />
-        <BusinessDevSection />
-        <PartnerSection onAnchor={handleAnchor} />
-        <InvestmentSection onAnchor={handleAnchor} />
+        <VisualPortfolio onAnchor={handleAnchor} />
+        <VisualImpact onAnchor={handleAnchor} />
+        <VisualDisclosure title="支援内容と進め方" subtitle="戦略・開発・運用／契約・成果物・進行">
+          <ServicesEditorial onAnchor={handleAnchor} />
+          <EngagementSection onAnchor={handleAnchor} />
+        </VisualDisclosure>
+        <VisualDisclosure title="技術・セキュリティ" subtitle="AIの組み込み方と、情報を守る仕組み">
+          <AiNativeSection />
+          <TechnologySection />
+          <SecuritySection />
+        </VisualDisclosure>
+        <VisualDisclosure title="COREの支援体制・協業" subtitle="事業開発・パートナー・投資規模を詳しく">
+          <WhyCore />
+          <ApproachSection />
+          <BusinessDevSection />
+          <PartnerSection onAnchor={handleAnchor} />
+          <InvestmentSection onAnchor={handleAnchor} />
+        </VisualDisclosure>
         <FinalCta onAnchor={handleAnchor} />
       </>
       )}
@@ -1460,7 +1486,7 @@ export default function CoreSite() {
       )}
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
-      {/*  13 変わらないもの ＋ 14 数字で見る CORE */}
+      {/*  13 変わらないもの */}
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       {tab === 'company' && (
       <>
@@ -1468,7 +1494,6 @@ export default function CoreSite() {
         <ProofStrip onAnchor={handleAnchor} />
         <CreedBand onAnchor={handleAnchor} />
         <PhilosophyCore />
-        <CoreNumbersSection />
       </>
       )}
 
@@ -1766,36 +1791,10 @@ export default function CoreSite() {
             <InfoRow label="代表取締役" subLabel="CEO"           value={COMPANY.ceoJa}    subValue={COMPANY.ceoEn} />
             <InfoRow label="本社所在地" subLabel="Headquarters" value={COMPANY.addressJa} subValue={COMPANY.addressEn} />
             <InfoRow label="事業内容"   subLabel="Business"     value="エージェントAIを中心とした SaaS の開発・運営" />
-            <InfoRow label="提供サービス" subLabel="Products"   value="CORE NERI（話すだけで会社が動く Company OS）／ CORE Universe（AIに任せられる仕事の宇宙図）／ CORE Prism（事業家向け）／ CORE Iris（インフルエンサー向け）／ CORE Resonance（店舗・サロン・教室向け）／ CORE Lume（クリエイター向け）／ Crystal（AI コンシェルジュ・接客サイト向け）／ CORE Pulse（からだ見守りAI）" isLast />
+            <InfoRow label="提供サービス" subLabel="Products"   value="NERI（話すだけで会社が動く Company OS）／ Universe（AIに任せられる仕事の宇宙図）／ PRISM（事業家向け）／ IRIS（インフルエンサー向け）／ RESONANCE（店舗・サロン・教室向け）／ LUME（クリエイター向け）／ Crystal（AI コンシェルジュ・接客サイト向け）／ PULSE（からだ見守りAI）" isLast />
           </dl>
           </MobileFold>
 
-          {/* 現在の提供状況について（feedback_lp_selling_structure §8 と同型。各サービスのFAQ/約款で
-              既に開示済みの事実のみを転記し、法人サイト側にも同じ開示を横展開する。新規の数字・約束は作らない） */}
-          <div style={{ marginTop: '3.5rem' }}>
-            <p style={{ fontFamily: FONT_DISPLAY, fontSize: '0.72rem', letterSpacing: '0.28em', color: "var(--corp-accent, #7DD3FC)", textTransform: 'uppercase', marginBottom: '0.8rem', textAlign: 'center' }}>
-              Current Status
-            </p>
-            <h3 style={{ fontFamily: FONT_SERIF_JA, fontSize: 'clamp(1.25rem, 2.3vw, 1.6rem)', fontWeight: 700, textAlign: 'center', marginBottom: '0.8rem', letterSpacing: '0.03em' }}>
-              現在の提供状況について
-            </h3>
-            <p style={{ fontFamily: FONT_SERIF_JA, fontSize: '0.9rem', color: "var(--corp-muted, rgba(226,232,240,0.68))", lineHeight: 1.9, textAlign: 'center', maxWidth: 620, margin: '0 auto 2.2rem' }}>
-              各サービスを正しくご検討いただけるよう、現在対応が完了していない点も含めて開示します。
-            </p>
-            <div style={{ display: 'grid', gap: '0.9rem' }}>
-              {[
-                { t: '株式会社COREとして運営しています', d: '法人化にともない、運営体制は株式会社CORE（代表 井出直毅）に切り替わりました。安心してお試しいただけるよう、各サービスに無料お試し期間といつでも解約可能な仕組みを設けています。' },
-                { t: '「絶対に継続する」とはお約束できません', d: 'これはどの事業者にも共通する点です。解約はいつでも各サービスの画面から行え、電話等での引き止めは行いません。' },
-                { t: '導入実績・効果数値は、公開できる段階のもののみ記載しています', d: '「導入◯◯社」「効果◯◯%」といった数字は、実績として公開できる段階に至るまでは記載しません。公開可能になり次第、各サービスのページに掲載します。' },
-                { t: '一部の管理機能は開発中です', d: '例えば Prism では、アプリ内での領収書発行画面が現時点では未実装です。必要な方はメールにてご連絡いただければ個別に対応します。' },
-              ].map((c) => (
-                <div key={c.t} style={{ padding: '1.4rem 1.6rem', borderRadius: 14, border: "1px solid var(--corp-line, rgba(125,211,252,0.24))", background: "rgba(var(--corp-tint-rgb, 255,255,255), 0.025)" }}>
-                  <p style={{ fontFamily: FONT_SERIF_JA, fontWeight: 600, fontSize: '0.95rem', color: "var(--corp-text, #F3F6FB)", lineHeight: 1.8, marginBottom: '0.5rem' }}>{c.t}</p>
-                  <p style={{ fontFamily: FONT_SANS, fontSize: '0.82rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", lineHeight: 1.9 }}>{c.d}</p>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
       )}
@@ -1974,11 +1973,6 @@ export default function CoreSite() {
             <a href="/faq" style={{ color: "var(--corp-accent, #BAE6FD)", textDecoration: 'underline', textUnderlineOffset: 3, display: 'inline-block', padding: '13px 4px' }}>よくある質問</a>
             {' '}に、誰が作っているか・料金・解約・データの扱いをまとめています。
           </p>
-          {/* 2026-08-03: 「動いているのか」を確かめる場所を、問い合わせる前に置く */}
-          <p style={{ fontSize: '0.78rem', color: "var(--corp-muted, rgba(226,232,240,0.60))", marginTop: '0.6rem', fontFamily: FONT_SERIF_JA, lineHeight: 1.8 }}>
-            <a href="/status" style={{ color: "var(--corp-accent, #BAE6FD)", textDecoration: 'underline', textUnderlineOffset: 3, display: 'inline-block', padding: '13px 4px' }}>いまの稼働状況</a>
-            {' '}では、7つのサービスがこの瞬間ひらけるかを実際に測って出しています。
-          </p>
         </div>
       </ContactSection>
       )}
@@ -1998,10 +1992,10 @@ export default function CoreSite() {
             maxWidth: 1280,
             margin: '0 auto',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
             gap: '2rem',
             marginBottom: '2.75rem',
           }}
+          className="corp-footer-grid"
         >
           <div>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, lineHeight: 1 }}>
@@ -2034,14 +2028,14 @@ export default function CoreSite() {
           </div>
           <div>
             <p style={footHead}>プロダクト</p>
-            <a href={neriLpUrl('corp-foot')} target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link" onClick={() => track('corp_cta_click', 'foot-neri')}>CORE NERI</a>
-            <a href="/?lp=1" style={footLink} className="lp-tap-link">CORE Prism</a>
-            <a href="/iris?lp=1" style={footLink} className="lp-tap-link">CORE Iris</a>
-            <a href="https://guild-gauches-projects.vercel.app/?lp=1" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">CORE Guild</a>
-            <a href="https://resonancebot-ivory.vercel.app/lp" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">CORE Resonance</a>
-            <a href="https://lume-deploy-five.vercel.app/" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">CORE Lume</a>
+            <a href={neriLpUrl('corp-foot')} target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link" onClick={() => track('corp_cta_click', 'foot-neri')}>NERI</a>
+            <a href="/?lp=1" style={footLink} className="lp-tap-link">PRISM</a>
+            <a href="/iris?lp=1" style={footLink} className="lp-tap-link">IRIS</a>
+            <a href="https://guild-gauches-projects.vercel.app/?lp=1" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">GUILD</a>
+            <a href="https://resonancebot-ivory.vercel.app/lp" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">RESONANCE</a>
+            <a href="https://lume-deploy-five.vercel.app/" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">LUME</a>
             <a href="https://crystal-nine-self.vercel.app/" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">Crystal</a>
-            <a href="/pulse" style={footLink} className="lp-tap-link">CORE Pulse</a>
+            <a href="/pulse" style={footLink} className="lp-tap-link">PULSE</a>
           </div>
           <div>
             <p style={footHead}>サービス</p>
@@ -2077,13 +2071,9 @@ export default function CoreSite() {
               {COMPANY.addressJa}
             </p>
           </div>
-          {/* 2026-08-03: 競合 board は「稼働状況・更新履歴・ロードマップ」を常設で持っている。
-              CORE は /status と /trust を作ってあったのに、どのページからもリンクが無く
-              誰も辿り着けなかった。約束ではなく「いまどうなっているか」を常設で置く。 */}
           <div>
             <p style={footHead}>安心のために</p>
             <a href="/faq" style={footLink} className="lp-tap-link">よくある質問</a>
-            <a href="/status" style={footLink} className="lp-tap-link">いまの稼働状況</a>
             <a href="/trust" style={footLink} className="lp-tap-link">データの取り扱い</a>
           </div>
           <div>
