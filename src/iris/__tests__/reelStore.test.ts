@@ -71,19 +71,19 @@ function memIndexedDb(stores: Record<string, Map<string, any>>, requestDelayMs =
             const tx: Record<string, any> = { error: null };
             let pending = 0;
             let completed = false;
-            const finishIfIdle = () => queueMicrotask(() => {
+            const finishIfIdle = () => setTimeout(() => {
               if (pending === 0 && !completed) {
                 completed = true;
                 tx.oncomplete?.();
               }
-            });
+            }, 0);
             const request = (result: any) => {
               const r: Record<string, any> = { result };
               pending++;
               setTimeout(() => {
                 r.onsuccess?.();
                 pending--;
-                // Promise continuations can queue another IndexedDB request first.
+                // Wait for the whole Promise/microtask checkpoint before checking the queue.
                 finishIfIdle();
               }, requestDelayMs);
               return r;
