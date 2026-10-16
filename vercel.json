@@ -182,6 +182,18 @@
   ],
   "rewrites": [
     {
+      "source": "/intelligence",
+      "destination": "/intelligence/index.html"
+    },
+    {
+      "source": "/intelligence/",
+      "destination": "/intelligence/index.html"
+    },
+    {
+      "source": "/intelligence/:asset",
+      "destination": "/intelligence/:asset"
+    },
+    {
       "source": "/studio/contact/",
       "destination": "/studio-contact.html"
     },

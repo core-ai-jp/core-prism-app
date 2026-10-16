@@ -58,7 +58,7 @@ import divisionData from './divisions.json';
 import AiAdvisorTab from './AiAdvisorTab';
 import { VisualPortfolio, VisualImpact, VisualDisclosure } from './VisualStrategy';
 import { track } from './roai/track';
-import { neriLpUrl } from '../lib/coreLinks';
+import { neriLpUrl, INTELLIGENCE_LP } from '../lib/coreLinks';
 
 const COMPANY = {
   nameJa: COMPANY_INFO.name,
@@ -485,7 +485,7 @@ export default function CoreSite() {
         }}
       >
         <div
-          className="lp-safe"
+          className="lp-safe corp-product-header"
           style={{
             maxWidth: 1320,
             margin: '0 auto',
@@ -521,7 +521,7 @@ export default function CoreSite() {
             </span>
           </a>
           {/* 別ページ（タブでは切り替わらない別ルート）だけをここに残す */}
-          <nav style={{ display: 'flex', gap: '1.6rem', alignItems: 'center' }}>
+          <nav className="corp-product-nav" aria-label="製品と導入相談" style={{ display: 'flex', gap: '1.6rem', alignItems: 'center' }}>
             {/* ブランド階層は CORE ＞ NERI ＞ CORE Studio の3層（[[05_BRAND_ARCHITECTURE]]）。
                 Continuum は4つ目のポジションを名乗っていたのでここから外した（ページは /continuum に残る）。 */}
             <a
@@ -530,8 +530,9 @@ export default function CoreSite() {
               rel="noopener noreferrer"
               onClick={() => track('corp_cta_click', 'header-neri')}
               style={navLink}
-              className="lp-nav-link"
+              className="lp-nav-link corp-product-link"
             >NERI</a>
+            <a href={INTELLIGENCE_LP} style={navLink} className="lp-nav-link corp-product-link" onClick={() => track('corp_cta_click', 'header-intelligence')}>Intelligence</a>
             <a href="/studio" style={navLink} className="lp-nav-link">制作スタジオ</a>
             <a href="#workflow-scan" onClick={e => { track('corp_cta_click', 'header'); handleAnchor(e, '#workflow-scan'); }} style={ctaSmall}>無料業務診断</a>
           </nav>
@@ -2029,6 +2030,7 @@ export default function CoreSite() {
           <div>
             <p style={footHead}>プロダクト</p>
             <a href={neriLpUrl('corp-foot')} target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link" onClick={() => track('corp_cta_click', 'foot-neri')}>NERI</a>
+            <a href={INTELLIGENCE_LP} style={footLink} className="lp-tap-link" onClick={() => track('corp_cta_click', 'foot-intelligence')}>Intelligence</a>
             <a href="/?lp=1" style={footLink} className="lp-tap-link">PRISM</a>
             <a href="/iris?lp=1" style={footLink} className="lp-tap-link">IRIS</a>
             <a href="https://guild-gauches-projects.vercel.app/?lp=1" target="_blank" rel="noopener noreferrer" style={footLink} className="lp-tap-link">GUILD</a>
