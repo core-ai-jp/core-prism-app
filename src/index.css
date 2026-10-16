@@ -4418,6 +4418,38 @@ details[open] > summary .disclosure-chev {
   .ch-hero--film .ch-hero-copy .ch-h1--creed { font-size: clamp(2.1rem, 8.8vw, 2.7rem); margin: 0.1rem 0 1rem; }
   .ch-hero--film .ch-cta-row { gap: 0.6rem; }
 }
+/* Corporate brand film: unobstructed, viewport-sized stage; original framing. */
+.ch-brand-hero { background: var(--corp-surface, #fff); }
+.ch-brand-stage {
+  position: relative; isolation: isolate; overflow: hidden; background: #070A10;
+  height: calc(100vh - var(--film-header-height, 132px));
+  height: calc(100svh - var(--film-header-height, 132px));
+  min-height: 240px;
+}
+.ch-brand-ambient {
+  position: absolute; inset: -8%; width: 116%; height: 116%;
+  object-fit: cover; filter: blur(40px) brightness(.35); z-index: -1;
+}
+.ch-brand-video { display: block; width: 100%; height: 100%; object-fit: contain; background: transparent; }
+.ch-brand-controls {
+  position: absolute; right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex; gap: 8px;
+}
+.ch-brand-controls button {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; padding: 0; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.5); background: rgba(7,10,16,.78); color: #fff; cursor: pointer;
+}
+.ch-brand-controls button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.ch-brand-intro { padding: clamp(40px, 6vw, 80px) 24px; }
+.ch-brand-title { font-size: clamp(2.1rem, 5vw, 4.5rem); line-height: 1.3; letter-spacing: -.02em; margin: 0 0 1.6rem; }
+@media (max-width: 860px) {
+  .ch-brand-stage { min-height: 0; }
+  .ch-brand-video { object-fit: cover; object-position: center; }
+  .ch-brand-intro { padding: 40px 20px; }
+}
+
 /* ── MANIFESTO 全面写真 ── */
 .ch-manifesto { position: relative; overflow: hidden; background: var(--corp-surface, #070A10); min-height: clamp(560px, 80vh, 820px); display: flex; align-items: center; }
 .ch-manifesto > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }

@@ -1,3 +1,5 @@
+import { CORE_BRAND_FILM } from '../data/coreBrandFilm';
+
 // ============================================================
 // CORE Studio — 映像の制作実績 (データのみ)
 //
@@ -73,9 +75,9 @@ export const FILM_WORKS: FilmWork[] = [
     id: 'work-core-corp-01',
     client: '株式会社CORE（自社）',
     category: 'BRAND FILM',
-    purpose: '当社自身の企業紹介映像。社是「いつの時代も、変わらない核を。」を軸に、AIの会社でありながら人をいちばん大切にする姿勢を伝えるブランドフィルムです。',
-    poster: '/corp-creed-poster.webp',
-    videoUrl: '/corp-creed-portrait.mp4',
+    purpose: '株式会社コアの宣伝動画。企業の世界観を伝える、縦型のブランドフィルムです。',
+    poster: CORE_BRAND_FILM.poster,
+    videoUrl: CORE_BRAND_FILM.src,
     url: 'https://www.core-ai.jp/corp',
   },
   // 2026-09-04: client を実名(GAUCHE)からイベント開催の一般的な告知として汎用表記に変更
