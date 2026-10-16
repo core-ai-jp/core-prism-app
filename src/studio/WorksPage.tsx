@@ -95,8 +95,8 @@ export default function WorksPage({ go }: { go: Go }) {
 
 // ---- 映像制作の実績 (旧 StudioSite.tsx の FilmWorksBand を移設) ----
 function FilmWorksBand({ go }: { go: Go }) {
-  const featured = FEATURED_FILM_WORKS;
-  const rest = OTHER_FILM_WORKS;
+  const featured = [...FEATURED_FILM_WORKS, ...OTHER_FILM_WORKS.filter(w => w.id === 'work-core-corp-01')];
+  const rest = OTHER_FILM_WORKS.filter(w => w.id !== 'work-core-corp-01');
   if (!featured.length) return null;
   const openFilm = () => { track('studio_works_to_film', { from: 'works-page' }); go('film'); };
 
