@@ -50,3 +50,6 @@ export const NERI_FACTS = {
   from: '月 ¥39,800（税込）から',
   free: '無料は1日5回・登録もカードも要りません',
 } as const;
+
+/** CORE Intelligenceの製品LP。部門紹介 /corp/intelligence とは別の導線。 */
+export const INTELLIGENCE_LP = '/intelligence/';

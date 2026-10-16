@@ -5133,3 +5133,16 @@ header .lp-tab.is-on { color: var(--corp-text, #fff); border-bottom-color: var(-
 .cs-page-hero .cs-bleed-h { font-size: clamp(2.1rem, 4.4vw, 4rem); }
 @media (max-width: 640px) { .cs-bleed-inner h2 { font-size: 1.72rem !important; } .cs-page-hero .cs-bleed-h { font-size: 2.05rem; } }
 @media (max-width: 640px) { .cs-program { grid-template-columns: minmax(0, 1fr); } .cs-strings-body { grid-template-columns: minmax(0, 1fr); } .cs-strings-scale { grid-template-rows: none; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; } .cs-strings-scale li { flex-direction: column; align-items: flex-start; gap: 0; } }
+
+/* Keep the requested product pair visible and tappable on mobile. */
+.corp-product-nav .corp-product-link { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
+@media (max-width: 900px) {
+  .corp-product-header { flex-wrap: wrap; row-gap: 10px; }
+  .corp-product-nav { width: 100%; gap: 18px !important; flex-wrap: wrap; }
+  .corp-product-nav .corp-product-link { display: inline-flex !important; align-items: center; min-height: 44px; }
+  .corp-product-nav > a:last-child { margin-left: auto; }
+}
+@media (max-width: 430px) {
+  .corp-product-nav { gap: 12px !important; }
+  .corp-product-nav > a:last-child { font-size: 12px; padding-inline: 10px; }
+}
