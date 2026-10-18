@@ -3,6 +3,7 @@ const form=document.querySelector('#registration-form');
 const intent=document.querySelector('#intent');
 const submit=document.querySelector('#submit-button');
 let config={ready:false,event:null,booking:'https://timerex.net/s/core-ai/061de4f3',line:'https://lin.ee/XVR8ySP'};
+let surveyToken='';
 const api=async(action,body)=>{
   const r=await fetch('/api/academy?action='+action,{method:body?'POST':'GET',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(action==='register'?90000:25000)});
   const data=await r.json();if(!r.ok)throw new Error(data.error||'処理を完了できませんでした。');return data;
@@ -16,6 +17,12 @@ function complete(data,title,message){
   document.querySelector('.mobile-cta').hidden=true;links(data);window.scrollTo(0,0);
 }
 async function init(){
+  if(location.pathname.replace(/\/$/,'').endsWith('/survey')){
+    surveyToken=location.hash.slice(1);history.replaceState(null,'','/academy/survey');
+    for(const section of document.querySelectorAll('main>section'))section.hidden=true;
+    document.querySelector('#survey-panel').hidden=false;document.body.classList.add('completed');
+    return;
+  }
   if(location.pathname.replace(/\/$/,'').endsWith('/verify')){
     const token=location.hash.slice(1);history.replaceState(null,'','/academy/verify');
     complete(config,'メールアドレスを確認しています。','しばらくお待ちください。');
@@ -59,5 +66,12 @@ form.addEventListener('submit',async ev=>{
     complete(data,data.registrationStatus==='キャンセル待ち'?'キャンセル待ちの受付を行いました。':'受付処理を行いました。','ご入力のメールアドレスへ確認メールをお送りします。迷惑メールフォルダもご確認ください。');
   }catch(e){error.textContent=(e instanceof Error?e.message:'通信に失敗しました。')+' 入力内容は残っています。';}
   finally{submit.disabled=false;}
+});
+document.querySelector('#survey-form').addEventListener('submit',async ev=>{
+  ev.preventDefault();const target=ev.currentTarget;if(!target.reportValidity())return;
+  const f=new FormData(target),button=target.querySelector('button');button.disabled=true;
+  try{const data=await api('survey',{token:surveyToken,rating:Number(f.get('rating')),note:f.get('note'),consultation:f.has('consultation')});complete(data,'ご回答ありがとうございました。','個別相談をご希望の方は、下のTimeRexから日程をお選びいただけます。');}
+  catch(e){document.querySelector('#survey-error').textContent=e instanceof Error?e.message:'送信できませんでした。';}
+  finally{button.disabled=false;}
 });
 init();
