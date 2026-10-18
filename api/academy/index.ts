@@ -72,7 +72,7 @@ async function verify(req:VercelRequest,res:VercelResponse) {
     await redis(['SET',PREFIX+'verified:'+hash(session),v.leadId,'EX',3600]);
     await redis(['DEL',PREFIX+'emailverify:'+hash(token)]);
     res.setHeader('Set-Cookie',`academy_verified=${session}; HttpOnly; Secure; SameSite=Lax; Path=/api/academy; Max-Age=3600`);
-    return json(res,{ok:true,...await settings(),lineLogin:!!process.env.LINE_LOGIN_CHANNEL_ID});
+    return json(res,{ok:true,...await settings(),lineLogin:!!process.env.LINE_LOGIN_CHANNEL_ID,lineCode:!!process.env.ACADEMY_LINE_BASIC_ID});
   });
 }
 async function lineStart(req:VercelRequest,res:VercelResponse) {
@@ -102,16 +102,50 @@ async function lineCallback(req:VercelRequest,res:VercelResponse) {
   res.setHeader('Set-Cookie',`${OAUTH_COOKIE}=; HttpOnly; Secure; SameSite=Lax; Path=/api/academy; Max-Age=0`);
   return res.redirect(303,'/academy/?line=linked');
 }
+async function lineCode(req:VercelRequest,res:VercelResponse) {
+  if(!sameOrigin(req))return json(res,{error:'送信元が一致しません。'},403);
+  const leadId=await verified(req);if(!leadId)return json(res,{error:'受付メールからメールアドレスを確認してください。'},401);
+  const basicId=process.env.ACADEMY_LINE_BASIC_ID||'';
+  if(!/^@[a-z0-9_-]+$/i.test(basicId))return json(res,{error:'LINE連携を準備しています。'},503);
+  return lock('linecode-lead:'+leadId,async()=>{
+    const old=await redis(['GET',PREFIX+'linecode-current:'+leadId]);
+    if(old)await redis(['DEL',PREFIX+'linecode:'+old]);
+    const code=opaque(),key=hash(code);
+    await redis(['SET',PREFIX+'linecode:'+key,leadId,'EX',600]);
+    await redis(['SET',PREFIX+'linecode-current:'+leadId,key,'EX',600]);
+    return json(res,{ok:true,url:'https://line.me/R/oaMessage/'+encodeURIComponent(basicId)+'/?'+encodeURIComponent('CORE-LINK '+code),expiresIn:600});
+  });
+}
+async function claimLineCode(code:string,userId:string) {
+  const key=hash(code);
+  return lock('linecode:'+key,async()=>{
+    const leadId=await redis(['GET',PREFIX+'linecode:'+key]);if(!leadId)return;
+    await lock('line:'+hash(userId),async()=>{
+      const others=await query(IDS.leads,{property:'LINE ID',rich_text:{equals:userId}});
+      if(others.some(p=>p.id!==leadId))throw new Error('LINE_ALREADY_LINKED');
+      const lead=await notion('pages/'+leadId),existing=ptext(lead,'LINE ID');
+      if(existing&&existing!==userId)throw new Error('LINE_ALREADY_LINKED');
+      await patch(leadId,{'LINE ID':text(userId),'LINE連携状況':select('連携済み'),'最終接点':date()});
+      const h=hash('line-linked:'+key),retryKey=`${h.slice(0,8)}-${h.slice(8,12)}-4${h.slice(13,16)}-8${h.slice(17,20)}-${h.slice(20,32)}`;
+      await enqueue('line-linked:'+key,{kind:'line-linked',userId,retryKey});
+      // Consuming a code does not opt the customer into marketing.
+      await redis(['DEL',PREFIX+'linecode:'+key]);
+    });
+  });
+}
 async function webhook(req:VercelRequest,res:VercelResponse) {
   if(!process.env.LINE_CHANNEL_SECRET)return json(res,{error:'LINE_NOT_CONFIGURED'},503);
   const raw=typeof req.body==='string'?req.body:Buffer.isBuffer(req.body)?req.body.toString('utf8'):null;
   // Raw body is mandatory. Never reconstruct JSON before signature verification.
   if(raw===null||!signature(raw,process.env.LINE_CHANNEL_SECRET,String(req.headers['x-line-signature']||'')))return json(res,{error:'INVALID_SIGNATURE'},401);
   const body=JSON.parse(raw);if(!Array.isArray(body.events))return json(res,{error:'INVALID_EVENTS'},400);
+  if(process.env.ACADEMY_LINE_DESTINATION&&body.destination!==process.env.ACADEMY_LINE_DESTINATION)return json(res,{error:'INVALID_DESTINATION'},403);
   for(const e of body.events){
     if(!e.webhookEventId||!e.source?.userId)continue;
     await lock('webhook:'+e.webhookEventId,async()=>{
       if(await redis(['GET',PREFIX+'lineevent:'+e.webhookEventId]))return;
+      const code=e.type==='message'&&e.message?.type==='text'?String(e.message.text).trim().match(/^CORE-LINK ([a-f0-9]{64})$/)?.[1]:null;
+      if(code)await claimLineCode(code,e.source.userId);
       const leads=await query(IDS.leads,{property:'LINE ID',rich_text:{equals:e.source.userId}});
       for(const lead of leads){
         if(e.type==='unfollow'||(e.type==='message'&&e.message?.type==='text'&&/^(停止|配信停止|STOP)$/i.test(e.message.text.trim()))){
@@ -122,6 +156,7 @@ async function webhook(req:VercelRequest,res:VercelResponse) {
       await redis(['SET',PREFIX+'lineevent:'+e.webhookEventId,'done','EX',604800]);
     });
   }
+  await drainJobs();
   return json(res,{ok:true});
 }
 async function drainJobs() {
@@ -129,7 +164,10 @@ async function drainJobs() {
   for(const key of keys.slice(0,20))try{await lock('job:'+key,async()=>{
     const raw=await redis(['GET',PREFIX+'job:'+key]);if(!raw){await redis(['SREM',PREFIX+'jobs',key]);return;}
     const j=JSON.parse(raw);
-    if(j.kind==='receipt'){
+    if(j.kind==='line-linked'){
+      const s=await settings();
+      await linePush(j.userId,'【CORE Academy】申込情報とLINEの連携が完了しました。\n無料個別相談の予約：'+s.booking+'\n\n配信停止をご希望の場合は「配信停止」と送信してください。',j.retryKey);
+    }else if(j.kind==='receipt'){
       const s=await settings();
       await redis(['SET',PREFIX+'emailverify:'+hash(j.token),JSON.stringify({leadId:j.leadId,registrationId:j.registrationId,marketing:j.marketing,consultation:j.consultation}),'EX',86400]);
       await mail(j.to,'【CORE Academy】受付とメール確認のご案内',`CORE Academyへのお申し込みありがとうございます。\n受付区分：${j.status}\n\nメール確認・LINE連携はこちら（24時間有効）：\n${origin()}/academy/verify#${j.token}\n\n無料個別相談の日程予約：\n${s.booking}\n\n公式LINE：${s.line}\n\n会場・料金等の確定情報は別途ご案内します。\n株式会社CORE / info@core-ai.jp`,key);
@@ -236,13 +274,20 @@ export default async function handler(req:VercelRequest,res:VercelResponse) {
     }
     if(action==='register'&&req.method==='POST')return await register(req,res);
     if(action==='verify'&&req.method==='POST')return await verify(req,res);
+    if(action==='line-code'&&req.method==='POST')return await lineCode(req,res);
     if(action==='survey'&&req.method==='POST')return await survey(req,res);
     if(action==='line-start'&&req.method==='GET')return await lineStart(req,res);
     if(action==='line-callback'&&req.method==='GET')return await lineCallback(req,res);
     if(action==='webhook'&&req.method==='POST')return await webhook(req,res);
-    if(action==='jobs'&&req.method==='GET'){
+    if((action==='jobs'||action==='health')&&req.method==='GET'){
       const secret=process.env.CRON_SECRET;
       if(!secret||!equal(String(req.headers.authorization||''),'Bearer '+secret))return json(res,{error:'UNAUTHORIZED'},401);
+      if(action==='health'){
+        const sources:Record<string,unknown>={};
+        for(const [name,id] of Object.entries(IDS))if(id){try{const ds=await notion('data_sources/'+id);sources[name]={ok:true,fields:Object.keys(ds.properties||{})};}catch(e){sources[name]={ok:false,error:e instanceof Error?e.message:'ERROR'};}}
+        const storage=await redis(['PING']);
+        return json(res,{ok:true,sources,storage:storage==='PONG',line:!!process.env.LINE_CHANNEL_ACCESS_TOKEN&&!!process.env.LINE_CHANNEL_SECRET,enabled:configured()});
+      }
       return json(res,{ok:true,jobs:await drainJobs(),notifications:await scheduledNotifications(),invitations:await nextSessionInvitations(),deals:await syncCommercialLeads()});
     }
     return json(res,{error:'METHOD_NOT_ALLOWED'},405);
