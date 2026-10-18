@@ -26,7 +26,7 @@ async function init(){
   if(location.pathname.replace(/\/$/,'').endsWith('/verify')){
     const token=location.hash.slice(1);history.replaceState(null,'','/academy/verify');
     complete(config,'メールアドレスを確認しています。','しばらくお待ちください。');
-    try{const data=await api('verify',{token});complete(data,'メール確認が完了しました。','ご希望の方は、LINE連携や個別相談の日程予約へお進みください。');document.querySelector('#line-login').hidden=!data.lineLogin;}
+    try{const data=await api('verify',{token});complete(data,'メール確認が完了しました。','ご希望の方は、LINE連携や個別相談の日程予約へお進みください。');document.querySelector('#line-login').hidden=!data.lineLogin;document.querySelector('#line-code').hidden=!data.lineCode;}
     catch(e){complete(config,'メール確認を完了できませんでした。',e instanceof Error?e.message:'受付メールをご確認ください。');}
     return;
   }
@@ -75,3 +75,10 @@ document.querySelector('#survey-form').addEventListener('submit',async ev=>{
   finally{button.disabled=false;}
 });
 init();
+
+document.querySelector('#line-code').addEventListener('click',async ev=>{
+  const button=ev.currentTarget;button.disabled=true;
+  try{const data=await api('line-code',{});const a=document.querySelector('#line-code-open');a.href=data.url;a.hidden=false;document.querySelector('#line-code-note').textContent='リンクを開き、入力された連携コードをそのまま送信すると紐づきます。コードは10分間・1回限り有効です。';}
+  catch(e){document.querySelector('#line-code-note').textContent=e instanceof Error?e.message:'連携を開始できませんでした。';}
+  finally{button.disabled=false;}
+});
