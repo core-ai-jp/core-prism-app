@@ -130,8 +130,8 @@ export async function mail(to:string,subject:string,body:string,idempotency:stri
     if(!r.ok)throw new Error('MAIL_FAILED');return;
   }
   if(!process.env.GMAIL_USER||!process.env.GMAIL_APP_PASSWORD)throw new Error('MAIL_NOT_CONFIGURED');
-  const {default:nodemailer}=await import('nodemailer');
-  const smtp=nodemailer.createTransport({service:'gmail',auth:{user:process.env.GMAIL_USER,pass:process.env.GMAIL_APP_PASSWORD},connectionTimeout:10000,greetingTimeout:10000,socketTimeout:15000});
+  const module=await import('nodemailer');const nodemailer=module.default??module;
+  const smtp=nodemailer.createTransport({host:'smtp.gmail.com',port:465,secure:true,auth:{user:process.env.GMAIL_USER,pass:process.env.GMAIL_APP_PASSWORD},connectionTimeout:10000,greetingTimeout:10000,socketTimeout:15000});
   await smtp.sendMail({from:process.env.GMAIL_USER,to,subject,text:body,messageId:`<${hash(idempotency)}@core-ai.jp>`});
 }
 export async function linePush(userId:string,message:string,retryKey:string) {
