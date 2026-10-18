@@ -98,6 +98,14 @@ describe('Academy application persistence',()=>{
   it('places a second attendee on the waitlist at capacity',async()=>{
     await call('register',input());const second=await call('register',input({email:'another@example.invalid'}));expect(second.data.registrationStatus).toBe('キャンセル待ち');
   });
+  it('releases a cancelled registration before deciding whether the next applicant is waitlisted',async()=>{
+    await call('register',input());
+    const cancelled=[...pages.values()].find(p=>p.parent?.data_source_id===R);
+    cancelled.properties['参加状況']={select:{name:'キャンセル'}};
+    const next=await call('register',input({email:'next@example.invalid'}));
+    expect(next.code).toBe(200);expect(next.data.registrationStatus).toBe('申込済み');
+    expect(sets.get('academy:seats:'+E)?.size).toBe(1);
+  });
   it('rejects cross-origin requests without external side effects',async()=>{
     const r=await call('register',input(),{headers:{origin:'https://attacker.invalid'}});expect(r.code).toBe(403);expect(kv.size).toBe(0);
   });
