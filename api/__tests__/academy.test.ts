@@ -55,7 +55,7 @@ beforeEach(async()=>{
     }
     throw new Error('Unexpected external request '+url);
   }));
-  core=await import('../academy/_core');handler=(await import('../academy/index')).default;
+  core=await import('../_lib/academy');handler=(await import('../academy/index')).default;
 });
 function input(extra={}){return {name:'テスト担当',company:'テスト株式会社',role:'代表',email:'test@example.invalid',phone:'',industry:'製造',aiLevel:'未導入',challenge:'社内資料の整理',consultation:false,marketing:false,privacy:true,eventId:E,source:'test',website:'',...extra};}
 async function call(action:string,body?:any,extra:any={}){
@@ -75,6 +75,10 @@ describe('Academy validation and public event boundary',()=>{
   it('rejects changed webhook bodies and malformed signature lengths',()=>{
     const body='{"events":[]}',sig=createHmac('sha256','test-secret').update(body).digest('base64');
     expect(core.signature(body,'test-secret',sig)).toBe(true);expect(core.signature(body+' ','test-secret',sig)).toBe(false);expect(core.signature(body,'test-secret','x')).toBe(false);
+  });
+  it('interprets date-only deadlines through the end of the day in Japan',()=>{
+    const p=pages.get(E);const row={...p,properties:{...p.properties,開催日時:{date:{start:'2026-10-25T13:00:00+09:00'}},申込締切:{date:{start:'2026-10-25'}}}};
+    expect(core.publicEvent(row,Date.parse('2026-10-25T12:00:00+09:00'))).not.toBeNull();
   });
 });
 describe('Academy application persistence',()=>{
@@ -101,5 +105,9 @@ describe('Academy application persistence',()=>{
   it('requires the emailed token before LINE identity linking',async()=>{expect((await call('line-start')).code).toBe(401);});
   it('rejects forged webhook events and anonymous job execution',async()=>{
     expect((await call('webhook','{"events":[]}')).code).toBe(401);expect((await call('jobs')).code).toBe(401);
+  });
+  it('requires a valid survey token and does not save arbitrary anonymous feedback',async()=>{
+    const r=await call('survey',{token:'a'.repeat(64),rating:5,note:'test',consultation:false});expect(r.code).toBe(410);
+    expect((await call('survey',{token:'bad',rating:6,note:'test',consultation:false})).code).toBe(422);
   });
 });
