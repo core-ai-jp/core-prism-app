@@ -67,3 +67,11 @@ The Notion dashboard displays real rows and explicitly labels unmeasured metrics
 8. Deploy a staged build; verify LP/API/CRM end to end; only then promote after approval.
 
 Notion creates are not transactional. A pending create with an uncertain result is deliberately not blindly retried: reconcile its unique key against Notion, retain the successful ID or resolve the pending marker. Logs contain failure codes, never contact values or secrets. Redis and Notion both hold personal information; protect administrative access and handle deletion/access requests across both. Review retention and implement a cleanup policy before production. SMTP acknowledgements cannot guarantee exactly-once delivery after a transport timeout.
+
+### 既存Messaging APIだけで行う本人紐づけ
+
+`ACADEMY_LINE_BASIC_ID` と `ACADEMY_LINE_DESTINATION` を本番に設定すると、受付メールの確認後にLINE連携コードを発行できます。申込者がリンクを開き、公式LINEへ入力済みのコードを送信して本人のLINEを紐づけます。コードは10分・1回限りで、再発行時には旧コードを失効します。LINE連携で営業配信同意は変更しません。LINE Loginを利用する場合は従来のOAuth設定も利用できます。
+
+既存Webhookがある場合は、元の受信先で署名検証後、同じraw bodyと署名をAcademyの `/api/academy/line-webhook` へ転送します。転送は指定したbotのdestinationだけに限定し、失敗時は既存の自動応答より前に再送可能なエラーを返します。連携コードを一般の自動応答・AI処理へ渡さないでください。
+
+`GET /api/academy?action=health` は `Authorization: Bearer <CRON_SECRET>` が必要な運用確認用です。Notion各データソースへの接続、Redis、LINE設定の存在だけを返し、APIキー・顧客内容は返しません。
