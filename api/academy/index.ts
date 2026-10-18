@@ -36,7 +36,9 @@ async function register(req:VercelRequest,res:VercelResponse) {
     if(!saga.status){
       let full=false;
       if(event){
-        const current=await query(IDS.registrations,{and:[{property:'開催',relation:{contains:event.id}},{property:'参加状況',select:{equals:'申込済み'}}]});
+        const histories=await query(IDS.registrations,{property:'開催',relation:{contains:event.id}});
+        for(const row of histories)if(['キャンセル','欠席'].includes(row.properties['参加状況']?.select?.name))await redis(['SREM',PREFIX+'seats:'+event.id,ptext(row,'申込ID')]);
+        const current=histories.filter(row=>row.properties['参加状況']?.select?.name==='申込済み');
         const reservations=await redis(['SCARD',PREFIX+'seats:'+event.id]);
         full=event.status==='満席'||Math.max(current.length,reservations)>=event.capacity;
       }
@@ -288,6 +290,8 @@ export default async function handler(req:VercelRequest,res:VercelResponse) {
         const storage=await redis(['PING']);
         return json(res,{ok:true,sources,storage:storage==='PONG',line:!!process.env.LINE_CHANNEL_ACCESS_TOKEN&&!!process.env.LINE_CHANNEL_SECRET,enabled:configured()});
       }
+      // Reconcile operator-entered attendance/cancellations without a website edit.
+      for(const event of await query(IDS.events)){const start=Date.parse(event.properties['開催日時']?.date?.start||'');if(Number.isFinite(start)&&start>Date.now()-172800000)await enqueue('count:'+event.id,{kind:'count',eventId:event.id});}
       return json(res,{ok:true,jobs:await drainJobs(),notifications:await scheduledNotifications(),invitations:await nextSessionInvitations(),deals:await syncCommercialLeads()});
     }
     return json(res,{error:'METHOD_NOT_ALLOWED'},405);
