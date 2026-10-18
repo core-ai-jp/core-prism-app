@@ -6,6 +6,7 @@ const R='33333333-3333-4333-8333-333333333333';
 const S='44444444-4444-4444-8444-444444444444';
 let handler:any,core:any,failCreate=false;
 const kv=new Map<string,any>(),pages=new Map<string,any>(),sets=new Map<string,Set<any>>();
+const linePushes:any[]=[];
 const sendMail=vi.fn(async()=>({messageId:'test'}));
 vi.mock('nodemailer',()=>({default:{createTransport:()=>({sendMail})}}));
 const rich=(s:string)=>({rich_text:[{text:{content:s}}]});
@@ -20,7 +21,7 @@ function match(p:any,f:any):boolean {
   throw new Error('Unsupported filter');
 }
 beforeEach(async()=>{
-  vi.resetModules();vi.unstubAllEnvs();kv.clear();pages.clear();sets.clear();sendMail.mockClear();failCreate=false;
+  vi.resetModules();vi.unstubAllEnvs();kv.clear();pages.clear();sets.clear();sendMail.mockClear();linePushes.length=0;failCreate=false;
   Object.entries({ACADEMY_ENABLED:'true',NOTION_API_KEY:'test',UPSTASH_REDIS_REST_URL:'https://redis.test',UPSTASH_REDIS_REST_TOKEN:'test',ACADEMY_EVENTS_DS:E,ACADEMY_LEADS_DS:L,ACADEMY_REGISTRATIONS_DS:R,ACADEMY_SETTINGS_DS:S,ACADEMY_TASKS_DS:'tasks',GMAIL_USER:'test@example.invalid',GMAIL_APP_PASSWORD:'test',LINE_CHANNEL_SECRET:'test-secret'}).forEach(([k,v])=>vi.stubEnv(k,v));
   pages.set(E,{id:E,parent:{data_source_id:E},properties:{テーマ:{title:[{text:{content:'テスト開催'}}]},開催日時:{date:{start:'2099-10-25T13:00:00+09:00'}},公開状態:{checkbox:true},定員:{number:1},募集状況:{select:{name:'募集中'}},会場:rich('テスト会場'),参加費:rich('未確定')}});
   vi.stubGlobal('fetch',vi.fn(async(url:string,options:any={})=>{
@@ -53,6 +54,7 @@ beforeEach(async()=>{
       if(options.method==='PATCH')p.properties={...p.properties,...b.properties};
       return Response.json(p);
     }
+    if(String(url)==='https://api.line.me/v2/bot/message/push'){linePushes.push(b);return Response.json({});}
     throw new Error('Unexpected external request '+url);
   }));
   core=await import('../_lib/academy');handler=(await import('../academy/index')).default;
@@ -152,5 +154,49 @@ describe('Academy application persistence',()=>{
   it('requires a valid survey token and does not save arbitrary anonymous feedback',async()=>{
     const r=await call('survey',{token:'a'.repeat(64),rating:5,note:'test',consultation:false});expect(r.code).toBe(410);
     expect((await call('survey',{token:'bad',rating:6,note:'test',consultation:false})).code).toBe(422);
+  });
+});
+
+async function lineMessage(text:string,id:string,uid='U-intake-test',type='user'){
+  const raw=JSON.stringify({events:[{type:'message',webhookEventId:id,source:{type,userId:uid},message:{type:'text',text}}]});
+  return call('webhook',raw,{headers:{'x-line-signature':createHmac('sha256','test-secret').update(raw).digest('base64')}});
+}
+describe('Simple applications and LINE three-field intake',()=>{
+  const details='名前：テスト担当\n会社名：LINEテスト株式会社\n業種：製造';
+  it('accepts the four required web fields without inventing optional answers',async()=>{
+    const r=await call('register',input({role:'',phone:'',aiLevel:'',challenge:''}));expect(r.code).toBe(200);
+    const lead=[...pages.values()].find(p=>p.parent?.data_source_id===L);expect(core.ptext(lead,'役職')).toBe('');expect(core.ptext(lead,'AI活用状況')).toBe('');
+  });
+  it('offers the privacy notice before creating a LINE lead and saves one customer/history',async()=>{
+    vi.stubEnv('LINE_CHANNEL_ACCESS_TOKEN','test-token');
+    expect((await lineMessage('Academy申込','start')).code).toBe(200);
+    expect([...pages.values()].filter(p=>p.parent?.data_source_id===L)).toHaveLength(0);
+    expect(linePushes[0].messages[0].text).toContain('プライバシーポリシー');
+    expect((await lineMessage(details,'details')).code).toBe(200);
+    expect((await lineMessage(details,'details')).code).toBe(200);
+    const leads=[...pages.values()].filter(p=>p.parent?.data_source_id===L),regs=[...pages.values()].filter(p=>p.parent?.data_source_id===R);
+    expect(leads).toHaveLength(1);expect(regs).toHaveLength(1);expect(core.ptext(leads[0],'会社名')).toBe('LINEテスト株式会社');expect(core.ptext(leads[0],'LINE ID')).toBe('U-intake-test');
+    expect(leads[0].properties['営業配信同意'].checkbox).toBe(false);expect(leads[0].properties['メール']).toBeUndefined();expect(regs[0].properties['受付通知'].select.name).toBe('送信済み');
+    expect(linePushes).toHaveLength(2);expect(linePushes[1].messages[0].text).toContain('https://timerex.net/s/core-ai/061de4f3');
+    await lineMessage('Academy申込','restart');await lineMessage(details,'repeat-details');
+    expect([...pages.values()].filter(p=>p.parent?.data_source_id===L)).toHaveLength(1);expect([...pages.values()].filter(p=>p.parent?.data_source_id===R)).toHaveLength(1);
+  });
+  it('does not harvest a three-field message without the notice flow or in a group',async()=>{
+    vi.stubEnv('LINE_CHANNEL_ACCESS_TOKEN','test-token');
+    await lineMessage(details,'unsolicited');expect([...pages.values()].filter(p=>p.parent?.data_source_id===L)).toHaveLength(0);
+    await lineMessage('Academy申込','group-start','U-group','group');await lineMessage(details,'group-details','U-group','group');
+    expect([...pages.values()].filter(p=>p.parent?.data_source_id===L)).toHaveLength(0);
+  });
+  it('uses the waitlist when a web application has already filled the event',async()=>{
+    vi.stubEnv('LINE_CHANNEL_ACCESS_TOKEN','test-token');await call('register',input());
+    await lineMessage('Academy申込','start');await lineMessage(details,'details');
+    const lineReg=[...pages.values()].find(p=>p.parent?.data_source_id===R&&core.ptext(p,'流入元')==='LINE公式／CORE Academy');
+    expect(lineReg.properties['参加状況'].select.name).toBe('キャンセル待ち');
+  });
+  it('reuses an already linked web customer and attendance without overwriting their identity',async()=>{
+    vi.stubEnv('LINE_CHANNEL_ACCESS_TOKEN','test-token');await call('register',input());
+    const lead=[...pages.values()].find(p=>p.parent?.data_source_id===L);lead.properties['LINE ID']=rich('U-intake-test');
+    await lineMessage('Academy申込','start');await lineMessage(details,'details');
+    expect([...pages.values()].filter(p=>p.parent?.data_source_id===L)).toHaveLength(1);expect([...pages.values()].filter(p=>p.parent?.data_source_id===R)).toHaveLength(1);expect(core.ptext(lead,'氏名')).toBe('テスト担当');
   });
 });

@@ -119,10 +119,10 @@ export function validate(b:any):Input {
   const email=str('email',254,true).normalize('NFKC').toLowerCase();
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new Error('INVALID_email');
   if(b.privacy!==true||typeof b.marketing!=='boolean'||typeof b.consultation!=='boolean')throw new Error('INVALID_CONSENT');
-  const industry=str('industry',40,true),aiLevel=str('aiLevel',40,true);
-  if(!INDUSTRIES.includes(industry)||!AI_LEVELS.includes(aiLevel))throw new Error('INVALID_SELECTION');
+  const industry=str('industry',40,true),aiLevel=str('aiLevel',40);
+  if(!INDUSTRIES.includes(industry)||(aiLevel&&!AI_LEVELS.includes(aiLevel)))throw new Error('INVALID_SELECTION');
   const eventId=str('eventId',60);if(eventId&&!/^[a-f\d-]{32,36}$/i.test(eventId))throw new Error('INVALID_EVENT');
-  return {name:str('name',100,true),company:str('company',150,true),role:str('role',100,true),email,phone:str('phone',40),industry,aiLevel,challenge:str('challenge',1500,true),consultation:b.consultation,marketing:b.marketing,eventId,source:str('source',120)||'direct',privacy:true,website:str('website',200)};
+  return {name:str('name',100,true),company:str('company',150,true),role:str('role',100),email,phone:str('phone',40),industry,aiLevel,challenge:str('challenge',1500),consultation:b.consultation,marketing:b.marketing,eventId,source:str('source',120)||'direct',privacy:true,website:str('website',200)};
 }
 export async function mail(to:string,subject:string,body:string,idempotency:string) {
   // Prefer the existing, configured SMTP account over an unrelated shared Resend key.

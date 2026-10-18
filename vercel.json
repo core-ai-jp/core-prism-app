@@ -206,6 +206,14 @@
       "destination": "/academy/index.html"
     },
     {
+      "source": "/academy/apply",
+      "destination": "/academy/index.html"
+    },
+    {
+      "source": "/academy/apply/",
+      "destination": "/academy/index.html"
+    },
+    {
       "source": "/academy/verify",
       "destination": "/academy/index.html"
     },

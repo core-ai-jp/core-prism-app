@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { randomUUID } from 'node:crypto';
+import {handleLineIntake} from '../_lib/academy-line-intake.js';
 import {IDS,BOOKING,LINE,POLICY,origin,opaque,hash,json,equal,cookie,configured,sameOrigin,redis,lock,notion,query,createOnce,patch,title,text,select,relation,date,ptext,settings,nextEvent,publicEvent,validate,signature,mail,linePush,applicationCount} from '../_lib/academy.js';
 export const config={maxDuration:120};
 const PREFIX='academy:';
@@ -146,14 +147,17 @@ async function webhook(req:VercelRequest,res:VercelResponse) {
     if(!e.webhookEventId||!e.source?.userId)continue;
     await lock('webhook:'+e.webhookEventId,async()=>{
       if(await redis(['GET',PREFIX+'lineevent:'+e.webhookEventId]))return;
-      const code=e.type==='message'&&e.message?.type==='text'?String(e.message.text).trim().match(/^CORE-LINK ([a-f0-9]{64})$/)?.[1]:null;
-      if(code)await claimLineCode(code,e.source.userId);
-      const leads=await query(IDS.leads,{property:'LINE ID',rich_text:{equals:e.source.userId}});
-      for(const lead of leads){
-        if(e.type==='unfollow'||(e.type==='message'&&e.message?.type==='text'&&/^(停止|配信停止|STOP)$/i.test(e.message.text.trim()))){
-          await patch(lead.id,{'営業配信同意':{checkbox:false},'LINE連携状況':select('配信停止')});
+      const intake=await handleLineIntake(e,enqueue);
+      if(!intake){
+        const code=e.type==='message'&&e.message?.type==='text'?String(e.message.text).trim().match(/^CORE-LINK ([a-f0-9]{64})$/)?.[1]:null;
+        if(code)await claimLineCode(code,e.source.userId);
+        const leads=await query(IDS.leads,{property:'LINE ID',rich_text:{equals:e.source.userId}});
+        for(const lead of leads){
+          if(e.type==='unfollow'||(e.type==='message'&&e.message?.type==='text'&&/^(停止|配信停止|STOP)$/i.test(e.message.text.trim()))){
+            await patch(lead.id,{'営業配信同意':{checkbox:false},'LINE連携状況':select('配信停止')});
+          }
+          // Re-follow never silently re-enables consent.
         }
-        // Re-follow never silently re-enables consent.
       }
       await redis(['SET',PREFIX+'lineevent:'+e.webhookEventId,'done','EX',604800]);
     });
@@ -166,7 +170,10 @@ async function drainJobs() {
   for(const key of keys.slice(0,20))try{await lock('job:'+key,async()=>{
     const raw=await redis(['GET',PREFIX+'job:'+key]);if(!raw){await redis(['SREM',PREFIX+'jobs',key]);return;}
     const j=JSON.parse(raw);
-    if(j.kind==='line-linked'){
+    if(j.kind==='line-message'){
+      await linePush(j.userId,j.message,j.retryKey);
+      if(j.registrationId)await patch(j.registrationId,{'受付通知':select('送信済み')});
+    }else if(j.kind==='line-linked'){
       const s=await settings();
       await linePush(j.userId,'【CORE Academy】申込情報とLINEの連携が完了しました。\n無料個別相談の予約：'+s.booking+'\n\n配信停止をご希望の場合は「配信停止」と送信してください。',j.retryKey);
     }else if(j.kind==='receipt'){

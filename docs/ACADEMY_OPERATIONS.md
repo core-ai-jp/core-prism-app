@@ -75,3 +75,17 @@ Notion creates are not transactional. A pending create with an uncertain result 
 既存Webhookがある場合は、元の受信先で署名検証後、同じraw bodyと署名をAcademyの `/api/academy/line-webhook` へ転送します。転送は指定したbotのdestinationだけに限定し、失敗時は既存の自動応答より前に再送可能なエラーを返します。連携コードを一般の自動応答・AI処理へ渡さないでください。
 
 `GET /api/academy?action=health` は `Authorization: Bearer <CRON_SECRET>` が必要な運用確認用です。Notion各データソースへの接続、Redis、LINE設定の存在だけを返し、APIキー・顧客内容は返しません。
+
+### 簡単フォームとLINEの3項目申込
+
+LPの申込ボタンは `/academy/apply` を開きます。Webは会社名・氏名・業種・受付メールの4項目と利用目的の確認が必須です。役職・電話・AI活用状況・課題は任意欄です。未回答を推測して埋めません。
+
+公式LINEの友だち追加時、または「Academy申込」を送信すると、次回開催と利用目的を案内します。案内後30分以内に、次の3行を1通で送るとNotion顧客・参加履歴へ記録し、受付結果とTimeRex予約URLをLINEへ送ります。
+
+```
+名前：山田太郎
+会社名：株式会社サンプル
+業種：製造
+```
+
+署名検証済みの1対1トークだけを受け付けます。友だち追加だけでは顧客登録しません。営業配信同意は初期値オフです。同じLINEユーザーの同じ開催回は重複作成せず、満席ならキャンセル待ちにします。別の未連携メールで作った顧客とは氏名・会社名だけで推測統合しません。
