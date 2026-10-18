@@ -186,6 +186,10 @@
   ],
   "rewrites": [
     {
+      "source": "/academy/brand-visual.svg",
+      "destination": "/academy/brand-visual.svg"
+    },
+    {
       "source": "/academy/survey",
       "destination": "/academy/index.html"
     },
