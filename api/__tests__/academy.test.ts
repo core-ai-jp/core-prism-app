@@ -89,6 +89,12 @@ describe('Academy application persistence',()=>{
     expect(leads).toHaveLength(1);expect(regs).toHaveLength(1);expect(core.ptext(leads[0],'氏名')).toBe('テスト担当');expect(leads[0].properties['営業配信同意'].checkbox).toBe(false);
     expect(sendMail).toHaveBeenCalledTimes(1);expect(JSON.stringify(first.data)).not.toContain('leadId');expect(JSON.stringify(first.data)).not.toContain('verifyToken');
   });
+  it('uses the configured SMTP account even when a shared Resend key is present',async()=>{
+    vi.stubEnv('RESEND_API_KEY','unrelated-shared-key');
+    expect((await call('register',input())).code).toBe(200);
+    expect(sendMail).toHaveBeenCalledTimes(1);
+    expect([...pages.values()].find(p=>p.parent?.data_source_id===R).properties['受付通知'].select.name).toBe('送信済み');
+  });
   it('places a second attendee on the waitlist at capacity',async()=>{
     await call('register',input());const second=await call('register',input({email:'another@example.invalid'}));expect(second.data.registrationStatus).toBe('キャンセル待ち');
   });
