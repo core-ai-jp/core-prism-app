@@ -19,6 +19,7 @@ Set these server-only variables on the verified existing project, never in VITE-
 
 | Variable | Purpose |
 | --- | --- |
+| `ACADEMY_ENABLED` | Set `true` only after CRM access controls, runtime credentials and launch approval are confirmed. Default is closed. |
 | `NOTION_API_KEY` | Existing authorized integration; access only to the Academy data and required existing tasks/deals |
 | `ACADEMY_EVENTS_DS` | Event data source ID |
 | `ACADEMY_LEADS_DS` | Lead data source ID |
@@ -57,7 +58,7 @@ The Notion dashboard displays real rows and explicitly labels unmeasured metrics
 ## Acceptance before launch
 
 1. Verify team/project/domains and latest production commit. Keep unrelated edits isolated. Obtain approval for the user-visible production release.
-2. Confirm the integration can query and write the four new data sources and required tasks/deals with restricted permissions.
+2. Confirm the integration can query and write the four new data sources and required tasks/deals with restricted permissions. Verify that logged-out visitors cannot read any customer/contact/attendance database or linked views. Parent-page sharing may be inherited; a filter is not an access boundary. Do not load personal information before verifying these permissions.
 3. Test a designated non-production application through the browser: actual Notion rows, duplicate retry, second event history, capacity/waitlist, notification, and consultation task.
 4. Confirm email delivery; follow the actual emailed token; verify consent, LINE Login, nonce/state rejection, account association, unfollow/STOP and redelivery.
 5. Test survey save and consultation follow-up. Confirm the actual TimeRex booking is completed; do not mark it confirmed from navigation alone. Booking webhook/calendar reconciliation remains unimplemented.
