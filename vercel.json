@@ -183,11 +183,11 @@
   "rewrites": [
     {
       "source": "/intelligence",
-      "destination": "/intelligence/index.html"
+      "destination": "/intelligence.html"
     },
     {
       "source": "/intelligence/",
-      "destination": "/intelligence/index.html"
+      "destination": "/intelligence.html"
     },
     {
       "source": "/intelligence/:asset",

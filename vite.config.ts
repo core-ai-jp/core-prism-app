@@ -17,6 +17,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        intelligence: resolve(__dirname, 'intelligence.html'),
         iris: resolve(__dirname, 'iris.html'),
         corp: resolve(__dirname, 'corp.html'),
         corpAdvisory: resolve(__dirname, 'corp-advisory.html'),
