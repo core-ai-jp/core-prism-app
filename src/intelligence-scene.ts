@@ -31,6 +31,7 @@ if (host) {
     const resize = () => { const { width, height } = host.getBoundingClientRect(); renderer.setSize(width, height); camera.aspect = width / height; camera.updateProjectionMatrix(); render(); };
     new ResizeObserver(resize).observe(host); resize();
     host.classList.add('ready');
+    if (toggle) toggle.hidden = false;
     function tick(now: number) {
       frame = 0;
       if (!visible || paused || document.hidden) return;
