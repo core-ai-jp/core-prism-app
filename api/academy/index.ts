@@ -160,7 +160,7 @@ async function webhook(req:VercelRequest,res:VercelResponse) {
   return json(res,{ok:true});
 }
 async function drainJobs() {
-  const keys=await redis(['SMEMBERS',PREFIX+'jobs']);let done=0,failed=0;
+  const keys=await redis(['SMEMBERS',PREFIX+'jobs']);let done=0,failed=0;const failures:{kind:string;code:string}[]=[];
   for(const key of keys.slice(0,20))try{await lock('job:'+key,async()=>{
     const raw=await redis(['GET',PREFIX+'job:'+key]);if(!raw){await redis(['SREM',PREFIX+'jobs',key]);return;}
     const j=JSON.parse(raw);
@@ -183,8 +183,8 @@ async function drainJobs() {
       await createOnce(IDS.tasks,'根拠','academy:'+j.registrationId,{'タスク':title('Academy個別相談：'+ptext(lead,'会社名')+' '+ptext(lead,'氏名')),'根拠':text('academy:'+j.registrationId),'ステータス':select('未着手'),'優先度':select('A'),'種別':select('顧客対応'),'次回確認日':date(),'完了条件':text('TimeRex予約の確定と相談実施を確認する。顧客： https://www.notion.so/'+j.leadId.replaceAll('-',''))});
     }
     await redis(['DEL',PREFIX+'job:'+key]);await redis(['SREM',PREFIX+'jobs',key]);done++;
-  });}catch{failed++;}
-  return {done,failed};
+  });}catch(e){failed++;const code=e&&typeof e==='object'&&'code' in e?String(e.code):e instanceof Error?e.message:'';failures.push({kind:key.split(':')[0],code:/^[A-Z_0-9]+$/.test(code)?code:'JOB_FAILED'});}
+  return {done,failed,failures};
 }
 // Only operator-confirmed commercial stages create a deal. Financial fields are never inferred.
 async function syncCommercialLeads() {
