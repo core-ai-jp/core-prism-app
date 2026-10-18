@@ -181,6 +181,14 @@ describe('Simple applications and LINE three-field intake',()=>{
     await lineMessage('Academy申込','restart');await lineMessage(details,'repeat-details');
     expect([...pages.values()].filter(p=>p.parent?.data_source_id===L)).toHaveLength(1);expect([...pages.values()].filter(p=>p.parent?.data_source_id===R)).toHaveLength(1);
   });
+  it('accepts an authenticated LINE reapplication after cancellation and refreshes only LINE-native details',async()=>{
+    vi.stubEnv('LINE_CHANNEL_ACCESS_TOKEN','test-token');
+    await lineMessage('Academy申込','start');await lineMessage(details,'details');
+    const reg=[...pages.values()].find(p=>p.parent?.data_source_id===R);reg.properties['参加状況']={select:{name:'キャンセル'}};
+    await lineMessage('Academy申込','restart');await lineMessage(details.replace('LINEテスト株式会社','更新した会社'),'reapply');
+    expect(reg.properties['参加状況'].select.name).toBe('申込済み');expect([...pages.values()].filter(p=>p.parent?.data_source_id===R)).toHaveLength(1);
+    const lead=[...pages.values()].find(p=>p.parent?.data_source_id===L);expect(core.ptext(lead,'会社名')).toBe('更新した会社');expect(lead.properties['営業配信同意'].checkbox).toBe(false);
+  });
   it('does not harvest a three-field message without the notice flow or in a group',async()=>{
     vi.stubEnv('LINE_CHANNEL_ACCESS_TOKEN','test-token');
     await lineMessage(details,'unsolicited');expect([...pages.values()].filter(p=>p.parent?.data_source_id===L)).toHaveLength(0);
