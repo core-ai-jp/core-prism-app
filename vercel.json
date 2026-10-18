@@ -186,6 +186,10 @@
   ],
   "rewrites": [
     {
+      "source": "/academy/survey",
+      "destination": "/academy/index.html"
+    },
+    {
       "source": "/academy",
       "destination": "/academy/index.html"
     },
