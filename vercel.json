@@ -55,6 +55,10 @@
     {
       "path": "/api/cron/threads-scheduled-posts",
       "schedule": "10 23 * * *"
+    },
+    {
+      "path": "/api/academy?action=jobs",
+      "schedule": "0 0 * * *"
     }
   ],
   "redirects": [
@@ -181,6 +185,34 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/academy/survey",
+      "destination": "/academy/index.html"
+    },
+    {
+      "source": "/academy",
+      "destination": "/academy/index.html"
+    },
+    {
+      "source": "/academy/",
+      "destination": "/academy/index.html"
+    },
+    {
+      "source": "/academy/thanks",
+      "destination": "/academy/index.html"
+    },
+    {
+      "source": "/academy/verify",
+      "destination": "/academy/index.html"
+    },
+    {
+      "source": "/academy/style.css",
+      "destination": "/academy/style.css"
+    },
+    {
+      "source": "/academy/app.js",
+      "destination": "/academy/app.js"
+    },
     {
       "source": "/intelligence",
       "destination": "/intelligence.html"
