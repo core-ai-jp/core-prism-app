@@ -33,7 +33,7 @@ export function sameOrigin(req: VercelRequest) {
   return typeof o==='string' && [origin(), ...(process.env.ACADEMY_TEST_ORIGIN ? [process.env.ACADEMY_TEST_ORIGIN] : [])].includes(o);
 }
 export function configured() {
-  return Boolean(process.env.NOTION_API_KEY && process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN && IDS.events && IDS.leads && IDS.registrations && IDS.settings);
+  return Boolean(process.env.ACADEMY_ENABLED==='true' && process.env.NOTION_API_KEY && process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN && IDS.events && IDS.leads && IDS.registrations && IDS.settings);
 }
 export function cookie(req: VercelRequest, name: string) {
   return (req.headers.cookie||'').split(';').map(s=>s.trim()).find(s=>s.startsWith(name+'='))?.slice(name.length+1)||'';
