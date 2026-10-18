@@ -21,7 +21,7 @@ function match(p:any,f:any):boolean {
 }
 beforeEach(async()=>{
   vi.resetModules();vi.unstubAllEnvs();kv.clear();pages.clear();sets.clear();sendMail.mockClear();failCreate=false;
-  Object.entries({NOTION_API_KEY:'test',UPSTASH_REDIS_REST_URL:'https://redis.test',UPSTASH_REDIS_REST_TOKEN:'test',ACADEMY_EVENTS_DS:E,ACADEMY_LEADS_DS:L,ACADEMY_REGISTRATIONS_DS:R,ACADEMY_SETTINGS_DS:S,ACADEMY_TASKS_DS:'tasks',GMAIL_USER:'test@example.invalid',GMAIL_APP_PASSWORD:'test',LINE_CHANNEL_SECRET:'test-secret'}).forEach(([k,v])=>vi.stubEnv(k,v));
+  Object.entries({ACADEMY_ENABLED:'true',NOTION_API_KEY:'test',UPSTASH_REDIS_REST_URL:'https://redis.test',UPSTASH_REDIS_REST_TOKEN:'test',ACADEMY_EVENTS_DS:E,ACADEMY_LEADS_DS:L,ACADEMY_REGISTRATIONS_DS:R,ACADEMY_SETTINGS_DS:S,ACADEMY_TASKS_DS:'tasks',GMAIL_USER:'test@example.invalid',GMAIL_APP_PASSWORD:'test',LINE_CHANNEL_SECRET:'test-secret'}).forEach(([k,v])=>vi.stubEnv(k,v));
   pages.set(E,{id:E,parent:{data_source_id:E},properties:{テーマ:{title:[{text:{content:'テスト開催'}}]},開催日時:{date:{start:'2099-10-25T13:00:00+09:00'}},公開状態:{checkbox:true},定員:{number:1},募集状況:{select:{name:'募集中'}},会場:rich('テスト会場'),参加費:rich('未確定')}});
   vi.stubGlobal('fetch',vi.fn(async(url:string,options:any={})=>{
     const b=options.body?JSON.parse(options.body):{};
