@@ -125,7 +125,8 @@ export function validate(b:any):Input {
   return {name:str('name',100,true),company:str('company',150,true),role:str('role',100,true),email,phone:str('phone',40),industry,aiLevel,challenge:str('challenge',1500,true),consultation:b.consultation,marketing:b.marketing,eventId,source:str('source',120)||'direct',privacy:true,website:str('website',200)};
 }
 export async function mail(to:string,subject:string,body:string,idempotency:string) {
-  if(process.env.RESEND_API_KEY){
+  // Prefer the existing, configured SMTP account over an unrelated shared Resend key.
+  if(process.env.RESEND_API_KEY&&!(process.env.GMAIL_USER&&process.env.GMAIL_APP_PASSWORD)){
     const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${process.env.RESEND_API_KEY}`,'Content-Type':'application/json','Idempotency-Key':idempotency},body:JSON.stringify({from:process.env.EMAIL_FROM||'CORE <info@core-ai.jp>',to,subject,text:body}),signal:AbortSignal.timeout(10000)});
     if(!r.ok)throw new Error('MAIL_FAILED');return;
   }
