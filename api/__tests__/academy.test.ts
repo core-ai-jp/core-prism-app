@@ -103,6 +103,35 @@ describe('Academy application persistence',()=>{
     expect((await call('register',input())).code).toBe(503);expect([...pages.values()].filter(p=>p.parent?.data_source_id===L)).toHaveLength(0);
   });
   it('requires the emailed token before LINE identity linking',async()=>{expect((await call('line-start')).code).toBe(401);});
+  it('links only a verified email with a single-use code and preserves marketing consent',async()=>{
+    vi.stubEnv('ACADEMY_LINE_BASIC_ID','@485jvtkw');
+    expect((await call('line-code',{})).code).toBe(401);
+    await call('register',input());
+    const verification=[...kv.entries()].find(([k])=>k.startsWith('academy:emailverify:'))!;
+    const data=JSON.parse(verification[1]);const token=core.opaque();kv.set('academy:emailverify:'+core.hash(token),JSON.stringify(data));
+    const checked=await call('verify',{token});expect(checked.code).toBe(200);
+    const headers={origin:'https://www.core-ai.jp',cookie:checked.headers['Set-Cookie'].split(';')[0]};
+    const codeResponse=await call('line-code',{}, {headers});expect(codeResponse.code).toBe(200);
+    const message=decodeURIComponent(codeResponse.data.url.split('/?')[1]);
+    const raw=JSON.stringify({events:[{webhookEventId:'link-test',type:'message',source:{userId:'U-test'},message:{type:'text',text:message}}]});
+    const sig=createHmac('sha256','test-secret').update(raw).digest('base64');
+    expect((await call('webhook',raw,{headers:{'x-line-signature':sig}})).code).toBe(200);
+    expect((await call('webhook',raw,{headers:{'x-line-signature':sig}})).code).toBe(200);
+    const lead=pages.get(data.leadId);expect(core.ptext(lead,'LINE ID')).toBe('U-test');expect(lead.properties['営業配信同意'].checkbox).toBe(false);
+    expect([...kv.keys()].filter(k=>k.startsWith('academy:linecode:'))).toHaveLength(0);
+    const stolen=JSON.stringify({events:[{webhookEventId:'reused-code',type:'message',source:{userId:'U-other'},message:{type:'text',text:message}}]});
+    await call('webhook',stolen,{headers:{'x-line-signature':createHmac('sha256','test-secret').update(stolen).digest('base64')}});
+    expect(core.ptext(lead,'LINE ID')).toBe('U-test');
+  });
+  it('revokes earlier link codes and refuses the wrong LINE destination',async()=>{
+    vi.stubEnv('ACADEMY_LINE_BASIC_ID','@485jvtkw');
+    const session=core.opaque();kv.set('academy:verified:'+core.hash(session),'lead-test');
+    const headers={origin:'https://www.core-ai.jp',cookie:'academy_verified='+session};
+    const first=await call('line-code',{}, {headers});const old=decodeURIComponent(first.data.url.split('/?')[1]).split(' ')[1];
+    await call('line-code',{}, {headers});expect(kv.has('academy:linecode:'+core.hash(old))).toBe(false);
+    vi.stubEnv('ACADEMY_LINE_DESTINATION','correct-bot');const raw=JSON.stringify({destination:'wrong-bot',events:[]});
+    expect((await call('webhook',raw,{headers:{'x-line-signature':createHmac('sha256','test-secret').update(raw).digest('base64')}})).code).toBe(403);
+  });
   it('rejects forged webhook events and anonymous job execution',async()=>{
     expect((await call('webhook','{"events":[]}')).code).toBe(401);expect((await call('jobs')).code).toBe(401);
   });
