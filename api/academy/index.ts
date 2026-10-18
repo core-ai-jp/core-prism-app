@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { randomUUID } from 'node:crypto';
-import {IDS,BOOKING,LINE,POLICY,origin,opaque,hash,json,equal,cookie,configured,sameOrigin,redis,lock,notion,query,find,createOnce,patch,title,text,select,relation,date,ptext,settings,nextEvent,publicEvent,validate,signature,mail,linePush} from './_core.js';
+import {IDS,BOOKING,LINE,POLICY,origin,opaque,hash,json,equal,cookie,configured,sameOrigin,redis,lock,notion,query,createOnce,patch,title,text,select,relation,date,ptext,settings,nextEvent,publicEvent,validate,signature,mail,linePush,applicationCount} from '../_lib/academy.js';
 export const config={maxDuration:120};
 const PREFIX='academy:';
 const OAUTH_COOKIE='academy_oauth';
@@ -25,7 +25,7 @@ async function register(req:VercelRequest,res:VercelResponse) {
     let saga=JSON.parse(await redis(['GET',PREFIX+'registration:'+regKey])||'null');
     if(saga?.done)return saga;
     // Freeze the first payload. A repeated anonymous request cannot change existing identity or consent.
-    if(!saga){saga={input:b,regKey,created:new Date().toISOString()};await redis(['SET',PREFIX+'registration:'+regKey,JSON.stringify(saga)]);}
+    if(!saga){saga={input:b,regKey,created:new Date().toISOString(),policy:POLICY};await redis(['SET',PREFIX+'registration:'+regKey,JSON.stringify(saga)]);}
     const input=saga.input;
     let event:any=null;
     if(input.eventId){event=publicEvent(await notion('pages/'+input.eventId));if(!event)throw new Error('EVENT_CLOSED');}
@@ -48,8 +48,9 @@ async function register(req:VercelRequest,res:VercelResponse) {
     saga.registrationId=registration.id;
     if(!saga.verifyToken)saga.verifyToken=opaque();
     await redis(['SET',PREFIX+'emailverify:'+hash(saga.verifyToken),JSON.stringify({leadId:saga.leadId,registrationId:registration.id,marketing:input.marketing,consultation:input.consultation}),'EX',86400]);
-    await enqueue('receipt:'+regKey,{kind:'receipt',to:input.email,token:saga.verifyToken,registrationId:registration.id,status:saga.status,eventId:event?.id||null,leadId:saga.leadId});
+    await enqueue('receipt:'+regKey,{kind:'receipt',to:input.email,token:saga.verifyToken,registrationId:registration.id,status:saga.status,eventId:event?.id||null,leadId:saga.leadId,marketing:input.marketing,consultation:input.consultation});
     if(input.consultation)await enqueue('task:'+regKey,{kind:'task',leadId:saga.leadId,registrationId:registration.id});
+    if(event)await enqueue('count:'+event.id,{kind:'count',eventId:event.id});
     saga.done=true;await redis(['SET',PREFIX+'registration:'+regKey,JSON.stringify(saga)]);
     return saga;
   }));
@@ -130,8 +131,15 @@ async function drainJobs() {
     const j=JSON.parse(raw);
     if(j.kind==='receipt'){
       const s=await settings();
+      await redis(['SET',PREFIX+'emailverify:'+hash(j.token),JSON.stringify({leadId:j.leadId,registrationId:j.registrationId,marketing:j.marketing,consultation:j.consultation}),'EX',86400]);
       await mail(j.to,'【CORE Academy】受付とメール確認のご案内',`CORE Academyへのお申し込みありがとうございます。\n受付区分：${j.status}\n\nメール確認・LINE連携はこちら（24時間有効）：\n${origin()}/academy/verify#${j.token}\n\n無料個別相談の日程予約：\n${s.booking}\n\n公式LINE：${s.line}\n\n会場・料金等の確定情報は別途ご案内します。\n株式会社CORE / info@core-ai.jp`,key);
       await patch(j.registrationId,{'受付通知':select('送信済み')});
+    }else if(j.kind==='count'){
+      await lock('event:'+j.eventId,async()=>{
+        const rows=await query(IDS.registrations,{property:'開催',relation:{contains:j.eventId}});
+        for(const row of rows)if(['キャンセル','欠席'].includes(row.properties['参加状況']?.select?.name))await redis(['SREM',PREFIX+'seats:'+j.eventId,ptext(row,'申込ID')]);
+        await patch(j.eventId,{'申込数':{number:await applicationCount(j.eventId)}});
+      });
     }else if(j.kind==='task'){
       const lead=await notion('pages/'+j.leadId);
       await createOnce(IDS.tasks,'根拠','academy:'+j.registrationId,{'タスク':title('Academy個別相談：'+ptext(lead,'会社名')+' '+ptext(lead,'氏名')),'根拠':text('academy:'+j.registrationId),'ステータス':select('未着手'),'優先度':select('A'),'種別':select('顧客対応'),'次回確認日':date(),'完了条件':text('TimeRex予約の確定と相談実施を確認する。顧客： https://www.notion.so/'+j.leadId.replaceAll('-',''))});
@@ -140,26 +148,82 @@ async function drainJobs() {
   });}catch{failed++;}
   return {done,failed};
 }
+// Only operator-confirmed commercial stages create a deal. Financial fields are never inferred.
+async function syncCommercialLeads() {
+  if(!IDS.deals)return 0;
+  const leads=await query(IDS.leads,{or:[{property:'営業ステータス',select:{equals:'商談中'}},{property:'営業ステータス',select:{equals:'提案中'}}]});
+  let linked=0;
+  for(const lead of leads.slice(0,20))await lock('lead:'+ptext(lead,'顧客キー'),async()=>{
+    if(lead.properties['関連案件']?.relation?.length)return;
+    const stage=lead.properties['営業ステータス']?.select?.name;
+    const deal=await createOnce(IDS.deals,'情報源','CORE Academy:'+lead.id,{'案件名':title('CORE Academy｜'+ptext(lead,'会社名')+' 個別相談'),'情報源':text('CORE Academy:'+lead.id),'会社・顧客':text(ptext(lead,'会社名')),'業種':text(lead.properties['業種']?.select?.name||''),'窓口':text(ptext(lead,'氏名')),'顧客ニーズ':text(ptext(lead,'AI課題')),'進捗':select(stage),'最終接点':date(),'次回アクション':text('相談内容を確認し提案範囲を決定する')});
+    await patch(lead.id,{'関連案件':relation(deal.id)});linked++;
+  });
+  return linked;
+}
 async function scheduledNotifications() {
   const events=await query(IDS.events),s=await settings();let sent=0;
   for(const event of events){
     const start=Date.parse(event.properties['開催日時']?.date?.start||'');
     const until=start-Date.now();const kind=until>0&&until<=129600000?'before':until<0&&until>=-172800000?'after':null;
     if(!kind)continue;
+    if(kind==='before'&&(!event.properties['公開状態']?.checkbox||!['募集中','満席'].includes(event.properties['募集状況']?.select?.name)))continue;
     const regs=await query(IDS.registrations,{and:[{property:'開催',relation:{contains:event.id}},{property:'参加状況',select:{equals:kind==='before'?'申込済み':'参加済み'}}]});
     for(const reg of regs){
       const leadId=reg.properties['顧客']?.relation?.[0]?.id;if(!leadId)continue;
       const lead=await notion('pages/'+leadId),uid=ptext(lead,'LINE ID');
       if(!uid||lead.properties['LINE連携状況']?.select?.name!=='連携済み'||!lead.properties['営業配信同意']?.checkbox)continue;
-      if(kind==='after'&&!s.survey)continue;
-      const key=PREFIX+'sent:'+reg.id+':'+kind;
+      const key=PREFIX+'sent:'+reg.id+':'+kind+':'+start;
       await lock(key,async()=>{
         if(await redis(['GET',key]))return;
         let retryKey=await redis(['GET',key+':retry']);if(!retryKey){retryKey=randomUUID();await redis(['SET',key+':retry',retryKey]);}
-        const message=kind==='before'?`CORE Academyの開催が近づいています。\n${ptext(event,'テーマ')}\n${new Date(start).toLocaleString('ja-JP',{timeZone:'Asia/Tokyo'})}\n${ptext(event,'会場')}`:`CORE Academyへのご参加ありがとうございました。\nアンケート：${s.survey}\n無料個別相談：${s.booking}\n配信停止は「停止」と送信してください。`;
+        let survey=s.survey;
+        if(kind==='after'&&!survey){
+          let token=await redis(['GET',PREFIX+'surveyfor:'+reg.id]);
+          if(!token){token=opaque();await redis(['SET',PREFIX+'surveyfor:'+reg.id,token,'EX',2592000]);}
+          await redis(['SET',PREFIX+'survey:'+hash(token),JSON.stringify({leadId,registrationId:reg.id}),'EX',2592000]);
+          survey=origin()+'/academy/survey#'+token;
+        }
+        const message=kind==='before'?`CORE Academyの開催が近づいています。\n${ptext(event,'テーマ')}\n${new Date(start).toLocaleString('ja-JP',{timeZone:'Asia/Tokyo'})}\n${ptext(event,'会場')}`:`CORE Academyへのご参加ありがとうございました。\nアンケート：${survey}\n無料個別相談：${s.booking}\n配信停止は「停止」と送信してください。`;
         await linePush(uid,message,retryKey);await redis(['SET',key,'done']);await patch(reg.id,{[kind==='before'?'前日通知':'事後通知']:{checkbox:true}});sent++;
       });
     }
+  }
+  return sent;
+}
+async function survey(req:VercelRequest,res:VercelResponse){
+  if(!sameOrigin(req))return json(res,{error:'送信元が一致しません。'},403);
+  const {token,rating,note,consultation}=req.body||{};
+  if(typeof token!=='string'||!/^[a-f\d]{64}$/.test(token)||![1,2,3,4,5].includes(rating)||typeof note!=='string'||note.length>1500||typeof consultation!=='boolean')return json(res,{error:'入力内容を確認してください。'},422);
+  return lock('survey:'+hash(token),async()=>{
+    const raw=await redis(['GET',PREFIX+'survey:'+hash(token)]);if(!raw)return json(res,{error:'回答用リンクの有効期限が切れています。'},410);
+    const v=JSON.parse(raw);
+    await patch(v.registrationId,{'アンケート':text('満足度 '+rating+'/5\n'+note),'相談希望':{checkbox:consultation}});
+    if(consultation){
+      const lead=await notion('pages/'+v.leadId);const early=['新規リード','申込済み','参加済み'].includes(lead.properties['営業ステータス']?.select?.name);
+      await patch(v.leadId,{'相談希望':{checkbox:true},...(early?{'営業ステータス':select('相談希望')}:{})});
+      await enqueue('task:'+v.registrationId,{kind:'task',leadId:v.leadId,registrationId:v.registrationId});
+    }
+    await redis(['DEL',PREFIX+'survey:'+hash(token)]);return json(res,{ok:true,...await settings()});
+  });
+}
+async function nextSessionInvitations(){
+  if(!process.env.LINE_CHANNEL_ACCESS_TOKEN)return 0;
+  const event=await nextEvent();if(!event||event.status==='満席')return 0;
+  const leads=await query(IDS.leads,{and:[{property:'営業配信同意',checkbox:{equals:true}},{property:'LINE連携状況',select:{equals:'連携済み'}}]});
+  const registered=await query(IDS.registrations,{property:'開催',relation:{contains:event.id}});
+  const existing=new Set(registered.flatMap(p=>(p.properties['顧客']?.relation||[]).map((r:any)=>r.id)));
+  let sent=0;
+  for(const lead of leads){
+    if(sent>=20)break;if(existing.has(lead.id))continue;
+    const uid=ptext(lead,'LINE ID');if(!uid)continue;
+    const key=PREFIX+'invite:'+event.id+':'+event.start+':'+lead.id;
+    await lock(key,async()=>{
+      if(await redis(['GET',key]))return;
+      let retry=await redis(['GET',key+':retry']);if(!retry){retry=randomUUID();await redis(['SET',key+':retry',retry]);}
+      await linePush(uid,`CORE Academy 次回開催のご案内\n${event.theme}\n${new Date(event.start).toLocaleString('ja-JP',{timeZone:'Asia/Tokyo'})}\n${event.venue}\n参加費：${event.fee}\n詳細・申込：${origin()}/academy/\n配信停止は「停止」と送信してください。`,retry);
+      await redis(['SET',key,'done']);sent++;
+    });
   }
   return sent;
 }
@@ -172,13 +236,14 @@ export default async function handler(req:VercelRequest,res:VercelResponse) {
     }
     if(action==='register'&&req.method==='POST')return await register(req,res);
     if(action==='verify'&&req.method==='POST')return await verify(req,res);
+    if(action==='survey'&&req.method==='POST')return await survey(req,res);
     if(action==='line-start'&&req.method==='GET')return await lineStart(req,res);
     if(action==='line-callback'&&req.method==='GET')return await lineCallback(req,res);
     if(action==='webhook'&&req.method==='POST')return await webhook(req,res);
     if(action==='jobs'&&req.method==='GET'){
       const secret=process.env.CRON_SECRET;
       if(!secret||!equal(String(req.headers.authorization||''),'Bearer '+secret))return json(res,{error:'UNAUTHORIZED'},401);
-      return json(res,{ok:true,jobs:await drainJobs(),notifications:await scheduledNotifications()});
+      return json(res,{ok:true,jobs:await drainJobs(),notifications:await scheduledNotifications(),invitations:await nextSessionInvitations(),deals:await syncCommercialLeads()});
     }
     return json(res,{error:'METHOD_NOT_ALLOWED'},405);
   }catch(e){
