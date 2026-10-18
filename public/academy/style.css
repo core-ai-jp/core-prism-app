@@ -11,3 +11,7 @@
 .academy-poster-actions .text-link{display:block;margin-top:16px}
 .academy-poster-actions .fine{margin-bottom:0}
 @media(max-width:760px){.academy-poster-hero{padding-bottom:26px}.academy-poster-actions{padding-top:20px}.academy-poster-actions .button{width:100%}}
+
+.optional-fields{margin:18px 0;border:1px solid #bfccd9;border-radius:6px;padding:16px}.optional-fields summary{cursor:pointer;font-size:13px;font-weight:600}.optional-fields[open] summary{margin-bottom:16px}.form-page .apply-section{min-height:calc(100svh - 80px)}.form-page header nav>a:first-child{display:none}
+
+[hidden]{display:none!important}

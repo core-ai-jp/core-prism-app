@@ -17,6 +17,11 @@ function complete(data,title,message){
   document.querySelector('.mobile-cta').hidden=true;links(data);window.scrollTo(0,0);
 }
 async function init(){
+  if(location.pathname.replace(/\/$/,'').endsWith('/apply')){
+    for(const section of document.querySelectorAll('main>section'))section.hidden=section.id!=='apply';
+    document.querySelector('.mobile-cta').hidden=true;document.body.classList.add('form-page');
+    document.querySelector('#apply h2').textContent='CORE Academy 参加申し込み';
+  }
   if(location.pathname.replace(/\/$/,'').endsWith('/survey')){
     surveyToken=location.hash.slice(1);history.replaceState(null,'','/academy/survey');
     for(const section of document.querySelectorAll('main>section'))section.hidden=true;
