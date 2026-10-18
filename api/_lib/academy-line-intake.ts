@@ -1,4 +1,4 @@
-import {IDS,BOOKING,configured,hash,redis,lock,notion,query,createOnce,title,text,select,relation,date,ptext,nextEvent,publicEvent} from './academy.js';
+import {IDS,BOOKING,configured,hash,redis,lock,notion,query,createOnce,patch,title,text,select,relation,date,ptext,nextEvent,publicEvent} from './academy.js';
 
 export function parseLineIntake(value:string) {
   const lines=value.trim().split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
@@ -41,12 +41,16 @@ export async function handleLineIntake(e:any,enqueue:(key:string,value:unknown)=
     if(existing.length>1)throw new Error('DUPLICATE_REQUIRES_REVIEW');
     const key=existing[0]?(ptext(existing[0],'顧客キー')||hash('line:'+uid)):hash('line:'+uid);
     const lead=existing[0]||await createOnce(IDS.leads,'顧客キー',key,{'氏名':title(input!.name),'会社名':text(input!.company),'業種':select(input!.industry),'顧客キー':text(key),'流入元':text('LINE公式／CORE Academy'),'LINE ID':text(uid),'LINE連携状況':select('連携済み'),'営業配信同意':{checkbox:false},'同意日時':date(),'相談希望':{checkbox:false},'営業ステータス':select(event?'申込済み':'新規リード'),'最終接点':date(),'次回アクション':text('開催案内・希望に応じたTimeRex個別相談')});
+    // Only the authenticated LINE-native customer may refresh their three fields.
+    if(key===hash('line:'+uid)&&!lead.properties?.['メール']?.email)await patch(lead.id,{'氏名':title(input!.name),'会社名':text(input!.company),'業種':select(input!.industry),'LINE ID':text(uid),'LINE連携状況':select('連携済み'),'最終接点':date()});
     await lock('event:'+(event?.id||'advance'),async()=>{
       const regKey=hash(key+':'+(event?.id||'advance'));
       const old=await query(IDS.registrations,{property:'申込ID',title:{equals:regKey}});
       if(old.length>1)throw new Error('DUPLICATE_REQUIRES_REVIEW');
       let status=old[0]?.properties['参加状況']?.select?.name||'先行案内';
-      if(!old.length&&event){
+      const reapply=old[0]?.properties['参加状況']?.select?.name==='キャンセル';
+      if(reapply)status=event?'申込済み':'先行案内';
+      if((!old.length||reapply)&&event){
         const histories=await query(IDS.registrations,{property:'開催',relation:{contains:event.id}});
         for(const row of histories)if(['キャンセル','欠席'].includes(row.properties['参加状況']?.select?.name))await redis(['SREM','academy:seats:'+event.id,ptext(row,'申込ID')]);
         const reserved=await redis(['SCARD','academy:seats:'+event.id]);
@@ -54,8 +58,9 @@ export async function handleLineIntake(e:any,enqueue:(key:string,value:unknown)=
         if(status==='申込済み')await redis(['SADD','academy:seats:'+event.id,regKey]);
       }
       const registration=old[0]||await createOnce(IDS.registrations,'申込ID',regKey,{'申込ID':title(regKey),'顧客':relation(lead.id),...(event?{'開催':relation(event.id)}:{}),'申込日':date(),'参加状況':select(status),'相談希望':{checkbox:false},'営業配信同意':{checkbox:false},'流入元':text('LINE公式／CORE Academy'),'フォロー状況':select('未対応'),'受付通知':select('未送信')});
+      if(reapply)await patch(registration.id,{'参加状況':select(status),'申込日':date(),'フォロー状況':select('未対応'),'受付通知':select('未送信')});
       if(event)await enqueue('count:'+event.id,{kind:'count',eventId:event.id});
-      await reply('【CORE Academy】受付しました。\n受付区分：'+status+'\n'+(old.length?'同じ開催回への重複登録は行っていません。\n':'')+'\n無料個別相談をご希望の方は、こちらから井出直毅の空き日程をご予約ください。\n'+BOOKING+'\n\n会場・参加費などの確定条件をご確認いただいてから参加をお決めいただけます。\n営業情報の配信には登録していません。配信停止は「配信停止」と送信してください。',registration.id);
+      await reply('【CORE Academy】受付しました。\n受付区分：'+status+'\n'+(reapply?'再申込として受け付けました。\n':old.length?'同じ開催回への重複登録は行っていません。\n':'')+'\n無料個別相談をご希望の方は、こちらから井出直毅の空き日程をご予約ください。\n'+BOOKING+'\n\n会場・参加費などの確定条件をご確認いただいてから参加をお決めいただけます。\n営業情報の配信には登録していません。配信停止は「配信停止」と送信してください。',registration.id);
     });
   });
   await redis(['DEL',pendingKey]);
