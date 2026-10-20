@@ -70,4 +70,13 @@ it('preserves a newer subscription problem when an old invoice event arrives', a
   await deliver('customer.subscription.updated', { id: 'sub_test', customer: 'cus_test', status: 'unpaid' }, 300);
   await deliver('invoice.finalized', invoice('in_old', 100), 200);
   expect(state.record.status).toBe('payment_failed');
+  await deliver('customer.subscription.updated', { id: 'sub_test', customer: 'cus_test', status: 'active' }, 400);
+  expect(state.record.status).toBe('active');
+});
+it('retries an early card invoice and applies it after the checkout mapping is saved', async () => {
+  const early = { ...invoice('in_first', 100), subscription: 'sub_new', status: 'paid', amount_paid: 74800, subscription_details: { metadata: { studio_application: 'FILM-test' } } };
+  expect((await deliver('invoice.paid', early, 100)).code).toBe(503);
+  await deliver('checkout.session.completed', { id: 'cs_test', customer: 'cus_test', subscription: 'sub_new', payment_status: 'paid' }, 101);
+  expect((await deliver('invoice.paid', early, 100)).code).toBe(200);
+  expect(state.record.status).toBe('active');
 });

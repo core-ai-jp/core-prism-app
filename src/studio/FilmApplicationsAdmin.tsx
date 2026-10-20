@@ -11,6 +11,7 @@ export default function FilmApplicationsAdmin() {
   const [key, setKey] = useState('');
   const [rows, setRows] = useState<Application[] | null>(null);
   const [configured, setConfigured] = useState(false);
+  const [mailConfigured, setMailConfigured] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   async function refresh(e?: FormEvent) {
@@ -18,7 +19,7 @@ export default function FilmApplicationsAdmin() {
     try {
       const r = await fetch('/api/studio/applications', { headers: { Authorization: `Bearer ${key}` }, cache: 'no-store' });
       const data = await r.json(); if (!r.ok) throw new Error(data.error || '取得できませんでした。');
-      setRows(data.applications); setConfigured(data.billingConfigured);
+      setRows(data.applications); setConfigured(data.billingConfigured); setMailConfigured(data.mailConfigured);
     } catch (e) { setError(e instanceof Error ? e.message : '取得できませんでした。'); }
     finally { setBusy(false); }
   }
@@ -31,6 +32,7 @@ export default function FilmApplicationsAdmin() {
     </form> : <>
       <p>最新100件を表示しています。制作枠・開始日・見積りについて、顧客の了承を確認してから請求を開始してください。</p>
       {!configured && <p className="fa-notice">法人Stripeの本番設定を確認中です。申込受付は利用できますが、請求開始は停止しています。</p>}
+      {!mailConfigured && <p className="fa-notice">会社メールの送信設定を確認中です。受付一覧は保存されています。通知は設定完了後に送信してください。</p>}
       <button className="st-btn st-btn-ghost" onClick={() => refresh()} disabled={busy}>最新の状態に更新</button>
       <button className="st-btn st-btn-ghost" onClick={() => { setKey(''); setRows(null); }}>管理画面を閉じる</button>
       {rows.length === 0 && <p>現在、お申し込みはありません。新しい受付はここに表示されます。</p>}

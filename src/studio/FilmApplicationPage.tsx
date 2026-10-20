@@ -33,19 +33,21 @@ export default function FilmApplicationPage({ planId }: { planId: string }) {
     // A lost response or reload must keep the same request, including its consent snapshot.
     try { sessionStorage.setItem(draftKey, JSON.stringify({ input })); } catch { /* Server-side deduplication remains available. */ }
     setUncertain(true);
+    let serverError = '';
     try {
       const response = await fetch('/api/studio/applications', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input),
       });
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
       if (!response.ok || !data.reference) {
-        if ([400, 403, 422, 429].includes(response.status)) setUncertain(false);
-        throw new Error(data.error || '受付状況を確認できませんでした。入力を残したまま、もう一度お試しください。');
+        if ([400, 403, 404, 422, 429].includes(response.status)) setUncertain(false);
+        serverError = data.error || '受付状況を確認できませんでした。入力を残したまま、もう一度お試しください。';
+        throw new Error(serverError);
       }
       setReceipt(data);
       try { sessionStorage.setItem(draftKey, JSON.stringify({ input, receipt: data })); } catch { /* Receipt is still shown. */ }
-    } catch (e) {
-      setError(e instanceof Error ? e.message : '通信を確認して、もう一度お試しください。');
+    } catch {
+      setError(serverError || '通信を確認して、もう一度お試しください。入力内容は残っています。');
     } finally { pending.current = false; setBusy(false); }
   }
   return <section className="fa-page">

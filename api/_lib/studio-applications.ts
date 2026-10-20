@@ -44,7 +44,7 @@ export function sameOrigin(req: VercelRequest): boolean {
   if (!process.env.VERCEL_ENV) allowed.push('http://localhost:5173', 'http://localhost:4173');
   return typeof req.headers.origin === 'string' && allowed.includes(req.headers.origin);
 }
-export function validate(raw: unknown, now = new Date()): { input: FilmApplicationInput; plan: ApplicationPlan } {
+export function validate(raw: unknown, now = new Date(), existing?: ApplicationRecord | null): { input: FilmApplicationInput; plan: ApplicationPlan } {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new Error('入力内容を確認してください。');
   const b = raw as Record<string, unknown>;
   const string = (name: string, min: number, max: number) => {
@@ -54,17 +54,19 @@ export function validate(raw: unknown, now = new Date()): { input: FilmApplicati
   };
   const requestId = string('requestId', 36, 36);
   if (!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(requestId)) throw new Error('ページを開き直してください。');
-  const plan = applicationPlan(string('plan', 1, 20));
+  const planId = string('plan', 1, 20);
+  const plan = existing?.input.plan === planId ? existing.plan : applicationPlan(planId);
   if (!plan) throw new Error('プランを選び直してください。');
-  if (b.version !== APPLICATION_VERSION || b.amount !== plan.amount) throw new Error('PRICE_CHANGED');
+  const version = existing?.input.version || APPLICATION_VERSION;
+  if (b.version !== version || b.amount !== plan.amount) throw new Error('PRICE_CHANGED');
   if (b.consent !== true || b.website) throw new Error('制作条件と個人情報の取り扱いへの同意をご確認ください。');
   const email = string('email', 3, 254).toLowerCase();
   if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email) || /[\r\n]/.test(email)) throw new Error('メールアドレスを確認してください。');
   const startMonth = string('startMonth', 7, 7);
-  if (!startMonths(now).includes(startMonth)) throw new Error('希望開始月を選び直してください。');
+  if (!startMonths(now).includes(startMonth) && startMonth !== existing?.input.startMonth) throw new Error('希望開始月を選び直してください。');
   if (b.payment !== 'bank_transfer' && b.payment !== 'card') throw new Error('お支払い方法を選んでください。');
   return { plan, input: {
-    requestId: requestId.toLowerCase(), plan: plan.id, amount: plan.amount, version: APPLICATION_VERSION,
+    requestId: requestId.toLowerCase(), plan: plan.id, amount: plan.amount, version,
     company: string('company', 1, 100), name: string('name', 1, 80), email, startMonth,
     payment: b.payment, notes: string('notes', 0, 1000), consent: true, website: '',
   } };
@@ -77,7 +79,7 @@ export function origin() {
   return process.env.VERCEL_ENV === 'preview' && process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://www.core-ai.jp';
 }
 export function mailConfigured() {
-  return Boolean((process.env.GMAIL_USER?.trim().toLowerCase() === 'info@core-ai.jp' && process.env.GMAIL_APP_PASSWORD) || process.env.RESEND_API_KEY);
+  return Boolean(process.env.STUDIO_MAIL_ENABLED === 'true' && ((process.env.GMAIL_USER?.trim().toLowerCase() === 'info@core-ai.jp' && process.env.GMAIL_APP_PASSWORD) || process.env.RESEND_API_KEY));
 }
 async function mail(to: string, subject: string, text: string, idempotency: string) {
   if (process.env.GMAIL_USER?.trim().toLowerCase() === 'info@core-ai.jp' && process.env.GMAIL_APP_PASSWORD) {

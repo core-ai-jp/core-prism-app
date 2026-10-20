@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { admin, hash, load, mailKey, notice, PREFIX, rateLimit, recordKey, sameOrigin, store, validate, type ApplicationRecord } from '../_lib/studio-applications.js';
+import { admin, hash, load, mailConfigured, mailKey, notice, PREFIX, rateLimit, recordKey, sameOrigin, store, validate, type ApplicationRecord } from '../_lib/studio-applications.js';
 import { activateBilling, renewCardLink } from '../_lib/studio-billing.js';
 
 export const config = { maxDuration: 60 };
@@ -15,7 +15,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const delivery = await store(['MGET', ...['customer', 'owner', 'billing'].map(k => mailKey(r, k))]);
         return { ...r, delivery };
       }));
-      return res.status(200).json({ applications, billingConfigured: Boolean(process.env.STUDIO_BILLING_ENABLED === 'true' && process.env.STUDIO_STRIPE_ACCOUNT_ID && process.env.STUDIO_STRIPE_SECRET_KEY && process.env.STUDIO_STRIPE_WEBHOOK_SECRET) });
+      return res.status(200).json({ applications, mailConfigured: mailConfigured(), billingConfigured: Boolean(process.env.STUDIO_BILLING_ENABLED === 'true' && process.env.STUDIO_STRIPE_ACCOUNT_ID && process.env.STUDIO_STRIPE_SECRET_KEY && process.env.STUDIO_STRIPE_WEBHOOK_SECRET) });
     }
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
     if (!sameOrigin(req)) return res.status(403).json({ error: 'ページを開き直してお試しください。' });
@@ -41,15 +41,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const result = req.query.action === 'renew-card' ? await renewCardLink(r) : await activateBilling(r, body);
       return res.status(200).json({ reference: result.reference, status: result.status, url: result.billing?.url });
     }
+    const previousReference = typeof body.requestId === 'string' && /^[a-f0-9-]{36}$/i.test(body.requestId) ? 'FILM-' + body.requestId.toLowerCase().replaceAll('-', '') : '';
+    let r = previousReference ? await load(previousReference) : null;
     let validated;
-    try { validated = validate(body); } catch (e) {
+    try { validated = validate(body, new Date(), r); } catch (e) {
       const error = e instanceof Error ? e.message : '入力内容を確認してください。';
       return res.status(error === 'PRICE_CHANGED' ? 409 : 422).json({ error: error === 'PRICE_CHANGED' ? '料金または制作条件が更新されています。ページを再読み込みしてご確認ください。' : error });
     }
     const { input, plan } = validated;
     let reference = 'FILM-' + input.requestId.replaceAll('-', '');
     const fingerprint = hash(JSON.stringify({ ...input, requestId: undefined }));
-    let r = await load(reference);
     if (r && r.fingerprint !== fingerprint) return res.status(409).json({ error: 'この受付の入力内容が変更されています。受付状況の確認が必要です。再送せず、info@core-ai.jpへお問い合わせください。' });
     if (!r) {
       const ip = String(req.headers['x-vercel-forwarded-for'] || req.headers['x-forwarded-for'] || 'unknown').split(',')[0];

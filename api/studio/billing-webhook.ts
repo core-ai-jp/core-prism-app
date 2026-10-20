@@ -62,7 +62,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           r.status = current.status === 'paid' ? 'active' : current.status === 'failed' ? 'payment_failed' : 'awaiting_payment';
         }
         r.lastBillingEvent = Math.max(r.lastBillingEvent || 0, event.created);
-        if (r.subscriptionState && ['past_due', 'unpaid', 'incomplete_expired', 'paused'].includes(r.subscriptionState.status)) r.status = 'payment_failed';
+        if (subscriptionEvent && r.subscriptionState?.status === 'active' && r.lastInvoice) r.status = r.lastInvoice.status === 'paid' ? 'active' : r.lastInvoice.status === 'failed' ? 'payment_failed' : 'awaiting_payment';
+        if (r.status !== 'cancelled' && r.subscriptionState && ['past_due', 'unpaid', 'incomplete_expired', 'paused'].includes(r.subscriptionState.status)) r.status = 'payment_failed';
       }
       await save(r);
       await store(['SET', PREFIX + 'event:' + event.id, 'done', 'EX', 90 * 86400]);

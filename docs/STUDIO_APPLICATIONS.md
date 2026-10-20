@@ -21,6 +21,7 @@ Handle access/deletion requests under the site's privacy policy through an authe
 Customer receipt contains only the reference, plan, price and payment preference. Free-text input is only sent to the fixed operator address.
 Operator notices go to `info@core-ai.jp`. Company SMTP is accepted only when GMAIL_USER is exactly that address; otherwise Resend sends from `CORE Studio <info@core-ai.jp>`.
 Never use a personal sender as a fallback. Configure and verify a company transport before public release.
+Set `STUDIO_MAIL_ENABLED=true` only after verifying that company transport and receipt delivery; existing shared mail credentials alone do not enable Studio notifications.
 If mail is unconfigured, storage still succeeds with a `pending` receipt notice and can be inspected by an operator. SMTP outcomes are not delivery confirmations.
 Notifications have independent claims and states. Uncertain SMTP sends are never retried automatically; inspect provider history and then use the authenticated reconciliation/resend controls.
 

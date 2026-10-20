@@ -8,6 +8,7 @@ vi.mock('nodemailer', () => ({ default: { createTransport: () => ({ sendMail }) 
 let handler: any, core: any, failStore = false;
 beforeEach(async () => {
   vi.unstubAllEnvs(); vi.restoreAllMocks(); kv.clear(); sendMail.mockClear(); failStore = false;
+  vi.stubEnv('STUDIO_MAIL_ENABLED', 'true');
   Object.entries({ UPSTASH_REDIS_REST_URL: 'https://redis.invalid', UPSTASH_REDIS_REST_TOKEN: 'fake', GMAIL_USER: 'info@core-ai.jp', GMAIL_APP_PASSWORD: 'fake', CORE_AGGREGATE_KEY: 'test-admin-key-at-least-24-characters' }).forEach(([k, v]) => vi.stubEnv(k, v));
   vi.stubGlobal('fetch', vi.fn(async (url: string, options: any) => {
     if (url !== 'https://redis.invalid') throw new Error('Unexpected external request');
@@ -55,6 +56,14 @@ describe('Studio application intake', () => {
     expect(a.data.reference).toBe(b.data.reference);
     const c = await call({ ...payload, requestId: randomUUID() });
     expect(c.data.reference).toBe(a.data.reference); expect(sendMail).toHaveBeenCalledTimes(2);
+  });
+  it('recovers a saved receipt after its requested month has passed', async () => {
+    const payload = input(); const a = await call(payload);
+    vi.useFakeTimers({ toFake: ['Date'] });
+    try {
+      vi.setSystemTime(new Date('2099-01-01T00:00:00Z'));
+      const b = await call(payload); expect(b.code).toBe(200); expect(b.data.reference).toBe(a.data.reference);
+    } finally { vi.useRealTimers(); }
   });
   it('rejects changed payload with the same request id', async () => {
     const payload = input(); await call(payload);
