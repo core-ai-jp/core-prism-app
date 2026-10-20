@@ -1,4 +1,4 @@
-import { FILM_PLANS, MONTHLY_PLANS, MONTHLY_SPEC, MONTHLY_TERMS } from './film';
+import { FILM_PLANS, MONTHLY_PLANS, MONTHLY_SPEC, MONTHLY_TERMS } from './film.js';
 
 export const APPLICATION_VERSION = 'film-application-2026-10-20-v1';
 export type PaymentChoice = 'bank_transfer' | 'card';
