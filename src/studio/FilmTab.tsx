@@ -24,6 +24,8 @@ import {
 import { track } from './track';
 // 実績データの正本は works.ts (実績タブと映像タブの両方が使う)
 import { FILM_WORKS, FEATURED_FILM_WORKS, OTHER_FILM_WORKS } from './works';
+import FilmApplicationPage from './FilmApplicationPage';
+import FilmApplicationsAdmin from './FilmApplicationsAdmin';
 
 // 遠い行き先へ smooth を指定するとブラウザが移動そのものを諦め、押しても何も起きない
 // (実測: ヒーローから 10,700px 下の相談欄へ smooth 指定 → scrollY が 0 のまま)。
@@ -90,6 +92,11 @@ export default function FilmTab() {
     setOpenPlan(plan ?? null);
     window.setTimeout(() => scrollToId(plan ? `film-plan-${plan}` : 'film-pricing'), 0);
   };
+
+  const query = new URLSearchParams(window.location.search);
+  if (query.get('manage') === 'applications') return <FilmApplicationsAdmin />;
+  if (query.has('apply')) return <FilmApplicationPage planId={query.get('apply') || ''} />;
+  if (query.get('payment') === 'received') return <section className="fa-page"><h1>お支払い手続きを受け付けました。</h1><p>入金状況を確認してから制作についてご連絡します。この画面の表示だけで入金完了は確定しません。</p><a href="/studio/film">映像制作へ戻る</a></section>;
 
   return (
     <div>
@@ -1186,40 +1193,13 @@ function TermsRevision() {
 // 制作工程
 // ============================================================
 // ============================================================
-// Stripe決済ボタン (未設定/失敗時はLINE相談へ自動フォールバック)
+// 選択プランを申込画面へ引き継ぐ。相談用のLINE導線とは分ける。
 // ============================================================
 function FilmCheckoutButton({ plan, mode, label }: { plan: string; mode: 'payment' | 'subscription'; label: string }) {
-  const [busy, setBusy] = useState(false);
-
-  const go = async () => {
-    if (busy) return;
-    setBusy(true);
-    track('studio_film_checkout_start', { plan, mode });
-    try {
-      const resp = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan, brand: 'film', mode }),
-      });
-      if (resp.status === 503) {
-        track('studio_film_checkout_fallback', { plan });
-        window.open(CONTACT.lineUrl, '_blank', 'noopener,noreferrer');
-        return;
-      }
-      const data: { url?: string } = await resp.json().catch(() => ({}));
-      if (data.url) window.location.href = data.url;
-      else window.open(CONTACT.lineUrl, '_blank', 'noopener,noreferrer');
-    } catch {
-      window.open(CONTACT.lineUrl, '_blank', 'noopener,noreferrer');
-    } finally {
-      setBusy(false);
-    }
-  };
-
   return (
-    <button type="button" className="st-btn st-btn-primary" style={{ width: '100%', boxSizing: 'border-box' }} onClick={go} disabled={busy}>
-      {busy ? '決済ページを開いています…' : label}
-    </button>
+    <a className="st-btn st-btn-primary" style={{ width: '100%', boxSizing: 'border-box' }} href={`/studio/film?apply=${encodeURIComponent(plan)}`} onClick={() => track('studio_film_checkout_start', { plan, mode })}>
+      {mode === 'subscription' ? 'このプランで申し込む' : label}
+    </a>
   );
 }
 

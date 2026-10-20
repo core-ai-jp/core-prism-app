@@ -99,6 +99,9 @@ export default async function handler(req: Request) {
   }
 
   const { plan, brand, email } = body;
+  if (brand === 'film') {
+    return json({ error: 'FILM_APPLICATION_REQUIRED', url: '/studio/film?apply=' + encodeURIComponent(plan || '') }, 409, ch);
+  }
   const cycle = body.cycle === 'yearly' ? 'yearly' : 'monthly';
   if (!plan || !brand) {
     return json({ error: 'Missing plan or brand' }, 400, ch);
