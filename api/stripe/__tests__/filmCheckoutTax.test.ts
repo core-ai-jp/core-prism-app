@@ -34,7 +34,7 @@ describe('Film keeps advertised amounts and adds exclusive Japanese 10% tax', ()
     expect(response.status).toBe(200); expect(mock).toHaveBeenCalledTimes(3);
     const advertised = [...FILM_PLANS, ...MONTHLY_PLANS].find(p => p.id === plan);
     expect(advertised?.priceYen).toBe(amount);
-    expect(PRICE_NOTE).toContain('消費税10%を別途加算');
+    expect(PRICE_NOTE).toContain('税込総額（消費税10%）');
   });
   it('does not open an untaxed checkout when the tax rate is absent', async () => {
     const mock = setup(); vi.stubEnv('STRIPE_TAX_RATE_FILM_JP_10', '');
