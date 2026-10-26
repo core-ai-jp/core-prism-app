@@ -457,24 +457,24 @@ PAGES.push(
   {
     file: 'studio-film.html', theme: 'studioDark', url: `${STUDIO}/studio/film`,
     title: 'AI動画制作・ショートドラマ制作代行 — CORE Studio',
-    description: 'ショートドラマ、ブランドムービー、SNS縦型動画、CMまで。企画・脚本・映像制作・編集・字幕・SNS最適化までを一貫制作するAIクリエイティブスタジオ。15秒1本は通常¥89,800、初めてのお取引にかぎり¥49,800。撮影費・出演費・ロケ費・機材費は0円。初期費用0円・最低契約期間なし。神戸の株式会社COREが制作します。',
+    description: '表示価格は税別・消費税10%別途。ショートドラマ、ブランドムービー、SNS縦型動画、CMまで。企画・脚本・映像制作・編集・字幕・SNS最適化までを一貫制作するAIクリエイティブスタジオ。15秒1本は通常¥89,800、初めてのお取引にかぎり¥49,800。撮影費・出演費・ロケ費・機材費は0円。初期費用0円・最低契約期間なし。神戸の株式会社COREが制作します。',
     keywords: 'AI動画制作,AI動画生成,AIショートドラマ,ショート動画制作,ブランドムービー制作,TikTok動画制作,Instagram Reels制作,AI CM制作,縦型動画,採用動画,CORE Studio,神戸',
     og: `${STUDIO}/og-studio-film-v5.png`,
     ld: [
       { '@type': 'Service', '@id': `${STUDIO}/studio/film#service`, name: 'AI映像制作（CORE Studio）', serviceType: 'Video production',
         provider: { '@id': `${STUDIO}/#studio` }, areaServed: { '@type': 'Country', name: '日本' }, inLanguage: 'ja',
         description: '撮影を伴わないAI映像制作。企画・脚本・ディレクション・仕上げまで一貫。撮影費・出演費・ロケ費・機材費はかからない。',
-        hasOfferCatalog: { '@type': 'OfferCatalog', name: '映像制作の料金（税込・初稿まで約1週間）', itemListElement: [
-          offer('商品・サービス紹介（15秒・3〜5カット）', '89800', `${STUDIO}/studio/film`, { price: '89800', description: '見せ場だけを15秒に。そのまま広告に出せる形で納品。初めてのお取引は ¥49,800。' }),
-          offer('採用・会社紹介（30秒・8〜12カット）', '128000', `${STUDIO}/studio/film`, { price: '128000', description: '働く場所と人の空気を、応募前の候補者に先に届ける。' }),
-          offer('イベント告知（30秒・8〜12カット）', '128000', `${STUDIO}/studio/film`, { price: '128000', description: '開催前に、当日の熱量を先に見せる告知映像。' }),
-          offer('ブランドフィルム（60秒・15カット以上）', '298000', `${STUDIO}/studio/film`, { price: '298000', description: '会社・商品の思想を1本に。商談や展示会で流す顔になる。' }),
-          offer('SNSの継続発信（20〜30秒 × 月1〜12本）', '74800', `${STUDIO}/studio/film`, { price: '74800', description: 'TikTok・Reels・Shorts用の縦型を毎月まとめて。1本あたり ¥45,667〜。', priceSpecification: { '@type': 'UnitPriceSpecification', price: '74800', priceCurrency: 'JPY', unitCode: 'MON' } }),
-          offer('ショートドラマ（20〜30秒 × 月1〜12本）', '74800', `${STUDIO}/studio/film`, { price: '74800', description: '人物を主役にした連続もの。毎月1話ずつ積み上げる。', priceSpecification: { '@type': 'UnitPriceSpecification', price: '74800', priceCurrency: 'JPY', unitCode: 'MON' } }),
+        hasOfferCatalog: { '@type': 'OfferCatalog', name: '映像制作の料金（税別・初稿まで約1週間）', itemListElement: [
+          offer('商品・サービス紹介（15秒・3〜5カット）', '89800', `${STUDIO}/studio/film`, { price: '89800', priceSpecification: { '@type': 'PriceSpecification', price: '89800', priceCurrency: 'JPY', valueAddedTaxIncluded: false }, description: '見せ場だけを15秒に。そのまま広告に出せる形で納品。初めてのお取引は ¥49,800。' }),
+          offer('採用・会社紹介（30秒・8〜12カット）', '128000', `${STUDIO}/studio/film`, { price: '128000', priceSpecification: { '@type': 'PriceSpecification', price: '128000', priceCurrency: 'JPY', valueAddedTaxIncluded: false }, description: '働く場所と人の空気を、応募前の候補者に先に届ける。' }),
+          offer('イベント告知（30秒・8〜12カット）', '128000', `${STUDIO}/studio/film`, { price: '128000', priceSpecification: { '@type': 'PriceSpecification', price: '128000', priceCurrency: 'JPY', valueAddedTaxIncluded: false }, description: '開催前に、当日の熱量を先に見せる告知映像。' }),
+          offer('ブランドフィルム（60秒・15カット以上）', '298000', `${STUDIO}/studio/film`, { price: '298000', priceSpecification: { '@type': 'PriceSpecification', price: '298000', priceCurrency: 'JPY', valueAddedTaxIncluded: false }, description: '会社・商品の思想を1本に。商談や展示会で流す顔になる。' }),
+          offer('SNSの継続発信（20〜30秒 × 月1〜12本）', '74800', `${STUDIO}/studio/film`, { price: '74800', description: 'TikTok・Reels・Shorts用の縦型を毎月まとめて。1本あたり ¥45,667〜。', priceSpecification: { '@type': 'UnitPriceSpecification', price: '74800', priceCurrency: 'JPY', unitCode: 'MON', valueAddedTaxIncluded: false } }),
+          offer('ショートドラマ（20〜30秒 × 月1〜12本）', '74800', `${STUDIO}/studio/film`, { price: '74800', description: '人物を主役にした連続もの。毎月1話ずつ積み上げる。', priceSpecification: { '@type': 'UnitPriceSpecification', price: '74800', priceCurrency: 'JPY', unitCode: 'MON', valueAddedTaxIncluded: false } }),
         ] } },
       sCrumb('film', '映像制作'),
       faq(`${STUDIO}/studio/film`, [
-        ['AI動画制作はいくらからですか。', '商品・サービス紹介（15秒・3〜5カット）が通常¥89,800、初めてのお取引にかぎり¥49,800です。採用・会社紹介とイベント告知が¥128,000、ブランドフィルム（60秒）が¥298,000、SNSの継続発信とショートドラマは月¥74,800からです。'],
+        ['AI動画制作はいくらからですか。', '商品・サービス紹介（15秒・3〜5カット）が通常¥89,800、初めてのお取引にかぎり¥49,800です。採用・会社紹介とイベント告知が¥128,000、ブランドフィルム（60秒）が¥298,000、SNSの継続発信とショートドラマは月¥74,800からです。表示価格はすべて税別・消費税10%別途です。'],
         ['撮影費や出演費は別にかかりますか。', 'かかりません。撮影費・出演費・ロケ費・機材費は0円です。初期費用も0円です。'],
         ['納品までどれくらいですか。', 'どのメニューも初稿のお渡しまで約1週間です。'],
         ['修正は何回までですか。', '全プラン共通で無償の修正は1回です。2回目以降は1回¥5,500で承ります。1回は「いただいたご指示をまとめて1回」と数えるため、1通のご連絡に10箇所のご指摘が含まれていても1回です。'],
@@ -490,7 +490,7 @@ PAGES.push(
           <section>
             <h2>何が、いくらで作れるか</h2>
             <table>
-              <caption>ご依頼の多い6つ。金額はすべて税込で、初稿のお渡しまではどれも約1週間です。撮影費・出演費・ロケ費・機材費はかかりません。</caption>
+              <caption>ご依頼の多い6つ。金額はすべて税別で、初稿のお渡しまではどれも約1週間です。撮影費・出演費・ロケ費・機材費はかかりません。</caption>
               <thead><tr><th>メニュー</th><th>尺・構成</th><th>料金</th><th>内容</th></tr></thead>
               <tbody>
                 <tr><td>商品・サービス紹介</td><td>15秒・3〜5カット</td><td><strong>¥89,800</strong>（初めてのお取引は ¥49,800）</td><td>見せ場だけを15秒に。そのまま広告に出せる形で納品します。</td></tr>
@@ -501,7 +501,7 @@ PAGES.push(
                 <tr><td>ショートドラマ</td><td>20〜30秒 × 月1〜12本</td><td><strong>月 ¥74,800〜</strong>（1本あたり ¥45,667〜）</td><td>人物を主役にした連続もの。毎月1話ずつ積み上げます。</td></tr>
               </tbody>
             </table>
-            <p>金額は目安で、確定金額はヒアリングの上でお見積りとしてご提示します。</p>
+            <p>表示価格はすべて税別です。お支払い時に消費税10%を別途加算します。金額は目安で、確定金額はヒアリングの上でお見積りとしてご提示します。</p>
           </section>
 
           <section>

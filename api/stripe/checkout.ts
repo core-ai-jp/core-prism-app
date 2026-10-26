@@ -8,6 +8,8 @@ export const config = { runtime: 'edge' };
 
 const ALLOWED_ORIGINS = [
   'https://core-prism-app.vercel.app',
+  'https://www.core-ai.jp',
+  'https://studio.core-ai.jp',
   'http://localhost:5173',
   'http://localhost:4173',
 ];
@@ -115,11 +117,52 @@ export default async function handler(req: Request) {
 
   // film の trial/standard は単発の制作費決済 (mode=payment)。それ以外は従来通り月額サブスク。
   const mode = body.mode === 'payment' ? 'payment' : 'subscription';
+  // Film prices are tax-exclusive. Validate both the amount and the exclusive
+  // Japanese 10% rate before creating a session; never silently charge untaxed.
+  const filmAmounts: Record<string, number> = {
+    trial: 49800, standard: 128000, m1: 74800, m2: 118000,
+    m4: 228000, m8: 398000, m12: 548000,
+  };
+  const filmTaxRateId = process.env.STRIPE_TAX_RATE_FILM_JP_10;
+  if (brand === 'film') {
+    const expectedMode = ['trial', 'standard'].includes(plan) ? 'payment' : 'subscription';
+    if (!Object.hasOwn(filmAmounts, plan) || mode !== expectedMode || cycle !== 'monthly') {
+      return json({ error: 'INVALID_FILM_PLAN' }, 400, ch);
+    }
+    if (!filmTaxRateId) return json({ error: 'STRIPE_TAX_NOT_CONFIGURED' }, 503, ch);
+    try {
+      const headers = { Authorization: `Bearer ${secretKey}` };
+      const [priceResp, taxResp] = await Promise.all([
+        fetch(`https://api.stripe.com/v1/prices/${encodeURIComponent(priceId)}`, { headers }),
+        fetch(`https://api.stripe.com/v1/tax_rates/${encodeURIComponent(filmTaxRateId)}`, { headers }),
+      ]);
+      if (!priceResp.ok || !taxResp.ok) return json({ error: 'STRIPE_FILM_CONFIG_INVALID' }, 503, ch);
+      const price = await priceResp.json();
+      const tax = await taxResp.json();
+      if (!price.active || price.currency !== 'jpy' || price.unit_amount !== filmAmounts[plan]
+        || price.tax_behavior === 'inclusive'
+        || (mode === 'subscription'
+          ? price.recurring?.interval !== 'month' || price.recurring?.interval_count !== 1
+          : !!price.recurring)
+        || !tax.active || tax.inclusive !== false || tax.percentage !== 10 || tax.country !== 'JP') {
+        return json({ error: 'STRIPE_FILM_CONFIG_INVALID' }, 503, ch);
+      }
+    } catch {
+      return json({ error: 'STRIPE_FILM_CONFIG_UNAVAILABLE' }, 503, ch);
+    }
+  }
 
   const params = new URLSearchParams();
   params.append('mode', mode);
   params.append('line_items[0][price]', priceId);
   params.append('line_items[0][quantity]', '1');
+  if (brand === 'film') {
+    // Stripe carries default_tax_rates onto subsequent subscription invoices.
+    const taxField = mode === 'subscription'
+      ? 'subscription_data[default_tax_rates][0]' : 'line_items[0][tax_rates][0]';
+    params.append(taxField, filmTaxRateId!);
+    params.append('custom_text[submit][message]', '表示金額は税別です。消費税10%を加算した総額をご確認ください。');
+  }
   params.append('success_url', successUrl);
   params.append('cancel_url', cancelUrl);
   params.append('metadata[plan]', plan);

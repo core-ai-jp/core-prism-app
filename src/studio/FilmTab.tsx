@@ -1304,7 +1304,7 @@ function PlanPickCards({ onDetail }: { onDetail: (id: string) => void }) {
             </div>
           )}
           <div className="fm-pick-price">{p.price}</div>
-          <div className="fm-pick-tax">税込 ／ 初稿まで {p.delivery}</div>
+          <div className="fm-pick-tax">税別 ／ 初稿まで {p.delivery}</div>
           {showOffer && p.offerNote && <div className="fm-pick-offnote">{p.offerNote}</div>}
           <p className="fm-pick-fit">{p.fit}</p>
           {/* 「何ができるか」を仕様より先に置く。尺とカット数だけでは用途が想像できない */}
@@ -1345,7 +1345,7 @@ function MonthlyPickCards() {
           <div className="fm-pick-name" data-ja="true">月{m.count}本</div>
           <div className="fm-pick-unit">1本 20〜30秒</div>
           <div className="fm-pick-price">{m.price}</div>
-          <div className="fm-pick-tax">税込 ／ 月々のお支払い</div>
+          <div className="fm-pick-tax">税別 ／ 月々のお支払い</div>
           <p className="fm-pick-fit">{m.unitPrice}</p>
           {/* 「1本ずつ頼んだほうが安いのでは」という疑いは、月額の金額を見た瞬間に生まれる。
               疑いが生まれる場所と同じ場所で、15秒1本の通常価格 × 本数と並べて否定する */}

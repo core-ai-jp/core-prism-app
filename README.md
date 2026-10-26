@@ -65,6 +65,13 @@ npx vercel --prod --yes   # 本番デプロイ
 
 #### CORE Studio 映像制作 (/studio/film) — 任意・上記とは別枠
 
+表示金額はすべて税別です。新規Checkoutでは消費税10%を別途加算します。
+StripeのFilm Priceは表の税抜額・JPY・税別（tax_behavior=exclusive）で設定してください。
+日本の有効な10%外税率（country=JP、percentage=10、inclusive=false）を作成し、
+`STRIPE_TAX_RATE_FILM_JP_10` にそのIDを設定します。単発は明細、月額は継続請求の既定税率に適用します。
+未設定・価格不一致・内税率の場合はCheckoutを作成せず相談導線に戻します。
+既存契約はこの変更では更新しません。設定後は実際のCheckoutで税額・総額を確認してください。
+
 | 商品名 | plan | 種別 | 金額 |
 | --- | --- | --- | --- |
 | Film TRIAL | film_trial | 単発 (one-time) | ¥49,800 |
