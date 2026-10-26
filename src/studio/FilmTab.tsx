@@ -1249,7 +1249,8 @@ function ModeSwitch({ mode, onPick }: { mode: PricingMode; onPick: (m: PricingMo
             onClick={() => onPick(m.id)}>
             <span className="fm-mode-badge">{m.badge}</span>
             <span className="fm-mode-label">{m.label}</span>
-            <span className="fm-mode-hint">{m.hint}</span>
+            <span className="fm-mode-hint">{m.hint}<small style={{ fontSize: 12 }}> 税別</small></span>
+            <span style={{ display: "block", fontSize: 14, marginTop: 5 }}>税込 {m.id === "monthly" ? "月 " : ""}{taxIncluded(Math.min(...(m.id === "once" ? FILM_PLANS : MONTHLY_PLANS).map(p => p.priceYen)))}〜</span>
             <span className="fm-mode-unit">{m.unit}</span>
             <ul className="fm-mode-points">
               {m.points.map(p => <li key={p} className="fm-mode-point"><IconCheck />{p}</li>)}
