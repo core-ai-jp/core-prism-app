@@ -10,7 +10,7 @@ import { Band, H2, Note, Reveal, IconCheck, IconChat, IconCopy, IconArrow } from
 import { STUDIO, CONTACT, COMPANY } from './plans';
 import {
   FILM, FILM_PLANS, MONTHLY_LEAD, MONTHLY_PLANS, MONTHLY_TERMS, MONTHLY_SPEC,
-  PLAN_LADDER, PRICE_NOTE, PRICE_WHY, VALUE, monthlySavings, yen,
+  PLAN_LADDER, PRICE_NOTE, PRICE_WHY, VALUE, monthlySavings, yen, taxIncluded,
   TRIAL_OFFER, CAMPAIGN, isCampaignLive, offPercent,
   PRICING_MODES, PRICING_LEAD, planMatrix, type PricingMode, type FilmPlan,
   FILM_PROCESS, PROCESS_STATEMENT, START_STEPS, REVISION, TERMS, AI_TERMS,
@@ -365,7 +365,7 @@ export default function FilmTab() {
         .fm-pick-unit { font-size: 11px; color: ${C.mute}; margin-top: 4px; letter-spacing: 0.14em; font-weight: 600; }
         .fm-pick-price { font-family: ${SERIF}; font-size: clamp(28px, 7vw, 34px); font-weight: 700;
           color: ${C.ink}; line-height: 1.25; letter-spacing: 0.01em; margin-top: 10px; }
-        .fm-pick-tax { font-size: 11.5px; color: ${C.mute}; margin-top: 4px; letter-spacing: 0.02em; }
+        .fm-pick-tax { font-size: 14.5px; color: ${C.mute}; margin-top: 4px; letter-spacing: 0.02em; }
         .fm-pick-fit { font-size: 12.5px; line-height: 1.8; color: ${C.goldText}; font-weight: 600;
           margin: 13px 0 0; padding-top: 13px; border-top: 1px solid ${C.line}; }
         .fm-pick-body { font-size: 12.5px; line-height: 1.85; color: ${C.body}; margin: 9px 0 0; }
@@ -833,7 +833,8 @@ function PriceMenu({ onPick }: { onPick: (mode: PricingMode, plan?: string) => v
                     <span className="fm-pm-body">{m.body}</span>
                   </span>
                   <span className="fm-pm-price">
-                    <span className="st-serif fm-pm-price-main">{price.main}</span>
+                    <span className="st-serif fm-pm-price-main">{price.main}<small style={{ fontSize: 11 }}> 税別</small></span>
+                    <span className="fm-pm-price-sub" style={{ fontSize: 13, color: D.ink }}>{price.total}</span>
                     {price.sub && <span className="fm-pm-price-sub">{price.sub}</span>}
                     <span className="fm-pm-more" aria-hidden>
                       内訳を見る
@@ -1304,7 +1305,7 @@ function PlanPickCards({ onDetail }: { onDetail: (id: string) => void }) {
             </div>
           )}
           <div className="fm-pick-price">{p.price}</div>
-          <div className="fm-pick-tax">税別 ／ 初稿まで {p.delivery}</div>
+          <div className="fm-pick-tax">税別 ／ 税込 {taxIncluded(p.priceYen)}<br />初稿まで {p.delivery}</div>
           {showOffer && p.offerNote && <div className="fm-pick-offnote">{p.offerNote}</div>}
           <p className="fm-pick-fit">{p.fit}</p>
           {/* 「何ができるか」を仕様より先に置く。尺とカット数だけでは用途が想像できない */}
@@ -1345,7 +1346,7 @@ function MonthlyPickCards() {
           <div className="fm-pick-name" data-ja="true">月{m.count}本</div>
           <div className="fm-pick-unit">1本 20〜30秒</div>
           <div className="fm-pick-price">{m.price}</div>
-          <div className="fm-pick-tax">税別 ／ 月々のお支払い</div>
+          <div className="fm-pick-tax">税別 ／ 税込 {taxIncluded(m.priceYen)}<br />月々のお支払い</div>
           <p className="fm-pick-fit">{m.unitPrice}</p>
           {/* 「1本ずつ頼んだほうが安いのでは」という疑いは、月額の金額を見た瞬間に生まれる。
               疑いが生まれる場所と同じ場所で、15秒1本の通常価格 × 本数と並べて否定する */}
@@ -1385,7 +1386,7 @@ function PlanMatrix() {
               {FILM_PLANS.map(p => (
                 <th key={p.id} scope="col" className={`fm-mx-plan${p.featured ? ' fm-mx-col-featured' : ''}`}>
                   <div className="fm-mx-plan-name">{p.unit}</div>
-                  <div className="fm-mx-plan-price">{p.price}</div>
+                  <div className="fm-mx-plan-price">{p.price}（税別）</div><div>税込 {taxIncluded(p.priceYen)}</div>
                   <div className="fm-mx-plan-unit">
                     {p.name}
                     {p.listPrice && (p.id === 'trial' || isCampaignLive()) && (
@@ -1426,7 +1427,7 @@ function PlanDetail({ p, open, onToggle }: { p: FilmPlan; open: boolean; onToggl
         <span>
           <span className="st-serif" style={{ display: 'block', fontSize: 14.5, fontWeight: 700, color: C.ink, letterSpacing: '0.02em' }}>
             {p.unit} <span style={{ letterSpacing: 'normal', color: C.mute, fontWeight: 400, fontSize: 12.5 }}>
-              {p.listPrice && (p.id === 'trial' || isCampaignLive()) && <s style={{ marginRight: 5 }}>{p.listPrice}</s>}{p.price} ／ {p.name}
+              {p.listPrice && (p.id === 'trial' || isCampaignLive()) && <s style={{ marginRight: 5 }}>{p.listPrice}</s>}{p.price}（税別・税込 {taxIncluded(p.priceYen)}） ／ {p.name}
             </span>
           </span>
           <span style={{ display: 'block', fontSize: 12, color: C.mute, lineHeight: 1.7, marginTop: 4 }}>{p.lead}</span>

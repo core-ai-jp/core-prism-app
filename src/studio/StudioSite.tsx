@@ -101,7 +101,7 @@ const SEO: { default: Seo; film: Seo } & Partial<Record<TabId, Seo>> = {
   film: {
     ogImage: 'https://core-prism-app.vercel.app/og-studio-film-v5.png',
     title: 'AI動画制作・ショートドラマ制作代行 — CORE Studio',
-    description: 'ショートドラマ、ブランドムービー、SNS縦型動画、CMまで。企画・脚本・映像制作・編集・字幕・SNS最適化までを一貫制作するAIクリエイティブスタジオ。初回1本(15秒)¥49,800、毎月継続は月4本¥228,000から（すべて税別・消費税10%別途）。初期費用0円・最低契約期間なし。',
+    description: 'ショートドラマ、ブランドムービー、SNS縦型動画、CMまで。企画・脚本・映像制作・編集・字幕・SNS最適化までを一貫制作するAIクリエイティブスタジオ。初回1本(15秒)¥49,800（税別・税込¥54,780）、毎月継続は月4本¥228,000（税別・税込¥250,800）から。初期費用0円・最低契約期間なし。',
   },
   // 下層5ページ (2026-09-04)。静的な html は無い (SPA が返る) ので、ここが唯一の title / description。
   plans: { ogImage: OG_STUDIO, title: 'ウェブサイト制作 — CORE Studio', description: `1ページのLPから、予約・決済を備えた企業サイトまで。${PRODUCTION_PLANS[0].name} ${PRODUCTION_PLANS[0].price}から。ご契約時に金額を確定し、以後の追加費用はいただきません。原稿と写真がなくても始められます。` },

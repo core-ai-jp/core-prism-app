@@ -77,7 +77,7 @@ export default async function handler(req: Request) {
     return json({ error: 'Method not allowed' }, 405, ch);
   }
 
-  const secretKey = process.env.STRIPE_SECRET_KEY;
+  const secretKey = process.env.STRIPE_SECRET_KEY?.trim();
   if (!secretKey) {
     return json({ error: 'STRIPE_NOT_CONFIGURED' }, 503, ch);
   }
@@ -136,7 +136,10 @@ export default async function handler(req: Request) {
         fetch(`https://api.stripe.com/v1/prices/${encodeURIComponent(priceId)}`, { headers }),
         fetch(`https://api.stripe.com/v1/tax_rates/${encodeURIComponent(filmTaxRateId)}`, { headers }),
       ]);
-      if (!priceResp.ok || !taxResp.ok) return json({ error: 'STRIPE_FILM_CONFIG_INVALID' }, 503, ch);
+      if (!priceResp.ok || !taxResp.ok) {
+        console.error('Film Stripe configuration lookup failed', { priceStatus: priceResp.status, taxStatus: taxResp.status });
+        return json({ error: 'STRIPE_FILM_CONFIG_INVALID' }, 503, ch);
+      }
       const price = await priceResp.json();
       const tax = await taxResp.json();
       if (!price.active || price.currency !== 'jpy' || price.unit_amount !== filmAmounts[plan]
@@ -161,7 +164,7 @@ export default async function handler(req: Request) {
     const taxField = mode === 'subscription'
       ? 'subscription_data[default_tax_rates][0]' : 'line_items[0][tax_rates][0]';
     params.append(taxField, filmTaxRateId!);
-    params.append('custom_text[submit][message]', '表示金額は税別です。消費税10%を加算した総額をご確認ください。');
+    params.append('custom_text[submit][message]', '消費税10%を含むお支払い総額をご確認ください。');
   }
   params.append('success_url', successUrl);
   params.append('cancel_url', cancelUrl);
