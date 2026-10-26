@@ -51,6 +51,25 @@ describe('静的入口HTMLが、画面のデータと食い違っていない', 
     expect(html, '古い「無制限」が studio-film.html に残っている').not.toContain('無制限');
   });
 
+  it('映像制作: HTMLと全Offerが税別で一致する', () => {
+    const html = read('studio-film.html');
+    expect(html).not.toContain('税込');
+    expect(html).toContain('消費税10%を別途加算');
+    const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+    const offers: Array<{ price: string; priceSpecification: { price: string; valueAddedTaxIncluded: boolean } }> = [];
+    const visit = (value: any) => {
+      if (!value || typeof value !== 'object') return;
+      if (value['@type'] === 'Offer') offers.push(value);
+      Object.values(value).forEach(visit);
+    };
+    blocks.forEach(block => visit(JSON.parse(block[1])));
+    expect(offers).toHaveLength(6);
+    for (const offer of offers) {
+      expect(offer.priceSpecification.valueAddedTaxIncluded).toBe(false);
+      expect(offer.priceSpecification.price).toBe(offer.price);
+    }
+  });
+
   it('サイト制作: 4プランの金額が生成HTMLに載っている', () => {
     const html = read('studio-plans.html');
     for (const plan of PRODUCTION_PLANS) {
