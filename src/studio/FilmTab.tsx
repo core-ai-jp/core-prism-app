@@ -1306,7 +1306,7 @@ function PlanPickCards({ onDetail }: { onDetail: (id: string) => void }) {
             </div>
           )}
           <div className="fm-pick-price">{p.price}</div>
-          <div className="fm-pick-tax">税別 ／ 税込 {taxIncluded(p.priceYen)}<br />初稿まで {p.delivery}</div>
+          <div className="fm-pick-tax">税別 ／ 税込 {taxIncluded(p.priceYen)}{p.id === 'premium' ? '〜（個別見積もり）' : ''}<br />初稿まで {p.delivery}</div>
           {showOffer && p.offerNote && <div className="fm-pick-offnote">{p.offerNote}</div>}
           <p className="fm-pick-fit">{p.fit}</p>
           {/* 「何ができるか」を仕様より先に置く。尺とカット数だけでは用途が想像できない */}
@@ -1387,7 +1387,7 @@ function PlanMatrix() {
               {FILM_PLANS.map(p => (
                 <th key={p.id} scope="col" className={`fm-mx-plan${p.featured ? ' fm-mx-col-featured' : ''}`}>
                   <div className="fm-mx-plan-name">{p.unit}</div>
-                  <div className="fm-mx-plan-price">{p.price}（税別）</div><div>税込 {taxIncluded(p.priceYen)}</div>
+                  <div className="fm-mx-plan-price">{p.price}（税別）</div><div>税込 {taxIncluded(p.priceYen)}{p.id === 'premium' ? '〜（個別見積もり）' : ''}</div>
                   <div className="fm-mx-plan-unit">
                     {p.name}
                     {p.listPrice && (p.id === 'trial' || isCampaignLive()) && (
@@ -1428,7 +1428,7 @@ function PlanDetail({ p, open, onToggle }: { p: FilmPlan; open: boolean; onToggl
         <span>
           <span className="st-serif" style={{ display: 'block', fontSize: 14.5, fontWeight: 700, color: C.ink, letterSpacing: '0.02em' }}>
             {p.unit} <span style={{ letterSpacing: 'normal', color: C.mute, fontWeight: 400, fontSize: 12.5 }}>
-              {p.listPrice && (p.id === 'trial' || isCampaignLive()) && <s style={{ marginRight: 5 }}>{p.listPrice}</s>}{p.price}（税別・税込 {taxIncluded(p.priceYen)}） ／ {p.name}
+              {p.listPrice && (p.id === 'trial' || isCampaignLive()) && <s style={{ marginRight: 5 }}>{p.listPrice}</s>}{p.price}（税別・税込 {taxIncluded(p.priceYen)}{p.id === 'premium' ? '〜（個別見積もり）' : ''}） ／ {p.name}
             </span>
           </span>
           <span style={{ display: 'block', fontSize: 12, color: C.mute, lineHeight: 1.7, marginTop: 4 }}>{p.lead}</span>
@@ -1531,7 +1531,7 @@ function Pricing({ mode, onMode, openPlan, onOpenPlan }: {
             onClick={() => { setShowAsk(true); track('studio_film_pricing_mode', { mode: 'ask' }); }}
             style={{ border: showAsk ? `2px solid ${C.gold}` : `1px solid ${C.line}`, background: showAsk ? C.alt : '#fff', borderRadius: 10, padding: '13px 24px', cursor: 'pointer', fontFamily: SANS, color: C.ink, fontWeight: 700, minHeight: 48, width: 'min(100%, 420px)' }}
           >
-            ASK｜298,000円以上の映像制作・個別見積もり
+            ASK｜298,000円〜・個別見積もり
           </button>
         </div>
       </Reveal>
@@ -1540,7 +1540,7 @@ function Pricing({ mode, onMode, openPlan, onOpenPlan }: {
         <div id="film-ask-panel" role="region" aria-label="ASK プレミアム映像制作" className="st-card" style={{ marginTop: 24, background: '#fff', border: `1px solid ${C.goldLine}`, padding: 'clamp(22px, 5vw, 38px)' }}>
           <div className="st-label" style={{ color: C.goldText, marginBottom: 10 }}>ASK / PREMIUM FILM</div>
           <h3 className="st-serif" style={{ fontSize: 'clamp(24px, 5vw, 34px)', color: C.ink, margin: '0 0 12px' }}>ブランドの世界観を、映像作品に。</h3>
-          <div style={{ fontSize: 26, fontWeight: 700, color: C.ink }}>制作費 298,000円以上 <small style={{ fontSize: 13, fontWeight: 400 }}>（税別・個別見積もり）</small></div>
+          <div style={{ fontSize: 26, fontWeight: 700, color: C.ink }}>制作費 298,000円〜 <small style={{ fontSize: 13, fontWeight: 400 }}>（税別・個別見積もり）</small></div>
           <p style={{ fontSize: 14, lineHeight: 2, color: C.body, margin: '18px 0' }}>ブランドフィルム、企業CM、ラグジュアリーな商品演出など、企画・演出・映像制作・編集を組み合わせてオーダーメイドでご提案します。</p>
           <p style={{ fontSize: 12.5, lineHeight: 1.9, color: C.mute, margin: '0 0 22px' }}>制作尺・カット数・修正回数・納期・納品形式は、ご相談内容に応じてお見積もりします。お見積もりのご提示までは無料です。</p>
           <a href="https://timerex.net/s/core-ai/061de4f3" className="st-btn fm-btn-gold" onClick={() => track('studio_film_ask_cta', { to: 'timerex' })} style={{ display: 'inline-flex', textDecoration: 'none' }}>無料相談・お見積もり <IconArrow /></a>
@@ -1575,8 +1575,8 @@ function Pricing({ mode, onMode, openPlan, onOpenPlan }: {
             </p>
             {isCampaignLive() && (
               <p style={{ fontSize: 12.5, lineHeight: 1.9, color: C.body, margin: '12px 0 0', paddingTop: 12, borderTop: `1px solid ${C.line}` }}>
-                <b style={{ color: C.ink }}>STANDARD・PREMIUM</b> — 開設にあたり、{CAMPAIGN.untilLabel} のご発注分までを現行価格でお引き受けしています。
-                {CAMPAIGN.nextLabel} 以降は、STANDARD ¥192,000・PREMIUM ¥385,000 に改定します。
+                <b style={{ color: C.ink }}>STANDARD</b> — 開設にあたり、{CAMPAIGN.untilLabel} のご発注分までを現行価格でお引き受けしています。
+                {CAMPAIGN.nextLabel} 以降は、STANDARD ¥192,000 に改定します。
                 <span style={{ color: C.mute }}>（すでにご発注いただいた制作は、改定後も当初の金額のまま進めます）</span>
               </p>
             )}
