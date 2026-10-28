@@ -1496,8 +1496,10 @@ function Pricing({ mode, onMode, openPlan, onOpenPlan }: {
   openPlan: string | null; onOpenPlan: (id: string | null) => void;
 }) {
   const setOpenPlan = onOpenPlan;
+  const [showAsk, setShowAsk] = useState(false);
 
   const pickMode = (m: PricingMode) => {
+    setShowAsk(false);
     if (m === mode) return;
     onMode(m);
     track('studio_film_pricing_mode', { mode: m });
@@ -1521,9 +1523,31 @@ function Pricing({ mode, onMode, openPlan, onOpenPlan }: {
       {/* 1. 発注の形。単発と月額サブスクの条件を両方出したうえで、詳しく見る側を選んでもらう */}
       <Reveal>
         <ModeSwitch mode={mode} onPick={pickMode} />
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 14 }}>
+          <button
+            type="button"
+            aria-pressed={showAsk}
+            aria-controls="film-ask-panel"
+            onClick={() => { setShowAsk(true); track('studio_film_pricing_mode', { mode: 'ask' }); }}
+            style={{ border: showAsk ? `2px solid ${C.gold}` : `1px solid ${C.line}`, background: showAsk ? C.alt : '#fff', borderRadius: 10, padding: '13px 24px', cursor: 'pointer', fontFamily: SANS, color: C.ink, fontWeight: 700, minHeight: 48, width: 'min(100%, 420px)' }}
+          >
+            ASK｜298,000円以上の映像制作・個別見積もり
+          </button>
+        </div>
       </Reveal>
 
-      <div id="film-pricing-panel" role="group" aria-labelledby={`film-pricing-tab-${mode}`}>
+      {showAsk && (
+        <div id="film-ask-panel" role="region" aria-label="ASK プレミアム映像制作" className="st-card" style={{ marginTop: 24, background: '#fff', border: `1px solid ${C.goldLine}`, padding: 'clamp(22px, 5vw, 38px)' }}>
+          <div className="st-label" style={{ color: C.goldText, marginBottom: 10 }}>ASK / PREMIUM FILM</div>
+          <h3 className="st-serif" style={{ fontSize: 'clamp(24px, 5vw, 34px)', color: C.ink, margin: '0 0 12px' }}>ブランドの世界観を、映像作品に。</h3>
+          <div style={{ fontSize: 26, fontWeight: 700, color: C.ink }}>制作費 298,000円以上 <small style={{ fontSize: 13, fontWeight: 400 }}>（税別・個別見積もり）</small></div>
+          <p style={{ fontSize: 14, lineHeight: 2, color: C.body, margin: '18px 0' }}>ブランドフィルム、企業CM、ラグジュアリーな商品演出など、企画・演出・映像制作・編集を組み合わせてオーダーメイドでご提案します。</p>
+          <p style={{ fontSize: 12.5, lineHeight: 1.9, color: C.mute, margin: '0 0 22px' }}>制作尺・カット数・修正回数・納期・納品形式は、ご相談内容に応じてお見積もりします。お見積もりのご提示までは無料です。</p>
+          <a href="https://timerex.net/s/core-ai/061de4f3" className="st-btn fm-btn-gold" onClick={() => track('studio_film_ask_cta', { to: 'timerex' })} style={{ display: 'inline-flex', textDecoration: 'none' }}>無料相談・お見積もり <IconArrow /></a>
+        </div>
+      )}
+
+      <div id="film-pricing-panel" role="group" aria-labelledby={`film-pricing-tab-${mode}`} style={{ display: showAsk ? 'none' : undefined }}>
       <Reveal>
         <p className="fm-prose" style={{ fontSize: 13, lineHeight: 1.95, color: C.body, margin: '20px 2px 0' }}>
           {PRICING_LEAD[mode]}
