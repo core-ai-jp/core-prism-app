@@ -36,3 +36,11 @@ Read [the project efficiency guide](docs/AGENT_EFFICIENCY.md) for task scoping, 
 
 ## Owner-approved delivery completion (2026-10-29)
 For an expressly requested feature, follow the shared private `core-ai-jp/core-knowledge/AGENTS.md` implementation-to-delivery contract: test, review, release and verify actual public URL, then report the verified URL and commit. 「やっといて」 authorizes its scoped normal release work without repeated prompts, but not bypassing third-party authorization, security gates, money execution or unrelated changes. Never confuse a branch/PR/preview with finished production. If blocked, report precisely. Do not expose private knowledge in this repository.
+
+
+## CORE Academy B2C subscriber lessons (2026-10-29)
+- For Academy work, read `docs/ACADEMY_MEMBERSHIP_IMPLEMENTATION.md` and private `core-ai-jp/core-knowledge/CORE_Academy/INDIVIDUAL_MEMBERSHIP_STRATEGY_2026-10-29.md` before editing or publishing. The 8 initial lesson scripts are in private `CORE_Academy/MEMBER_STARTER_2026-11.md`.
+- B2C membership price is owner's **tax-exclusive** 5,000 JPY, displayed as 5,500 JPY including Japanese 10% consumption tax. Keep enterprise seminars and individual subscriptions distinct.
+- All B2C payments must be bound to **CORE Inc Stripe acct_1Te6bDChAalnRS11**, never GAUCHE. Onboarding, login, monthly content, cancellations, customer portal and scheduled lessons must remain fail-closed until live verified.
+- Do not include paid lesson bodies or protected videos in public GitHub/static bundles. Release scheduled materials only behind server-side verified subscription and authorized publishing workflow.
+- Monthly lesson production must leave an inspectable owner-facing editorial draft; each release records final URL, deployment SHA and user acceptance. A saved draft/PR/preview is not a completed customer-facing release.
