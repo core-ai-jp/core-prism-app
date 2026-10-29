@@ -9,6 +9,7 @@ const SESSION_DAYS = 30;
 const enabled = () => process.env.ACADEMY_MEMBERSHIP_ENABLED === 'true'
   && !!process.env.ACADEMY_STRIPE_SECRET_KEY
   && !!process.env.ACADEMY_STRIPE_PRICE_ID
+  && !!process.env.ACADEMY_STRIPE_WEBHOOK_SECRET
   && !!process.env.ACADEMY_STRIPE_TAX_RATE_JP_10
   && process.env.ACADEMY_CONTENT_READY === 'true'
   && !!process.env.ACADEMY_STRIPE_ACCOUNT_ID
