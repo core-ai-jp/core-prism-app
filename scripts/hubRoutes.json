@@ -1,0 +1,58 @@
+[
+  {
+    "path": "/admin/lead-funnel",
+    "file": "hub-admin-lead-funnel.html"
+  },
+  {
+    "path": "/insights",
+    "file": "hub-insights.html"
+  },
+  {
+    "path": "/insights/harness-engineering",
+    "file": "hub-insights-harness-engineering.html"
+  },
+  {
+    "path": "/insights/codex",
+    "file": "hub-insights-codex.html"
+  },
+  {
+    "path": "/insights/claude-code",
+    "file": "hub-insights-claude-code.html"
+  },
+  {
+    "path": "/insights/codex-vs-claude-code",
+    "file": "hub-insights-codex-vs-claude-code.html"
+  },
+  {
+    "path": "/insights/ai-adoption-levels",
+    "file": "hub-insights-ai-adoption-levels.html"
+  },
+  {
+    "path": "/insights/ai-security",
+    "file": "hub-insights-ai-security.html"
+  },
+  {
+    "path": "/resources",
+    "file": "hub-resources.html"
+  },
+  {
+    "path": "/resources/harness-starter-kit",
+    "file": "hub-resources-harness-starter-kit.html"
+  },
+  {
+    "path": "/resources/codex-claude-enterprise-guide",
+    "file": "hub-resources-codex-claude-enterprise-guide.html"
+  },
+  {
+    "path": "/resources/ai-workflow-checklist",
+    "file": "hub-resources-ai-workflow-checklist.html"
+  },
+  {
+    "path": "/resources/security-self-check",
+    "file": "hub-resources-security-self-check.html"
+  },
+  {
+    "path": "/resources/confirm",
+    "file": "hub-resources-confirm.html"
+  }
+]

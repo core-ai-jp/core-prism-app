@@ -1,6 +1,6 @@
 # CORE Intelligence Hub implementation
 
-Status: foundation in progress; requested master specification and lecture source unavailable.
+Status: superseded by [current execution ledger](intelligence-hub/EXECUTION_PLAN.md). Complete master specification was supplied in the subsequent owner message; original audio remains unavailable. The baseline below is historical evidence.
 
 ## Baseline, 2026-10-29
 
@@ -39,7 +39,7 @@ Status: foundation in progress; requested master specification and lecture sourc
 | Mobile/desktop visual verification | Not performed |
 | Hub production URL and end-to-end verification | Not available |
 
-Run `node scripts/check-hub-baseline.mjs https://www.core-ai.jp` for public HTML identity checks. Run `node --test scripts/check-hub-baseline.test.mjs` for offline safety/failure checks. These checks do not validate rendered UI, authentication, CRM persistence, pricing values, email receipt or bookings.
+Run `node scripts/check-hub-baseline.mjs https://www.core-ai.jp` for public HTML identity checks. Run `node --test scripts/check-hub-baseline.node-tests.mjs` for offline safety/failure checks. These checks do not validate rendered UI, authentication, CRM persistence, pricing values, email receipt or bookings.
 
 ## Initial verification receipt
 

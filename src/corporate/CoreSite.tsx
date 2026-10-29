@@ -2041,6 +2041,8 @@ export default function CoreSite() {
           </div>
           <div>
             <p style={footHead}>サービス</p>
+            <a href="/insights" style={footLink} className="lp-tap-link">CORE Intelligence Hub</a>
+            <a href="/resources" style={footLink} className="lp-tap-link">無料 AI Toolkit</a>
             <a href="#whatwedo" onClick={e => handleAnchor(e, '#whatwedo')} style={footLink} className="lp-tap-link">事業内容</a>
             <a href="/return-on-ai" onClick={e => handleAnchor(e, '/return-on-ai')} style={footLink} className="lp-tap-link">Return on AI</a>
             <a href="/roai-score" onClick={e => handleAnchor(e, '/roai-score')} style={footLink} className="lp-tap-link">CORE ROAI SCORE</a>
