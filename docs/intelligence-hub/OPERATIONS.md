@@ -24,3 +24,6 @@ Disable HUB_MAIL_ENABLED first for mail incidents, HUB_ENABLED for intake incide
 
 ## Missing live acceptance
 HUB flags and strong administrator key were absent from the observed production variable-name inventory. Sender credentials exist, but actual domain alignment/receipt and Notion access for this new flow have not been tested. Physical iPhone QR, TimeRex booking reconciliation, confirmed sales attribution and ongoing marketing remain pending.
+
+## Repeatable public monitoring
+After approved production rollout, set the repository variable HUB_PUBLIC_BASE_URL to the verified HTTPS origin. The existing daily CI schedule then runs scripts/check-hub-public.mjs: 14 HTML routes, public configuration shape and unauthorized-admin denial. It never submits forms or sends mail. This variable has not been set by this change, so production monitoring for Hub is prepared but inactive. Browser/PDF acceptance and delivery monitoring remain separate.
