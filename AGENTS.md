@@ -32,3 +32,7 @@ Read existing `CLAUDE.md` if present, `README.md`, relevant design files, packag
 ## Efficient execution
 
 Read [the project efficiency guide](docs/AGENT_EFFICIENCY.md) for task scoping, model choice, limited retries, conditional Jev and concise handoffs. It supplements project contracts and the private shared workflow; existing security and current owner authorization take precedence.
+
+
+## Owner-approved delivery completion (2026-10-29)
+For an expressly requested feature, follow the shared private `core-ai-jp/core-knowledge/AGENTS.md` implementation-to-delivery contract: test, review, release and verify actual public URL, then report the verified URL and commit. 「やっといて」 authorizes its scoped normal release work without repeated prompts, but not bypassing third-party authorization, security gates, money execution or unrelated changes. Never confuse a branch/PR/preview with finished production. If blocked, report precisely. Do not expose private knowledge in this repository.
