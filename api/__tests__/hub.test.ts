@@ -15,7 +15,18 @@ vi.mock("../_lib/academy.js", () => ({
       storage.delete(key);
       return 1;
     }
-    if (op === "EVAL") return 1;
+    if (op === "EVAL") {
+      if (String(k).includes("redis.call('SET'")) {
+        const keys = cmd.slice(3, 9).map(String);
+        const values = cmd.slice(9).map(String);
+        keys.slice(0, 3).forEach((name, i) => storage.set(name, values[i]));
+        const jobs = sets.get(keys[3]) || new Set<string>();
+        jobs.add(values[3]);
+        sets.set(keys[3], jobs);
+        storage.delete(keys[4]);
+      }
+      return 1;
+    }
     if (op === "SADD") {
       const s = sets.get(key) || new Set<string>();
       args.forEach((a) => s.add(String(a)));
@@ -296,5 +307,31 @@ describe("Hub validation and permissions", () => {
     expect(
       JSON.parse(storage.get("hub:v1:lead:" + first.leadId)!).marketing,
     ).toBe(false);
+  });
+  it("does not consume verification when the atomic evidence commit fails", async () => {
+    await request("register", { ...payload, marketing: true });
+    const first = JSON.parse(
+      [...storage].find(([k]) => k.startsWith("hub:v1:receipt:"))![1],
+    );
+    const { redis } = await import("../_lib/academy.js");
+    const original = vi.mocked(redis).getMockImplementation()!;
+    vi.mocked(redis).mockImplementation(async (cmd) => {
+      if (cmd[0] === "EVAL" && String(cmd[1]).includes("redis.call('SET'"))
+        throw Error("injected commit failure");
+      return original(cmd);
+    });
+    expect(
+      (await request("verify", { token: first.verifyToken })).statusCode,
+    ).toBe(503);
+    expect(
+      JSON.parse(storage.get("hub:v1:receipt:" + first.receiptId)!).verified,
+    ).not.toBe(true);
+    vi.mocked(redis).mockImplementation(original);
+    expect(
+      (await request("verify", { token: first.verifyToken })).statusCode,
+    ).toBe(200);
+    expect(
+      [...storage].filter(([k]) => k.startsWith("hub:v1:consent:")),
+    ).toHaveLength(1);
   });
 });

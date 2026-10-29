@@ -275,18 +275,34 @@ async function verify(req: VercelRequest, res: VercelResponse) {
     )
       throw Error("EXPIRED");
     receipt.verified = true;
-    await put("receipt:" + v.registration, receipt);
-    await put("lead:" + lead.id, lead);
-    await put("consent:" + v.registration, {
-      version: POLICY,
-      at: lead.consentAt,
-      requested: v.marketing,
-      active: lead.marketing,
-      source: v.registration,
-    });
-    await redis(["SADD", key("crm-jobs"), lead.id]);
-    await redis(["DEL", key("verify:" + hash(t))]);
-    await audit("email_verified", lead.id);
+    // Commit receipt consumption, consent evidence and CRM queue as one Redis operation.
+    // An interrupted write must not consume the link before its evidence exists.
+    await redis([
+      "EVAL",
+      "redis.call('SET',KEYS[1],ARGV[1]); redis.call('SET',KEYS[2],ARGV[2]); redis.call('SET',KEYS[3],ARGV[3]); redis.call('SADD',KEYS[4],ARGV[4]); redis.call('DEL',KEYS[5]); redis.call('LPUSH',KEYS[6],ARGV[5]); redis.call('LTRIM',KEYS[6],0,9999); return 1",
+      6,
+      key("receipt:" + v.registration),
+      key("lead:" + lead.id),
+      key("consent:" + v.registration),
+      key("crm-jobs"),
+      key("verify:" + hash(t)),
+      key("audit"),
+      JSON.stringify(receipt),
+      JSON.stringify(lead),
+      JSON.stringify({
+        version: POLICY,
+        at: lead.consentAt,
+        requested: v.marketing,
+        active: lead.marketing,
+        source: v.registration,
+      }),
+      lead.id,
+      JSON.stringify({
+        event: "email_verified",
+        id: lead.id,
+        at: new Date().toISOString(),
+      }),
+    ]);
   });
   return json(res, { ok: true });
 }
