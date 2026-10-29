@@ -9,10 +9,13 @@ const SESSION_DAYS = 30;
 const enabled = () => process.env.ACADEMY_MEMBERSHIP_ENABLED === 'true'
   && !!process.env.ACADEMY_STRIPE_SECRET_KEY
   && !!process.env.ACADEMY_STRIPE_PRICE_ID
+  && !!process.env.ACADEMY_STRIPE_TAX_RATE_JP_10
+  && process.env.ACADEMY_CONTENT_READY === 'true'
   && !!process.env.ACADEMY_STRIPE_ACCOUNT_ID
   && !!process.env.ACADEMY_MEMBER_SIGNING_KEY
   && !!process.env.UPSTASH_REDIS_REST_URL
-  && !!process.env.UPSTASH_REDIS_REST_TOKEN;
+  && !!process.env.UPSTASH_REDIS_REST_TOKEN
+  && !!(process.env.RESEND_API_KEY || (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD));
 const stripe = () => new Stripe(process.env.ACADEMY_STRIPE_SECRET_KEY!);
 const digest = (v: string) => createHash('sha256').update(v).digest('hex');
 const keyed = (v: string) => createHmac('sha256', process.env.ACADEMY_MEMBER_SIGNING_KEY!).update(v).digest('hex');
@@ -63,17 +66,19 @@ async function paidMember(req: VercelRequest): Promise<Member | null> {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const action = asString(req.query.action || 'config');
   if (req.method === 'GET' && action === 'config') return answer(res, { ready: enabled(), amount: 5500, currency: 'jpy', interval: 'month' });
-  if (!enabled()) return answer(res, { error: 'MEMBERSHIP_NOT_READY', message: '現在、会員受付の準備中です。' }, 503);
-  if (req.method === 'POST' && !sameOrigin(req)) return answer(res, { error: 'ORIGIN' }, 403);
+  if (action !== 'publish' && !enabled()) return answer(res, { error: 'MEMBERSHIP_NOT_READY', message: '現在、会員受付の準備中です。' }, 503);
+  if (req.method === 'POST' && action !== 'publish' && !sameOrigin(req)) return answer(res, { error: 'ORIGIN' }, 403);
   try {
     if (action === 'checkout' && req.method === 'POST') {
       if (!await rateLimit(req, 'checkout', 8)) return answer(res, { error: 'RATE_LIMIT' }, 429);
       const s = stripe(); await account(s);
       const p = await s.prices.retrieve(process.env.ACADEMY_STRIPE_PRICE_ID!);
       if (p.currency !== 'jpy' || p.unit_amount !== 5500 || p.recurring?.interval !== 'month' || p.tax_behavior !== 'inclusive' || !p.active) throw new Error('INVALID_PRICE');
+      const tax = await s.taxRates.retrieve(process.env.ACADEMY_STRIPE_TAX_RATE_JP_10!);
+      if (!tax.active || tax.percentage !== 10 || tax.inclusive !== true) throw new Error('INVALID_TAX_RATE');
       const session = await s.checkout.sessions.create({
         mode: 'subscription',
-        line_items: [{ price: p.id, quantity: 1 }],
+        line_items: [{ price: p.id, quantity: 1, tax_rates: [tax.id] }],
         success_url: ORIGIN + '/academy/member?checkout=complete',
         cancel_url: ORIGIN + '/academy/member?checkout=cancelled',
         allow_promotion_codes: false,
