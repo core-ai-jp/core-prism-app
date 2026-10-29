@@ -1,6 +1,128 @@
-import {useState} from 'react';
-interface Row{month:string;event:string;campaign:string;resource:string;downloaded:boolean;verified:boolean;consented:boolean;booked:boolean}
-export default function Admin(){const [secret,setSecret]=useState('');const [rows,setRows]=useState<Row[]|null>(null);const [error,setError]=useState('');const [month,setMonth]=useState('');const [event,setEvent]=useState('');const [resource,setResource]=useState('');
- async function load(csv=false){setError('');const params=new URLSearchParams({action:'metrics',...(month?{month}:{}),...(event?{event}:{}),...(resource?{resource}:{}),...(csv?{format:'csv'}:{})});try{const r=await fetch('/api/hub?'+params,{headers:{Authorization:'Bearer '+secret}});if(!r.ok)throw Error((await r.json()).error);if(csv){const blob=await r.blob();const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='lead-funnel.csv';a.click();URL.revokeObjectURL(u);}else setRows((await r.json()).rows);}catch(e){setError(e instanceof Error?e.message:'取得できませんでした。');}}
- return <section className="article-head"><p className="eyebrow">ADMIN / LEAD FUNNEL</p><h1>資料から、次の対話へ。</h1><p>管理者認証後に集計を取得します。認証情報は保存しません。顧客の氏名・メールは表示しません。</p><form className="hub-form" onSubmit={e=>{e.preventDefault();void load();}}><label>管理者アクセストークン<input type="password" autoComplete="off" value={secret} onChange={e=>setSecret(e.target.value)} required/></label><label>月<input type="month" value={month} onChange={e=>setMonth(e.target.value)}/></label><label>イベントID<input value={event} onChange={e=>setEvent(e.target.value)} maxLength={80}/></label><label>資料<select value={resource} onChange={e=>setResource(e.target.value)}><option value="">すべて</option><option value="harness-starter-kit">ハーネス</option><option value="codex-claude-enterprise-guide">企業導入</option><option value="ai-workflow-checklist">業務分解</option></select></label><button className="button">集計を取得</button></form>{error&&<p role="alert">{error}</p>}{rows&&<div><h2>確認できた受付：{rows.length}件</h2><p>資料取得 {rows.filter(r=>r.downloaded).length}件 / メール確認 {rows.filter(r=>r.verified).length}件 / 現在の案内同意 {rows.filter(r=>r.consented).length}件</p><p>訪問数・予約・受注・売上は未接続です。相談リンクのクリックを予約とは数えません。</p><button className="button" onClick={()=>void load(true)}>集計CSVを保存</button><button className="filters" onClick={()=>{setSecret('');setRows(null);}}>表示と認証情報を消去</button></div>}</section>
+import { useState } from "react";
+interface Row {
+  month: string;
+  event: string;
+  campaign: string;
+  resource: string;
+  downloaded: boolean;
+  verified: boolean;
+  consented: boolean;
+  booked: boolean | null;
+}
+export default function Admin() {
+  const [secret, setSecret] = useState("");
+  const [rows, setRows] = useState<Row[] | null>(null);
+  const [error, setError] = useState("");
+  const [month, setMonth] = useState("");
+  const [event, setEvent] = useState("");
+  const [resource, setResource] = useState("");
+  async function load(csv = false) {
+    setError("");
+    const params = new URLSearchParams({
+      action: "metrics",
+      ...(month ? { month } : {}),
+      ...(event ? { event } : {}),
+      ...(resource ? { resource } : {}),
+      ...(csv ? { format: "csv" } : {}),
+    });
+    try {
+      const r = await fetch("/api/hub?" + params, {
+        headers: { Authorization: "Bearer " + secret },
+      });
+      if (!r.ok) throw Error((await r.json()).error);
+      if (csv) {
+        const blob = await r.blob();
+        const u = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = u;
+        a.download = "lead-funnel.csv";
+        a.click();
+        URL.revokeObjectURL(u);
+      } else setRows((await r.json()).rows);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "取得できませんでした。");
+    }
+  }
+  return (
+    <section className="article-head">
+      <p className="eyebrow">ADMIN / LEAD FUNNEL</p>
+      <h1>資料から、次の対話へ。</h1>
+      <p>
+        管理者認証後に集計を取得します。認証情報は保存しません。顧客の氏名・メールは表示しません。
+      </p>
+      <form
+        className="hub-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void load();
+        }}
+      >
+        <label>
+          管理者アクセストークン
+          <input
+            type="password"
+            autoComplete="off"
+            value={secret}
+            onChange={(e) => setSecret(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          月
+          <input
+            type="month"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+          />
+        </label>
+        <label>
+          イベントID
+          <input
+            value={event}
+            onChange={(e) => setEvent(e.target.value)}
+            maxLength={80}
+          />
+        </label>
+        <label>
+          資料
+          <select
+            value={resource}
+            onChange={(e) => setResource(e.target.value)}
+          >
+            <option value="">すべて</option>
+            <option value="harness-starter-kit">ハーネス</option>
+            <option value="codex-claude-enterprise-guide">企業導入</option>
+            <option value="ai-workflow-checklist">業務分解</option>
+          </select>
+        </label>
+        <button className="button">集計を取得</button>
+      </form>
+      {error && <p role="alert">{error}</p>}
+      {rows && (
+        <div>
+          <h2>確認できた受付：{rows.length}件</h2>
+          <p>
+            資料取得 {rows.filter((r) => r.downloaded).length}件 / メール確認{" "}
+            {rows.filter((r) => r.verified).length}件 / 現在の案内同意{" "}
+            {rows.filter((r) => r.consented).length}件
+          </p>
+          <p>
+            訪問数・予約・受注・売上は未接続です。相談リンクのクリックを予約とは数えません。
+          </p>
+          <button className="button" onClick={() => void load(true)}>
+            集計CSVを保存
+          </button>
+          <button
+            className="filters"
+            onClick={() => {
+              setSecret("");
+              setRows(null);
+            }}
+          >
+            表示と認証情報を消去
+          </button>
+        </div>
+      )}
+    </section>
+  );
 }

@@ -1,3 +1,50 @@
-import http from 'node:http';import{readFile}from'node:fs/promises';import{resolve,extname}from'node:path';import{readFileSync}from'node:fs';
-const routes=JSON.parse(readFileSync('scripts/hubRoutes.json'));const root=resolve('dist');
-http.createServer(async(req,res)=>{const url=new URL(req.url,'http://localhost');let path=routes.find(r=>r.path===url.pathname)?.file||url.pathname.slice(1);if(url.pathname.startsWith('/api/')){res.writeHead(503,{'Content-Type':'application/json'});res.end(JSON.stringify({error:'ローカル検証：外部サービスには接続していません。'}));return;}if(!path)path='hub-insights.html';const file=resolve(root,path);if(!file.startsWith(root+'/')){res.writeHead(403);res.end();return;}try{const b=await readFile(file);res.writeHead(200,{'Content-Type':({'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.woff2':'font/woff2'})[extname(file)]||'application/octet-stream'});res.end(b);}catch{res.writeHead(404);res.end('Not found');}}).listen(4387,'127.0.0.1',()=>console.log('Hub preview http://127.0.0.1:4387/insights'));
+import http from "node:http";
+import { readFile } from "node:fs/promises";
+import { resolve, extname } from "node:path";
+import { readFileSync } from "node:fs";
+const routes = JSON.parse(readFileSync("scripts/hubRoutes.json"));
+const root = resolve("dist");
+http
+  .createServer(async (req, res) => {
+    const url = new URL(req.url, "http://localhost");
+    let path =
+      routes.find((r) => r.path === url.pathname)?.file ||
+      url.pathname.slice(1);
+    if (url.pathname.startsWith("/api/")) {
+      res.writeHead(503, { "Content-Type": "application/json" });
+      res.end(
+        JSON.stringify({
+          error: "ローカル検証：外部サービスには接続していません。",
+        }),
+      );
+      return;
+    }
+    if (!path) path = "hub-insights.html";
+    const file = resolve(root, path);
+    if (!file.startsWith(root + "/")) {
+      res.writeHead(403);
+      res.end();
+      return;
+    }
+    try {
+      const b = await readFile(file);
+      res.writeHead(200, {
+        "Content-Type":
+          {
+            ".html": "text/html; charset=utf-8",
+            ".js": "text/javascript",
+            ".css": "text/css",
+            ".svg": "image/svg+xml",
+            ".png": "image/png",
+            ".woff2": "font/woff2",
+          }[extname(file)] || "application/octet-stream",
+      });
+      res.end(b);
+    } catch {
+      res.writeHead(404);
+      res.end("Not found");
+    }
+  })
+  .listen(4387, "127.0.0.1", () =>
+    console.log("Hub preview http://127.0.0.1:4387/insights"),
+  );

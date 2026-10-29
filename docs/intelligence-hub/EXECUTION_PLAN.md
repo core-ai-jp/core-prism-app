@@ -15,12 +15,12 @@
 4. Run protected-route regression, unit, typecheck, lint, build, browser responsive and accessibility checks; independently review security changes.
 5. Publish only within applicable approval boundaries, verify exact deployment and public behavior. Record every unverified dependency explicitly.
 
-Current status: implementing. No Hub production completion claimed.
+Current status: implementation checkpoint / runtime acceptance pending. No Hub production completion claimed.
 
 ## Implementation checkpoint
 - Added 14 dedicated routes (six articles, catalog/LPs/self-check/confirmation/admin), scoped styles, canonical/OG/Article metadata and existing corporate footer links.
 - Completed real files: 24-page harness, 17-page enterprise guide, 8-page worksheet guide, editable CSV and Markdown templates. Reproducible generator plus campaign QR generator.
 - Added disabled-by-default intake/download/verification/withdrawal APIs, immutable participation plus versioned receipt/consent history, durable receipt jobs, shared-lock Notion adapter and authenticated aggregate report.
-- Day 0/2/5/8/12 are drafts only; no marketing scheduler or actual campaign sends enabled.
-- 950 unit tests pass; 4 standalone baseline tests pass; build, new source lint and API typecheck pass. Repository-wide lint and dependency advisories remain existing debt (QUALITY_REPORT.md).
+- Day 0/2/5/8/12 have full draft copy in EMAIL_DRAFTS.md, but are drafts only; no marketing scheduler or actual campaign sends enabled.
+- 951 unit tests pass; 4 standalone baseline tests pass; build, new source lint and API typecheck pass. Repository-wide lint and dependency advisories remain existing debt (QUALITY_REPORT.md).
 - Preview deployment is being verified. Production Hub release, runtime configuration and real-recipient/CRM acceptance remain pending. No completed production funnel is claimed.
