@@ -73,6 +73,7 @@ jobs:
         run: |
           npm test
           node scripts/check-smoke-safety.mjs
+          node --test scripts/check-hub-baseline.test.mjs
 
       - name: Local-date timezone regression
         run: |
