@@ -57,7 +57,7 @@ export function validate(input: unknown): Registration {
   const email = str("email", 254, true).normalize("NFKC").toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw Error("INVALID_INPUT");
   const resource = str("resource", 80, true);
-  if (!Object.hasOwn(files, resource)) throw Error("INVALID_INPUT");
+  if (!Object.prototype.hasOwnProperty.call(files, resource)) throw Error("INVALID_INPUT");
   const source = (k: string) => {
     const v = str(k, 80) || "unknown";
     if (!/^[a-zA-Z0-9_-]+$/.test(v)) throw Error("INVALID_INPUT");
