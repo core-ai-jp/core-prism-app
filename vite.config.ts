@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'path'
+import hubRoutes from './scripts/hubRoutes.json'
 
 // Multi-page 構成:
 // - / → index.html (Prism LP)
@@ -16,6 +17,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 600,
     rollupOptions: {
       input: {
+        ...Object.fromEntries(hubRoutes.map(r => [r.file, resolve(__dirname, r.file)])),
         main: resolve(__dirname, 'index.html'),
         intelligence: resolve(__dirname, 'intelligence.html'),
         iris: resolve(__dirname, 'iris.html'),

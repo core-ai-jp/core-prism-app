@@ -186,6 +186,62 @@
   ],
   "rewrites": [
     {
+      "source": "/admin/lead-funnel",
+      "destination": "/hub-admin-lead-funnel.html"
+    },
+    {
+      "source": "/insights",
+      "destination": "/hub-insights.html"
+    },
+    {
+      "source": "/insights/harness-engineering",
+      "destination": "/hub-insights-harness-engineering.html"
+    },
+    {
+      "source": "/insights/codex",
+      "destination": "/hub-insights-codex.html"
+    },
+    {
+      "source": "/insights/claude-code",
+      "destination": "/hub-insights-claude-code.html"
+    },
+    {
+      "source": "/insights/codex-vs-claude-code",
+      "destination": "/hub-insights-codex-vs-claude-code.html"
+    },
+    {
+      "source": "/insights/ai-adoption-levels",
+      "destination": "/hub-insights-ai-adoption-levels.html"
+    },
+    {
+      "source": "/insights/ai-security",
+      "destination": "/hub-insights-ai-security.html"
+    },
+    {
+      "source": "/resources",
+      "destination": "/hub-resources.html"
+    },
+    {
+      "source": "/resources/harness-starter-kit",
+      "destination": "/hub-resources-harness-starter-kit.html"
+    },
+    {
+      "source": "/resources/codex-claude-enterprise-guide",
+      "destination": "/hub-resources-codex-claude-enterprise-guide.html"
+    },
+    {
+      "source": "/resources/ai-workflow-checklist",
+      "destination": "/hub-resources-ai-workflow-checklist.html"
+    },
+    {
+      "source": "/resources/security-self-check",
+      "destination": "/hub-resources-security-self-check.html"
+    },
+    {
+      "source": "/resources/confirm",
+      "destination": "/hub-resources-confirm.html"
+    },
+    {
       "source": "/academy/brand-visual.svg",
       "destination": "/academy/brand-visual.svg"
     },
@@ -745,5 +801,11 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/hub/index.ts": {
+      "includeFiles": "data/toolkit/**",
+      "maxDuration": 60
+    }
+  }
 }

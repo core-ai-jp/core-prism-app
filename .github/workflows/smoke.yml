@@ -73,8 +73,42 @@ jobs:
         run: |
           npm test
           node scripts/check-smoke-safety.mjs
+          node --test scripts/check-hub-baseline.node-tests.mjs scripts/check-hub-public.node-tests.mjs
 
       - name: Local-date timezone regression
         run: |
           TZ=Asia/Tokyo npm exec -- vitest run src/iris/__tests__/overdueTrend.test.ts
           TZ=America/Los_Angeles npm exec -- vitest run src/iris/__tests__/overdueTrend.test.ts
+
+  hub-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Hub lint and API types
+        run: |
+          npx eslint src/hub src/hubMain.tsx api/hub api/_lib/hub.ts api/__tests__/hub.test.ts scripts/genHubPages.mjs scripts/previewHub.mjs scripts/checkHubBrowser.mjs
+          npx tsc --ignoreConfig --noEmit --skipLibCheck --module esnext --moduleResolution bundler --target es2021 --esModuleInterop api/hub/index.ts
+      - name: Build and protected route checks
+        run: |
+          npm run build
+          node --test scripts/check-hub-baseline.node-tests.mjs scripts/check-hub-public.node-tests.mjs
+
+  hub-public-monitor:
+    if: github.event_name != 'pull_request' && vars.HUB_PUBLIC_BASE_URL != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Read-only public Hub checks
+        env:
+          HUB_PUBLIC_BASE_URL: ${{ vars.HUB_PUBLIC_BASE_URL }}
+        run: node scripts/check-hub-public.mjs "$HUB_PUBLIC_BASE_URL"

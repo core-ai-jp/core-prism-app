@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "sync-plan": "node scripts/syncBusinessPlan.mjs",
-    "prebuild": "node scripts/syncBusinessPlan.mjs && node scripts/genRoutePages.mjs",
+    "prebuild": "node scripts/syncBusinessPlan.mjs && node scripts/genRoutePages.mjs && node scripts/genHubPages.mjs",
     "build": "tsc -b && vite build",
     "test": "vitest run && node scripts/check-static-facts.mjs",
     "lint": "eslint .",
@@ -15,7 +15,8 @@
     "build:store-assets": "node extensions/build-assets.mjs",
     "lighthouse": "node scripts/lighthouseAll.mjs",
     "gen:routes": "node scripts/genRoutePages.mjs",
-    "check:facts": "node scripts/check-static-facts.mjs"
+    "check:facts": "node scripts/check-static-facts.mjs",
+    "gen:hub": "node scripts/genHubPages.mjs"
   },
   "dependencies": {
     "@rolldown/binding-linux-x64-gnu": "^1.0.1",
