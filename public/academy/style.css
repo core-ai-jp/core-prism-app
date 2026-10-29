@@ -58,3 +58,21 @@
 
 .academy-tool-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:32px 0}.academy-tool-grid article{border:1px solid #d6dee7;background:white;padding:24px}.academy-tool-grid p{color:#536780;font-size:13px}.tool-identity{display:flex;align-items:center;gap:12px}.tool-identity h3{margin:0;font-size:18px;color:#172b44}.tool-identity img{object-fit:contain;flex:none}.academy-flow{display:flex;align-items:stretch;gap:10px;margin:36px 0}.academy-flow>div{flex:1;min-width:0;border:1px solid #ccd8e2;border-top:3px solid #1a83b8;background:white;padding:16px}.academy-flow>div span{display:block;color:#247caf;font-size:11px}.academy-flow>div strong{display:block;font-size:16px;color:#132c48;margin:7px 0}.academy-flow>div small{display:block;color:#536780;font-size:11px}.academy-flow>b{align-self:center;color:#267eb0}.academy-goal{background:#0d2b49;padding:35px;margin-top:28px;color:white}.academy-goal h3{font-size:25px}.academy-goal p{color:#d7e6f0}.academy-goal-points{display:flex;flex-wrap:wrap;gap:10px}.academy-goal-points span{padding:8px 12px;border:1px solid #87a6c6;font-size:12px}
 @media(max-width:760px){.academy-tool-grid{grid-template-columns:1fr}.academy-flow{display:grid;grid-template-columns:1fr;gap:8px}.academy-flow>b{text-align:center;transform:rotate(90deg)}.academy-goal{padding:22px}}
+
+
+/* Consumer membership journey — preserve existing CORE Academy identity */
+.academy-personal-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:26px 0 36px;border:1px solid #d8e1ea;background:#fff}
+.academy-personal-metrics>div{padding:19px 16px;text-align:center;border-right:1px solid #d8e1ea}
+.academy-personal-metrics>div:last-child{border:0}
+.academy-personal-metrics strong{display:block;font-size:clamp(21px,4vw,35px);font-weight:700;line-height:1.4;color:#087bac}
+.academy-personal-metrics span{display:block;font-size:11px;color:#576f87}
+.academy-monthly-topics article{display:flex;gap:15px;padding:12px 0;border-bottom:1px solid #dce3ea}
+.academy-monthly-topics article>span{font-size:12px;color:#0c87bd;font-weight:800;flex:none}
+.academy-monthly-topics strong{display:block;font-size:14px;color:#173654}
+.academy-monthly-topics p{font-size:12px!important;margin:3px 0!important}
+.academy-member-faq{margin:40px auto 0;max-width:850px}
+.academy-member-faq h3{font-size:22px;color:#173654}
+.academy-member-faq details{border-bottom:1px solid #cbd7e4}
+.academy-member-faq summary{padding:15px 0;cursor:pointer;font-weight:600;font-size:14px}
+.academy-member-faq details p{color:#536780;font-size:13px}
+@media(max-width:760px){.academy-personal-metrics>div{padding:12px 6px}.academy-personal-metrics span{font-size:9px}.academy-member-faq h3{font-size:18px}}
