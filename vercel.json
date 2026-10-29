@@ -190,6 +190,14 @@
       "destination": "/academy/brand-visual.svg"
     },
     {
+      "source": "/academy/member",
+      "destination": "/academy/member.html"
+    },
+    {
+      "source": "/academy/member/",
+      "destination": "/academy/member.html"
+    },
+    {
       "source": "/academy/survey",
       "destination": "/academy/index.html"
     },
