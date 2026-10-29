@@ -73,7 +73,7 @@ jobs:
         run: |
           npm test
           node scripts/check-smoke-safety.mjs
-          node --test scripts/check-hub-baseline.node-tests.mjs
+          node --test scripts/check-hub-baseline.node-tests.mjs scripts/check-hub-public.node-tests.mjs
 
       - name: Local-date timezone regression
         run: |
@@ -97,7 +97,7 @@ jobs:
       - name: Build and protected route checks
         run: |
           npm run build
-          node --test scripts/check-hub-baseline.node-tests.mjs
+          node --test scripts/check-hub-baseline.node-tests.mjs scripts/check-hub-public.node-tests.mjs
 
   hub-public-monitor:
     if: github.event_name != 'pull_request' && vars.HUB_PUBLIC_BASE_URL != ''

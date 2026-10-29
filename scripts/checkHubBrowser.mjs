@@ -6,7 +6,7 @@ const out = process.env.HUB_QA_OUT || "/tmp/core-hub-browser-qa";
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const results = [];
-for (const width of [1440, 1280, 768, 390, 375]) {
+for (const width of [1440, 1280, 768, 430, 390, 375]) {
   const page = await browser.newPage({
     viewport: { width, height: 900 },
     deviceScaleFactor: 1,
@@ -18,7 +18,8 @@ for (const width of [1440, 1280, 768, 390, 375]) {
     "/resources/security-self-check",
   ]) {
     const errors = [];
-    page.on("pageerror", (e) => errors.push(e.message));
+    const onError = (e) => errors.push(e.message);
+    page.on("pageerror", onError);
     await page.goto("http://127.0.0.1:4387" + path);
     await page.waitForSelector("h1");
     await page.screenshot({
@@ -34,6 +35,7 @@ for (const width of [1440, 1280, 768, 390, 375]) {
       h1: await page.locator("h1").innerText(),
       errors,
     });
+    page.off("pageerror", onError);
   }
   await page.close();
 }
@@ -44,6 +46,12 @@ await page
   .waitFor();
 results.push({
   disabledIntake: await page.locator("input[name=email]").isDisabled(),
+});
+// Block every registration request even if the local server gains API support.
+let registrationRequests = 0;
+await page.route("**/api/hub?action=register", (route) => {
+  registrationRequests++;
+  return route.fulfill({ status: 503, json: { error: "検証用の送信失敗" } });
 });
 // Explicit local-only fake config to test the submit-error path. No backend writes.
 await page.route("**/api/hub?action=config", (route) =>
@@ -64,7 +72,12 @@ results.push({
 });
 await page.getByRole("button", { name: "登録して資料を受け取る" }).click();
 await page.getByRole("alert").waitFor();
-results.push({ failureVisible: await page.getByRole("alert").innerText() });
+results.push({
+  registrationRequests,
+  failureVisible: await page.getByRole("alert").innerText(),
+});
 await browser.close();
 await writeFile(out + "/results.json", JSON.stringify(results, null, 2));
 console.log(JSON.stringify(results));
+
+if (results.some((r) => r.overflow || r.errors?.length || r.disabledIntake === false || r.attribution === false || r.marketingOff === false || (r.registrationRequests !== undefined && (r.registrationRequests !== 1 || r.failureVisible !== "検証用の送信失敗")))) process.exitCode = 1;
