@@ -97,7 +97,7 @@
         AI が事業を回す、すべての事業家の OS。
       </p>
       <p id="invite-message" class="message" hidden></p>
-      <a id="cta" class="cta" href="https://core-prism-app.vercel.app/">登録して受け取る →</a>
+      <a id="cta" class="cta" href="https://core-prism-app.vercel.app/?lp=1">登録して受け取る →</a>
       <p class="small">クレジットカード不要 · いつでも解約可</p>
     </main>
     <script>
@@ -122,7 +122,9 @@
             message.textContent = '「' + msg + '」';
             message.hidden = false;
           }
-          var qs = [];
+          // 保存済みデモ状態がある端末でも、招待の説明と登録 CTA がある LP を必ず見せる。
+          // lp=1 が無いとダッシュボードへ直行し、受取人が登録場所を探すことになる。
+          var qs = ['lp=1'];
           if (ref) qs.push('ref=' + encodeURIComponent(ref));
           if (from) qs.push('from=' + encodeURIComponent(from));
           if (msg) qs.push('msg=' + encodeURIComponent(msg));
