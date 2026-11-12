@@ -9,20 +9,19 @@ import { C, D, SERIF, SANS } from './theme';
 import { Band, H2, Note, Reveal, IconCheck, IconChat, IconCopy, IconArrow } from './ui';
 import { STUDIO, CONTACT, COMPANY } from './plans';
 import {
-  FILM, FILM_PLANS, MONTHLY_LEAD, MONTHLY_PLANS, MONTHLY_TERMS, MONTHLY_SPEC,
+  FILM_PLANS, MONTHLY_LEAD, MONTHLY_PLANS, MONTHLY_TERMS, MONTHLY_SPEC,
   PLAN_LADDER, PRICE_NOTE, PRICE_WHY, VALUE, monthlySavings, yen, taxIncluded,
-  TRIAL_OFFER, CAMPAIGN, isCampaignLive, offPercent,
+  CAMPAIGN, isCampaignLive, offPercent,
   PRICING_MODES, PRICING_LEAD, planMatrix, type PricingMode, type FilmPlan,
   FILM_PROCESS, PROCESS_STATEMENT, START_STEPS, REVISION, TERMS, AI_TERMS,
-  FILM_FAQ, FILM_CTA, FILM_GIFT, INQUIRY_FIELDS, FILM_MENU, MENU_LEAD,
-  menuPriceParts, menuSpecLabel, menuTarget,
+  FILM_FAQ, FILM_CTA, FILM_GIFT, INQUIRY_FIELDS,
 } from './film';
 // ---- 計測 ----
 // 以前はここで logEvent() を呼ぶだけだった = 記録は訪問者自身の localStorage に
 // 溜まるだけで、CORE 側には 1 件も届いていなかった。track() は手元にも残しつつ
 // /api/track/studio へビーコンを飛ばす (外部サービスは追加しない)。
 import { track } from './track';
-import { FilmProductionPicker } from './RealFilmPlans';
+import { RealFilmPlans } from './RealFilmPlans';
 // 実績データの正本は works.ts (実績タブと映像タブの両方が使う)
 import { FILM_WORKS, FEATURED_FILM_WORKS, OTHER_FILM_WORKS } from './works';
 
@@ -85,12 +84,6 @@ export default function FilmTab() {
     window.setTimeout(() => scrollToId('film-pricing'), 0);
   };
 
-  // 早見表の行 → 該当プランの内訳。単発は詳細を開いてそこまで運び、月額は料金表の頭へ。
-  const showPlan = (m: PricingMode, plan?: string) => {
-    setPricingMode(m);
-    setOpenPlan(plan ?? null);
-    window.setTimeout(() => scrollToId(plan ? `film-plan-${plan}` : 'film-pricing'), 0);
-  };
 
   return (
     <div>
@@ -344,7 +337,7 @@ export default function FilmTab() {
            限定は主張ではなく条件なので、地の色を濃紺にして静かに置く */
         .fm-pick-badge[data-offer="true"] { background: ${C.ink}; }
         /* 通常価格 → 初回価格。取り消し線の金額と割引額を1行に置く。
-           「50%OFF」のような丸めた数字は書かない (¥89,800→¥49,800 は 44%) */
+           割引を表示する場合も、計算値を用いる。 */
         .fm-pick-was { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
         .fm-pick-was-price { font-size: 13.5px; color: ${C.mute}; text-decoration: line-through;
           text-decoration-thickness: 1px; }
@@ -561,31 +554,18 @@ export default function FilmTab() {
         @media (max-width: 767px) { .fm-sticky-cta { display: block; } .fm-sticky-pad { height: 68px; } }
       `}</style>
 
-      {/* 章の並び (2026-08-27 第2版)。
-          オーナー指摘「まだ分かりにくい。特にiPhoneで、どんなものがいくらで作れるのかを」。
-
-          第1版は「作れるもの(用途)」と「料金(尺別3プラン)」を別々の章に置いていたため、
-          「採用動画はいくらか」に答えるには2章を突き合わせる必要があった。
-          第2版では 用途・仕様・金額を1行にした料金早見表を映像の直後に置き、
-          その1章だけで「何が、いくらで」が完結するようにしている。
-
-          並びは 実物(映像) → 何がいくらか(早見表) → 目次 → 本当に作れるのか(実績) →
-          金額の内訳(料金) → 誰がどう作り、どう頼むか(制作と発注の流れ) → 条件・FAQ → 相談。
-          目次を早見表の後ろに置いてあるのは、目次が先にあると
-          いちばん見せたい早見表が1スクロール遠のくため。 */}
-      <FilmProductionPicker>
+      {/* AI制作を主役に、動画 → 白い料金 → 制作実績。実写はページ下部。 */}
       <FilmHero />
-      <PriceMenu onPick={showPlan} />
-      <SectionNav onPricing={showPricing} />
-      <FilmWorks />
       <Pricing mode={pricingMode} onMode={setPricingMode} openPlan={openPlan} onOpenPlan={setOpenPlan} />
+      <FilmWorks />
+      <SectionNav onPricing={showPricing} />
       <HowWeWork />
       <Terms />
       <Faq />
+      <RealFilmPlans />
       <div className="fm-sticky-pad" />
       <FinalCta />
       <MobileStickyCta />
-      </FilmProductionPicker>
     </div>
   );
 }
@@ -650,7 +630,6 @@ function MobileStickyCta() {
 // その時に何も起きない静止画で終わらせないため、停止中は必ず再生ボタンを出す。
 // ============================================================
 // 同じ相手から複数本いただいている場合に社名が2度並ぶと、件数を水増ししているように見える。
-const HERO_CLIENTS = [...new Set([...FEATURED_FILM_WORKS, ...OTHER_FILM_WORKS].map(w => w.client))];
 
 function FilmHero() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -677,7 +656,7 @@ function FilmHero() {
   };
 
   return (
-    <section style={{ background: D.bg, paddingBottom: 44 }}>
+    <section style={{ background: D.bg, paddingBottom: 20 }}>
       {/* 映像そのものがヒーロー。文字は重ねず、下の帯に置く。
           素材は縦型なので、切り抜かずに画面幅いっぱいの 9:16 で出す。 */}
       <div className="fm-hero">
@@ -710,44 +689,9 @@ function FilmHero() {
         </div>
       </div>
 
-      {/* 2026-08-27 第2版 — 映像の下は「見出し・金額・押す場所」の3つだけにした。
-          旧版はここに 用途チップ6個 + 数字4つ + 条件5つ が続いて 574px あり、
-          ヒーローだけで2画面 (1,594px) を使っていた。用途と金額は直後の早見表で
-          セットにして出すほうが速いので、ここでは重複させない。 */}
-      <div className="st-inner" style={{ paddingTop: 20 }}>
-        <div className="st-label fm-hero-label" style={{ color: D.gold }}>{FILM.label}</div>
-        <h1 className="st-serif fm-hero-h1" style={{ whiteSpace: 'pre-line' }}>{FILM.hero}</h1>
-
-        {/* 金額は見出しの直後。間に1文でも挟むと 375x812 で固定CTAの下に落ちる。
-            「いくらから頼めるのか」が分からないまま2画面スクロールさせない */}
-        <div className="fm-heroprice">
-          {FILM.heroPrice.map(p => (
-            <div key={p.label} className="fm-heroprice-item">
-              <div className="st-serif fm-heroprice-value">{p.value}</div>
-              <div className="fm-heroprice-label">{p.label}</div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>
-          <button className="st-btn fm-btn-gold" onClick={() => { track('studio_film_hero_cta', { to: 'menu' }); scrollToId('film-menu'); }}>
-            {FILM.heroCtaSub}
-          </button>
-          <a className="st-btn st-btn-line" href={CONTACT.lineUrl} target="_blank" rel="noopener noreferrer"
-            onClick={() => track('studio_film_hero_cta', { to: 'line' })}>
-            <IconChat /> {FILM.heroCta}
-          </a>
-        </div>
-
-        <p className="fm-hero-sub">{FILM.heroSub}</p>
-        <p className="fm-hero-note">この映像はすべてAIで制作しました。撮影はしていません。</p>
-
-        <div className="fm-clients">
-          <span className="fm-clients-lead">ご依頼をいただいた企業・ブランド</span>
-          <div className="fm-clients-row">
-            {HERO_CLIENTS.map(name => <span key={name} className="fm-clients-item">{name}</span>)}
-          </div>
-        </div>
+      <div className="st-inner" style={{ paddingTop: 18 }}>
+        <h1 className="st-serif" style={{ fontSize: 23, color: D.ink, margin: 0 }}>AI映像制作</h1>
+        <p className="fm-hero-note" style={{ margin: '8px 0 0' }}>この映像はすべてAIで制作しました。撮影はしていません。</p>
       </div>
     </section>
   );
@@ -759,7 +703,7 @@ function FilmHero() {
 // mode を持つ項目は、飛ぶ前に料金セクションの表示を切り替える。
 // 「月額プラン」を押したのに単発のカードが出ている、という食い違いを作らない。
 const NAV_ITEMS: Array<{ id: string; label: string; mode?: PricingMode }> = [
-  { id: 'film-menu', label: '料金早見表' },
+  { id: 'film-live', label: '実写PV制作' },
   { id: 'film-works', label: '制作実績' },
   { id: 'film-pricing', label: '1本ずつの料金', mode: 'once' },
   { id: 'film-pricing', label: '月額プラン', mode: 'monthly' },
@@ -808,68 +752,6 @@ function SectionNav({ onPricing }: { onPricing: (m: PricingMode) => void }) {
 // ここに映像は貼らない (film.ts の FILM_MENU のコメント参照。手持ちの参考映像には
 // 実写素材が混ざっており「撮影をしない」という主張と食い違う。実映像は制作実績だけで見せる)。
 // ============================================================
-function PriceMenu({ onPick }: { onPick: (mode: PricingMode, plan?: string) => void }) {
-  return (
-    <section id="film-menu" style={{ background: D.bg, padding: '4px 0 48px', scrollMarginTop: 96 }}>
-      <div className="st-inner">
-        <Reveal>
-          <div className="st-label" style={{ color: D.gold, marginBottom: 12 }}>{MENU_LEAD.en}</div>
-          <h2 className="st-serif" style={{ fontSize: 'clamp(21px, 5.4vw, 27px)', fontWeight: 700, color: D.ink, margin: 0, lineHeight: 1.55 }}>
-            {MENU_LEAD.title}
-          </h2>
-          <p style={{ fontSize: 13, lineHeight: 1.95, color: D.body, margin: '10px 0 0', maxWidth: 620 }}>{MENU_LEAD.sub}</p>
-        </Reveal>
-
-        <Reveal delay={60}>
-          <div className="fm-pm" style={{ marginTop: 18 }}>
-            {FILM_MENU.map(m => {
-              const price = menuPriceParts(m.basis);
-              const target = menuTarget(m.basis);
-              return (
-                // 行そのものを押せるようにする。金額の隣に「詳しく」のリンクを置くと、
-                // 375px では金額が押しづらい幅に痩せる。行全体が当たり判定なら指で外さない。
-                <button key={m.id} type="button" className="fm-pm-row"
-                  onClick={() => { track('studio_film_menu_row', { id: m.id, mode: target.mode }); onPick(target.mode, target.plan); }}>
-                  <span className="fm-pm-main">
-                    <span className="fm-pm-title">{m.title}</span>
-                    <span className="fm-pm-spec">{menuSpecLabel(m.basis)}</span>
-                    <span className="fm-pm-body">{m.body}</span>
-                  </span>
-                  <span className="fm-pm-price">
-                    <span className="st-serif fm-pm-price-main">{price.main}<small style={{ fontSize: 11 }}> 税別</small></span>
-                    <span className="fm-pm-price-sub" style={{ fontSize: 13, color: D.ink }}>{price.total}</span>
-                    {price.sub && <span className="fm-pm-price-sub">{price.sub}</span>}
-                    <span className="fm-pm-more" aria-hidden>
-                      内訳を見る
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-                    </span>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-          <p className="fm-pm-note">{MENU_LEAD.note}</p>
-        </Reveal>
-
-        {/* 表の直下に「どの金額にも共通してついてくるもの」を1度だけ置く。
-            各行に同じ注記を6回書くと表が読めなくなり、章を分けると金額から離れて読まれない。 */}
-        <Reveal delay={100}>
-          <div className="fm-common">
-            <div className="fm-common-head">どの金額にも共通して含まれます</div>
-            {FILM.common.map(c => (
-              <div key={c.label} className="fm-common-item">
-                <div className="fm-common-label">{c.label}</div>
-                <div className="fm-common-value"><IconCheck color={D.gold} />{c.value}</div>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
 // ============================================================
 // 制作と発注の流れ — 2026-08-27 第2版で「はじめかた(3ステップ)」と
 // 「誰が作るか(制作6工程 + 窓口の実名)」を1章に統合した。
@@ -1275,13 +1157,12 @@ function ModeSwitch({ mode, onPick }: { mode: PricingMode; onPick: (m: PricingMo
 // ---- 早見カード (単発)。金額・向く相手・作れるものだけに絞る。仕様の全項目は下の比較表 ----
 function PlanPickCards({ onDetail }: { onDetail: (id: string) => void }) {
   // 期限を過ぎたら、割引の表示ごと消す。期限切れの「33%OFF」が残るのが一番まずい。
-  // TRIAL は日付ではなく「初めてのお取引」という条件つきなので、期限とは無関係に出し続ける。
+  // 15秒プランには初回割引を設けない。
   const live = isCampaignLive();
   return (
     <div className="fm-pick">
       {FILM_PLANS.map(p => {
-        const isTrial = p.id === 'trial';
-        const showOffer = !!p.listPriceYen && (isTrial || live);
+        const showOffer = !!p.listPriceYen && live;
         const off = p.listPriceYen ? offPercent(p.listPriceYen, p.priceYen) : 0;
         return (
         <div key={p.id} className="fm-pick-card" data-featured={p.featured ? 'true' : undefined}>
@@ -1289,7 +1170,7 @@ function PlanPickCards({ onDetail }: { onDetail: (id: string) => void }) {
             {p.featured && <span className="fm-pick-badge">おすすめ</span>}
             {showOffer && (
               <span className="fm-pick-badge" data-offer="true">
-                {isTrial ? TRIAL_OFFER.badge : CAMPAIGN.badge}
+                {CAMPAIGN.badge}
               </span>
             )}
           </div>
@@ -1393,8 +1274,8 @@ function PlanMatrix() {
                   <div className="fm-mx-plan-price">{p.price}（税別）</div><div>税込 {taxIncluded(p.priceYen)}{p.id === 'premium' ? '〜（個別見積もり）' : ''}</div>
                   <div className="fm-mx-plan-unit">
                     {p.name}
-                    {p.listPrice && (p.id === 'trial' || isCampaignLive()) && (
-                      <><br />通常 {p.listPrice}／{p.id === 'trial' ? TRIAL_OFFER.badge : CAMPAIGN.badge}</>
+                    {p.listPrice && isCampaignLive() && (
+                      <><br />通常 {p.listPrice}／{CAMPAIGN.badge}</>
                     )}
                   </div>
                 </th>
@@ -1431,7 +1312,7 @@ function PlanDetail({ p, open, onToggle }: { p: FilmPlan; open: boolean; onToggl
         <span>
           <span className="st-serif" style={{ display: 'block', fontSize: 14.5, fontWeight: 700, color: C.ink, letterSpacing: '0.02em' }}>
             {p.unit} <span style={{ letterSpacing: 'normal', color: C.mute, fontWeight: 400, fontSize: 12.5 }}>
-              {p.listPrice && (p.id === 'trial' || isCampaignLive()) && <s style={{ marginRight: 5 }}>{p.listPrice}</s>}{p.price}（税別・税込 {taxIncluded(p.priceYen)}{p.id === 'premium' ? '〜（個別見積もり）' : ''}） ／ {p.name}
+              {p.listPrice && isCampaignLive() && <s style={{ marginRight: 5 }}>{p.listPrice}</s>}{p.price}（税別・税込 {taxIncluded(p.priceYen)}{p.id === 'premium' ? '〜（個別見積もり）' : ''}） ／ {p.name}
             </span>
           </span>
           <span style={{ display: 'block', fontSize: 12, color: C.mute, lineHeight: 1.7, marginTop: 4 }}>{p.lead}</span>
@@ -1561,31 +1442,6 @@ function Pricing({ mode, onMode, openPlan, onOpenPlan }: {
       <div style={{ marginTop: 20 }}>
         {mode === 'once' ? <PlanPickCards onDetail={openDetail} /> : <MonthlyPickCards />}
       </div>
-
-      {/* 初回価格の根拠と枠。安さの理由を書かずに割引だけを出すと、品質への不信にしかならない。
-          「残り◯枠」のような検証できないカウンターは置かず、守れる条件だけを静かに書く */}
-      {mode === 'once' && (
-        <Reveal>
-          <div className="st-card" style={{ marginTop: 14, background: '#FFFFFF' }}>
-            <div style={{ fontSize: 12.5, fontWeight: 700, color: C.ink, marginBottom: 6 }}>
-              いまの価格について
-            </div>
-            <p style={{ fontSize: 12.5, lineHeight: 1.9, color: C.body, margin: 0 }}>
-              <b style={{ color: C.ink }}>TRIAL（15秒）</b> — {TRIAL_OFFER.why}
-            </p>
-            <p style={{ fontSize: 12, lineHeight: 1.85, color: C.mute, margin: '6px 0 0' }}>
-              {TRIAL_OFFER.limit}。{TRIAL_OFFER.quota}
-            </p>
-            {isCampaignLive() && (
-              <p style={{ fontSize: 12.5, lineHeight: 1.9, color: C.body, margin: '12px 0 0', paddingTop: 12, borderTop: `1px solid ${C.line}` }}>
-                <b style={{ color: C.ink }}>STANDARD</b> — 開設にあたり、{CAMPAIGN.untilLabel} のご発注分までを現行価格でお引き受けしています。
-                {CAMPAIGN.nextLabel} 以降は、STANDARD ¥192,000 に改定します。
-                <span style={{ color: C.mute }}>（すでにご発注いただいた制作は、改定後も当初の金額のまま進めます）</span>
-              </p>
-            )}
-          </div>
-        </Reveal>
-      )}
 
       {mode === 'once' ? (
         <>

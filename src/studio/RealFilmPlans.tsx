@@ -1,76 +1,60 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, type CSSProperties } from 'react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import content from './realFilmPlans.json';
-import { ArrowRight } from 'lucide-react';
 import { C, D, SANS, SERIF } from './theme';
+import { Band, H2 } from './ui';
 import { CONTACT } from './plans';
 import { track } from './track';
 import './realFilm.css';
 
 const money = (value: number) => `¥${value.toLocaleString('ja-JP')}`;
-const getMode = () => new URLSearchParams(window.location.search).get('production') === 'live' ? 'live' : 'ai';
 
-export function FilmProductionPicker({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState(getMode);
+export function RealFilmPlans() {
   useEffect(() => {
-    const sync = () => setMode(getMode());
-    window.addEventListener('popstate', sync);
-    return () => window.removeEventListener('popstate', sync);
+    // Preserve previously shared direct links without replacing the AI-first page.
+    if (new URLSearchParams(window.location.search).get('production') !== 'live') return;
+    const timer = window.setTimeout(() => {
+      const target = document.getElementById('film-live');
+      const header = document.querySelector('header');
+      if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - (header?.getBoundingClientRect().height ?? 115), behavior: 'instant' });
+    }, 100);
+    return () => window.clearTimeout(timer);
   }, []);
-  const select = (next: 'ai' | 'live') => {
-    setMode(next);
-    const url = new URL(window.location.href);
-    if (next === 'live') url.searchParams.set('production', 'live');
-    else url.searchParams.delete('production');
-    window.history.replaceState(window.history.state, '', url);
-    track('studio_film_nav', { to: next === 'live' ? 'real-pv' : 'ai-film' });
-  };
-  return <div style={{ '--pv-ink': C.ink, '--pv-body': C.body, '--pv-paper': C.alt,
-    '--pv-gold': C.goldText, '--pv-line': C.line, '--pv-dark': D.bg,
-    '--pv-sans': SANS, '--pv-serif': SERIF } as CSSProperties}>
-    <nav className="pv-switch" aria-label="映像制作の種類">
-      <button type="button" aria-pressed={mode === 'ai'} onClick={() => select('ai')}>
-        <span>AI映像制作</span><small>撮影を伴わない映像制作</small>
-      </button>
-      <button type="button" aria-pressed={mode === 'live'} onClick={() => select('live')}>
-        <span>実写PV制作</span><small>撮影・ヘアメイク・空撮・編集</small>
-      </button>
-    </nav>
-    {mode === 'live' ? <RealFilmPlans /> : children}
-  </div>;
-}
 
-function RealFilmPlans() {
-  return <section className="pv" aria-labelledby="pv-heading">
-    <div className="pv-inner">
-      <header className="pv-heading">
-        <p className="pv-kicker">CORE STUDIO / LIVE ACTION</p>
-        <h1 id="pv-heading">{content.title.split('、').map((part, i) => <span key={part}>{part}{i === 0 ? '、' : ''}</span>)}</h1>
-        <p className="pv-lead">{content.lead}</p>
-      </header>
-      <div className="pv-price-intro"><h2>実写PV制作、3つのプラン。</h2><p>{content.unit}</p></div>
+  return <div className="pv" style={{ '--pv-ink': C.ink, '--pv-body': C.body,
+    '--pv-paper': C.alt, '--pv-gold': C.goldText, '--pv-line': C.line,
+    '--pv-dark': D.bg, '--pv-sans': SANS, '--pv-serif': SERIF } as CSSProperties}>
+    <Band id="film-live" flat wide pad="64px 0">
+      <div className="pv-heading">
+        <H2 en="LIVE ACTION" sub="人・商品・空間を、長尺のPVに。実際の撮影をご希望の方へ。">実写の撮影も、CORE Studioで。</H2>
+        <p className="pv-unit">{content.unit}</p>
+      </div>
       <div className="pv-grid">
-        {content.plans.map((plan, index) => <article className="pv-plan" key={plan.id}>
-          <div className="pv-plan-top"><span className="pv-number">0{index + 1}</span><h3>{plan.name}</h3></div>
-          <p className="pv-headline">{plan.headline}</p>
-          <p className="pv-price"><strong>{plan.price / 10000}</strong><span>万円<span className="pv-tax">税別 / 1作品</span></span></p>
+        {content.plans.map(plan => <article className="pv-plan" key={plan.id}>
+          <p className="pv-name">{plan.name}</p>
+          <h3>{plan.headline}</h3>
+          <p className="pv-price"><strong>{plan.price / 10000}</strong><span>万円<small>税別 / 1作品</small></span></p>
           <p className="pv-inclusive">税込 {money(Math.round(plan.price * 1.1))}</p>
           <p className="pv-for">{plan.for}</p>
-          <dl>{content.rows.map(([label, key]) => <div key={key}>
-            <dt>{label}</dt><dd>{String(plan[key as keyof typeof plan])}</dd>
-          </div>)}</dl>
-          <a className="pv-cta" href={CONTACT.lineUrl} target="_blank" rel="noopener noreferrer"
-            onClick={() => track('studio_film_pricing_cta', { plan: `live-${plan.id}`, to: 'line' })}>
-            {plan.price / 10000}万円プランを相談する<ArrowRight size={18} aria-hidden="true" />
-          </a>
+          <dl className="pv-summary">
+            <div><dt>撮影</dt><dd>{plan.days}</dd></div>
+            <div><dt>体制</dt><dd>{plan.crew}</dd></div>
+            <div><dt>本編</dt><dd>{plan.mainFilm}</dd></div>
+            <div><dt>SNS</dt><dd>{plan.shorts}</dd></div>
+          </dl>
+          <details className="pv-detail">
+            <summary>制作内容を詳しく見る<ChevronDown size={17} aria-hidden="true" /></summary>
+            <dl>{content.rows.filter(([,key]) => !['days','crew','mainFilm','shorts'].includes(key)).map(([label,key]) => <div key={key}><dt>{label}</dt><dd>{String(plan[key as keyof typeof plan])}</dd></div>)}</dl>
+          </details>
+          <a className="pv-cta st-btn" href={CONTACT.lineUrl} target="_blank" rel="noopener noreferrer" onClick={() => track('studio_film_pricing_cta', { plan: `live-${plan.id}`, to: 'line' })}>このプランを相談する<ArrowRight size={17} aria-hidden="true" /></a>
         </article>)}
       </div>
-      <p className="pv-contact-note">LINEが開きます。ご希望のプラン名をお知らせください。ご相談・お見積もりは無料です。</p>
-      <section className="pv-common" aria-labelledby="pv-common-heading">
-        <h2 id="pv-common-heading">すべてのプランに含むもの。</h2>
-        <div className="pv-common-grid">{content.common.map(item => <div key={item.title}><h3>{item.title}</h3><p>{item.body}</p></div>)}</div>
-      </section>
-      <section className="pv-recurring"><p className="pv-kicker">CONTINUOUS PRODUCTION</p><h2>{content.recurring.title}</h2><p>{content.recurring.body}</p><a href={CONTACT.lineUrl} className="pv-text-link" target="_blank" rel="noopener noreferrer" onClick={() => track('studio_film_pricing_cta', { plan: 'live-recurring', to: 'line' })}>継続制作について相談する <ArrowRight size={18} aria-hidden="true" /></a></section>
-      <section className="pv-terms" aria-labelledby="pv-terms-heading"><h2 id="pv-terms-heading">ご依頼前に、ご確認ください。</h2><dl>{content.terms.map(item => <div key={item.title}><dt>{item.title}</dt><dd>{item.body}</dd></div>)}</dl></section>
-    </div>
-  </section>;
+      <p className="pv-contact-note">ヘアメイク・基本機材・条件付きドローン空撮・編集を含みます。ロケ地代等は別途お見積もり。相談ボタンからLINEが開きます。</p>
+      <details className="pv-conditions"><summary>含まれるもの・撮影条件<ChevronDown size={18} aria-hidden="true" /></summary>
+        <div className="pv-common">{content.common.map(item => <div key={item.title}><h3>{item.title}</h3><p>{item.body}</p></div>)}</div>
+        <dl className="pv-terms">{content.terms.map(item => <div key={item.title}><dt>{item.title}</dt><dd>{item.body}</dd></div>)}</dl>
+      </details>
+      <div className="pv-recurring"><div><h3>{content.recurring.title}</h3><p>{content.recurring.body}</p></div><a className="pv-text-link" href={CONTACT.lineUrl} target="_blank" rel="noopener noreferrer" onClick={() => track('studio_film_pricing_cta', { plan: 'live-recurring', to: 'line' })}>継続制作のご相談<ArrowRight size={17} aria-hidden="true" /></a></div>
+    </Band>
+  </div>;
 }

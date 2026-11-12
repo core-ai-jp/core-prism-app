@@ -612,7 +612,7 @@ function studioServiceLd() {
         name: 'AI動画制作・ショートドラマ制作代行',
         description: 'ショートドラマ・ブランドムービー・SNS縦型動画・CMの企画から脚本・映像制作・編集・字幕・SNS最適化までの一貫制作。',
         priceCurrency: 'JPY',
-        price: '49800',
+        price: '89800',
         url: `${STUDIO.url}#film`,
       },
       {

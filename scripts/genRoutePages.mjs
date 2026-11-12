@@ -468,7 +468,7 @@ PAGES.push(
         provider: { '@id': `${STUDIO}/#studio` }, areaServed: { '@type': 'Country', name: '日本' }, inLanguage: 'ja',
         description: '撮影を伴わないAI映像制作。企画・脚本・ディレクション・仕上げまで一貫。撮影費・出演費・ロケ費・機材費はかからない。',
         hasOfferCatalog: { '@type': 'OfferCatalog', name: '映像制作の料金（税別・初稿まで約1週間）', itemListElement: [
-          offer('商品・サービス紹介（15秒・3〜5カット）', '89800', `${STUDIO}/studio/film`, { price: '89800', priceSpecification: { '@type': 'PriceSpecification', price: '89800', priceCurrency: 'JPY', valueAddedTaxIncluded: false }, description: '見せ場だけを15秒に。そのまま広告に出せる形で納品。初めてのお取引は ¥49,800（税別・税込 ¥54,780）。' }),
+          offer('商品・サービス紹介（15秒・3〜5カット）', '89800', `${STUDIO}/studio/film`, { price: '89800', priceSpecification: { '@type': 'PriceSpecification', price: '89800', priceCurrency: 'JPY', valueAddedTaxIncluded: false }, description: '見せ場だけを15秒に。そのまま広告に出せる形で納品。' }),
           offer('採用・会社紹介（30秒・8〜12カット）', '128000', `${STUDIO}/studio/film`, { price: '128000', priceSpecification: { '@type': 'PriceSpecification', price: '128000', priceCurrency: 'JPY', valueAddedTaxIncluded: false }, description: '働く場所と人の空気を、応募前の候補者に先に届ける。' }),
           offer('イベント告知（30秒・8〜12カット）', '128000', `${STUDIO}/studio/film`, { price: '128000', priceSpecification: { '@type': 'PriceSpecification', price: '128000', priceCurrency: 'JPY', valueAddedTaxIncluded: false }, description: '開催前に、当日の熱量を先に見せる告知映像。' }),
           offer('ブランドフィルム（60秒・15カット以上）', '298000', `${STUDIO}/studio/film`, { price: '298000', priceSpecification: { '@type': 'PriceSpecification', price: '298000', priceCurrency: 'JPY', valueAddedTaxIncluded: false }, description: '会社・商品の思想を1本に。商談や展示会で流す顔になる。' }),
@@ -477,7 +477,7 @@ PAGES.push(
         ] } },
       sCrumb('film', '映像制作'),
       faq(`${STUDIO}/studio/film`, [
-        ['AI動画制作はいくらからですか。', '商品・サービス紹介（15秒・3〜5カット）が通常¥89,800（税別・税込 ¥98,780）、初めてのお取引にかぎり¥49,800（税別・税込 ¥54,780）です。採用・会社紹介とイベント告知が¥128,000（税別・税込 ¥140,800）、ブランドフィルム（60秒・ASK）が298,000円〜（税別・税込 ¥327,800〜・個別見積もり）、SNSの継続発信とショートドラマは月¥74,800（税別・税込 ¥82,280）からです。税別価格と消費税10%を含む税込総額を併記しています。'],
+        ['AI動画制作はいくらからですか。', '商品・サービス紹介（15秒・3〜5カット）が通常¥89,800（税別・税込 ¥98,780）です。採用・会社紹介とイベント告知が¥128,000（税別・税込 ¥140,800）、ブランドフィルム（60秒・ASK）が298,000円〜（税別・税込 ¥327,800〜・個別見積もり）、SNSの継続発信とショートドラマは月¥74,800（税別・税込 ¥82,280）からです。税別価格と消費税10%を含む税込総額を併記しています。'],
         ['AI映像制作に撮影費や出演費は別にかかりますか。', 'AI映像制作ではかかりません。撮影費・出演費・ロケ費・機材費は0円です。初期費用も0円です。'],
         ['納品までどれくらいですか。', 'どのメニューも初稿のお渡しまで約1週間です。'],
         ['修正は何回までですか。', 'AI映像制作の全プラン共通で無償の修正は1回です。2回目以降は1回¥5,500（税別・税込 ¥6,050）で承ります。1回は「いただいたご指示をまとめて1回」と数えるため、1通のご連絡に10箇所のご指摘が含まれていても1回です。'],
@@ -488,9 +488,8 @@ PAGES.push(
     body: `
           <p class="k">FILM &amp; MOTION</p>
           <h1>AI映像制作と、実写PV制作。</h1>
-          ${realFilmHtml}
           <h2>AI映像制作 — 撮影せずに、広告に出せる映像を。</h2>
-          <p class="lead">企画・脚本・ディレクション・仕上げまで、株式会社CORE（CORE Studio）が一貫して制作します。掲載している映像は<strong>すべてAIで制作しており、撮影はしていません</strong>。15秒1本 ¥89,800（税別・税込 ¥98,780）（初めてのお取引は ¥49,800（税別・税込 ¥54,780））、初稿のお渡しまで約1週間。</p>
+          <p class="lead">企画・脚本・ディレクション・仕上げまで、株式会社CORE（CORE Studio）が一貫して制作します。掲載している映像は<strong>すべてAIで制作しており、撮影はしていません</strong>。15秒1本 ¥89,800（税別・税込 ¥98,780）、初稿のお渡しまで約1週間。</p>
 
           <section>
             <h2>何が、いくらで作れるか</h2>
@@ -498,7 +497,7 @@ PAGES.push(
               <caption>ご依頼の多い6つ。税別価格と税込総額を併記しています。初稿のお渡しまではどれも約1週間です。撮影費・出演費・ロケ費・機材費はかかりません。</caption>
               <thead><tr><th>メニュー</th><th>尺・構成</th><th>料金</th><th>内容</th></tr></thead>
               <tbody>
-                <tr><td>商品・サービス紹介</td><td>15秒・3〜5カット</td><td><strong>¥89,800（税別・税込 ¥98,780）</strong>（初めてのお取引は ¥49,800（税別・税込 ¥54,780））</td><td>見せ場だけを15秒に。そのまま広告に出せる形で納品します。</td></tr>
+                <tr><td>商品・サービス紹介</td><td>15秒・3〜5カット</td><td><strong>¥89,800（税別・税込 ¥98,780）</strong></td><td>見せ場だけを15秒に。そのまま広告に出せる形で納品します。</td></tr>
                 <tr><td>採用・会社紹介</td><td>30秒・8〜12カット</td><td><strong>¥128,000（税別・税込 ¥140,800）</strong></td><td>働く場所と人の空気を、応募前の候補者に先に届けます。</td></tr>
                 <tr><td>イベント告知</td><td>30秒・8〜12カット</td><td><strong>¥128,000（税別・税込 ¥140,800）</strong></td><td>開催前に、当日の熱量を先に見せる告知映像です。</td></tr>
                 <tr><td>ブランドフィルム</td><td>60秒・15カット以上</td><td><strong>298,000円〜（ASK・税別・税込 ¥327,800〜・個別見積もり）</strong></td><td>会社・商品の思想を1本に。商談や展示会で流す顔になります。</td></tr>
@@ -538,7 +537,9 @@ PAGES.push(
           <section>
             <h2>ご相談</h2>
             <p>ご相談からお見積りのご提示までは無料です。NDAの締結・請求書払いにも対応します。メール：<a href="mailto:info@core-ai.jp">info@core-ai.jp</a></p>
-          </section>`,
+          </section>
+          ${realFilmHtml}
+`,
     footer: studioFooter,
   },
   {
@@ -854,7 +855,7 @@ PAGES.push(
               <li>請求書払いに対応</li>
               <li>要件が固まっていない段階からのご相談も歓迎します</li>
             </ul>
-            <p>料金の目安は <a href="/studio/film">映像制作</a>（¥49,800〜）、<a href="/studio/plans">サイト制作</a>（¥5万〜）、<a href="/studio/dev">受託開発</a>（¥50万〜）、<a href="/studio/care">運用</a>（月¥1万〜）をご覧ください。</p>
+            <p>料金の目安は <a href="/studio/film">映像制作</a>（¥89,800〜）、<a href="/studio/plans">サイト制作</a>（¥5万〜）、<a href="/studio/dev">受託開発</a>（¥50万〜）、<a href="/studio/care">運用</a>（月¥1万〜）をご覧ください。</p>
           </section>`,
     footer: studioFooter,
   },
