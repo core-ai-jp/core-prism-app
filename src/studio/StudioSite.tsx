@@ -100,8 +100,8 @@ const SEO: { default: Seo; film: Seo } & Partial<Record<TabId, Seo>> = {
   },
   film: {
     ogImage: 'https://core-prism-app.vercel.app/og-studio-film-v5.png',
-    title: 'AI動画制作・ショートドラマ制作代行 — CORE Studio',
-    description: 'ショートドラマ、ブランドムービー、SNS縦型動画、CMまで。企画・脚本・映像制作・編集・字幕・SNS最適化までを一貫制作するAIクリエイティブスタジオ。初回1本(15秒)¥49,800（税別・税込¥54,780）、毎月継続は月4本¥228,000（税別・税込¥250,800）から。初期費用0円・最低契約期間なし。',
+    title: 'AI映像・実写PV制作 — CORE Studio',
+    description: 'AI映像制作と、撮影を伴う実写PV制作。実写PVは1作品50万・70万・100万円（税別／税込55万・77万・110万円）の制作予算。企画・撮影・ヘアメイク・条件付きドローン空撮・編集をまとめてご相談いただけます。ロケ地使用料などの実費は別途。継続制作にも対応。',
   },
   // 下層5ページ (2026-09-04)。静的な html は無い (SPA が返る) ので、ここが唯一の title / description。
   plans: { ogImage: OG_STUDIO, title: 'ウェブサイト制作 — CORE Studio', description: `1ページのLPから、予約・決済を備えた企業サイトまで。${PRODUCTION_PLANS[0].name} ${PRODUCTION_PLANS[0].price}から。ご契約時に金額を確定し、以後の追加費用はいただきません。原稿と写真がなくても始められます。` },

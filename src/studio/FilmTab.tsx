@@ -22,6 +22,7 @@ import {
 // 溜まるだけで、CORE 側には 1 件も届いていなかった。track() は手元にも残しつつ
 // /api/track/studio へビーコンを飛ばす (外部サービスは追加しない)。
 import { track } from './track';
+import { FilmProductionPicker } from './RealFilmPlans';
 // 実績データの正本は works.ts (実績タブと映像タブの両方が使う)
 import { FILM_WORKS, FEATURED_FILM_WORKS, OTHER_FILM_WORKS } from './works';
 
@@ -572,6 +573,7 @@ export default function FilmTab() {
           金額の内訳(料金) → 誰がどう作り、どう頼むか(制作と発注の流れ) → 条件・FAQ → 相談。
           目次を早見表の後ろに置いてあるのは、目次が先にあると
           いちばん見せたい早見表が1スクロール遠のくため。 */}
+      <FilmProductionPicker>
       <FilmHero />
       <PriceMenu onPick={showPlan} />
       <SectionNav onPricing={showPricing} />
@@ -583,6 +585,7 @@ export default function FilmTab() {
       <div className="fm-sticky-pad" />
       <FinalCta />
       <MobileStickyCta />
+      </FilmProductionPicker>
     </div>
   );
 }
