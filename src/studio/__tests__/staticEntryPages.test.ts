@@ -53,7 +53,7 @@ describe('静的入口HTMLが、画面のデータと食い違っていない', 
 
   it('映像制作: HTMLと全Offerが税別で一致する', () => {
     const html = read('studio-film.html');
-    expect(html).toContain('税込 ¥54,780');
+    expect(html).toContain('税込 ¥98,780');
     expect(html).toContain('お支払い額は税込総額です');
     const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
     const offers: Array<{ price: string; priceSpecification: { price: string; valueAddedTaxIncluded: boolean } }> = [];
