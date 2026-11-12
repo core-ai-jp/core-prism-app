@@ -186,6 +186,14 @@
   ],
   "rewrites": [
     {
+      "source": "/academy/studio",
+      "destination": "/academy/studio.html"
+    },
+    {
+      "source": "/academy/studio/",
+      "destination": "/academy/studio.html"
+    },
+    {
       "source": "/academy/brand-visual.svg",
       "destination": "/academy/brand-visual.svg"
     },
