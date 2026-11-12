@@ -18,3 +18,9 @@ Existing Academy registration and B2C membership flows remain unchanged. No paym
 ## Sources for model names
 
 Checked 2026-11-12: [Cinema Studio 4.0](https://higgsfield.ai/blog/cinema-studio-4-0-complete-guide), [Seedance 2.5](https://www.capcut.com/newsroom/giving-creators-more-control-with-dreamina-seedance-2-5-and-dola-seedream-5-0-pro). Availability depends on account, region and provider plans.
+
+## 2026-11-12 visual and offer revision
+
+The Studio landing page uses the owner-requested reference-matched hero artwork and Mincho headings. `studio-hero-20261112.png` is a generated edit of the supplied Academy visual; the existing general Academy poster is preserved. No event date, venue, capacity or sales result was added. Image copy is also represented in accessible page text.
+
+The revised offer flow presents tangible learning deliverables, the practice/review cycle, a clearly attributed existing CORE Studio production example, intent-to-plan navigation and the scope of coaching hours. Existing plan prices and curriculum data are unchanged. Performance/conversion uplift is not yet measured.
