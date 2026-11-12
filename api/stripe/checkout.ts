@@ -120,7 +120,7 @@ export default async function handler(req: Request) {
   // Film prices are tax-exclusive. Validate both the amount and the exclusive
   // Japanese 10% rate before creating a session; never silently charge untaxed.
   const filmAmounts: Record<string, number> = {
-    trial: 49800, standard: 128000, m1: 74800, m2: 118000,
+    trial: 89800, standard: 128000, m1: 74800, m2: 118000,
     m4: 228000, m8: 398000, m12: 548000,
   };
   const filmTaxRateId = process.env.STRIPE_TAX_RATE_FILM_JP_10;

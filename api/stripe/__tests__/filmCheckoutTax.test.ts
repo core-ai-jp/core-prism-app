@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import handler from '../checkout';
 import { FILM_PLANS, MONTHLY_PLANS, PRICE_NOTE } from '../../../src/studio/film';
 
-const amounts = { trial: 49800, standard: 128000, m1: 74800, m2: 118000, m4: 228000, m8: 398000, m12: 548000 };
+const amounts = { trial: 89800, standard: 128000, m1: 74800, m2: 118000, m4: 228000, m8: 398000, m12: 548000 };
 const request = (plan = 'trial', mode = 'payment', brand = 'film') => new Request('https://www.core-ai.jp/api/stripe/checkout', {
   method: 'POST', headers: { 'Content-Type': 'application/json', origin: 'https://www.core-ai.jp' },
   body: JSON.stringify({ plan, mode, brand }),
@@ -40,7 +40,7 @@ describe('Film keeps advertised amounts and adds exclusive Japanese 10% tax', ()
     const mock = setup(); vi.stubEnv('STRIPE_TAX_RATE_FILM_JP_10', '');
     expect((await handler(request())).status).toBe(503); expect(mock).not.toHaveBeenCalled();
   });
-  it.each([{ unit_amount: 1 }, { tax_behavior: 'inclusive' }, { active: false }, { currency: 'usd' }])('rejects a mismatched configured price: %j', async override => {
+  it.each([{ unit_amount: 49800 }, { unit_amount: 1 }, { tax_behavior: 'inclusive' }, { active: false }, { currency: 'usd' }])('rejects a mismatched configured price: %j', async override => {
     const mock = setup('trial', override);
     expect((await handler(request())).status).toBe(503); expect(mock).toHaveBeenCalledTimes(2);
   });
@@ -49,7 +49,7 @@ describe('Film keeps advertised amounts and adds exclusive Japanese 10% tax', ()
   });
   it('rejects an inclusive or wrong tax rate', async () => {
     setup(); vi.stubGlobal('fetch', vi.fn(async (url: string) => Response.json(url.includes('/prices/')
-      ? { active: true, currency: 'jpy', unit_amount: 49800, tax_behavior: 'exclusive' }
+      ? { active: true, currency: 'jpy', unit_amount: 89800, tax_behavior: 'exclusive' }
       : { active: true, country: 'JP', percentage: 8, inclusive: true })));
     expect((await handler(request())).status).toBe(503);
   });
