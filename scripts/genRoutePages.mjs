@@ -22,6 +22,9 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const REAL_FILM = JSON.parse(readFileSync(resolve(ROOT, 'src/studio/realFilmPlans.json'), 'utf8'));
+const realMoney = n => `¥${n.toLocaleString('ja-JP')}`;
+const realFilmHtml = `<section><h2>実写PV制作 — 1作品あたりの制作予算</h2><p>${REAL_FILM.lead}</p>${REAL_FILM.plans.map(p => `<h3>${p.name}：${realMoney(p.price)}（税別・税込 ${realMoney(Math.round(p.price * 1.1))}）</h3><p>${p.headline} ${p.for}</p><ul>${REAL_FILM.rows.map(([label, key]) => `<li>${label}：${p[key]}</li>`).join('')}</ul>`).join('')}<h3>全実写プラン共通</h3>${REAL_FILM.common.map(x => `<p>${x.title}：${x.body}</p>`).join('')}${REAL_FILM.terms.map(x => `<p>${x.title}：${x.body}</p>`).join('')}<h3>${REAL_FILM.recurring.title}</h3><p>${REAL_FILM.recurring.body}</p><p><a href="https://lin.ee/XVR8ySP">LINEで実写PVを相談する</a></p></section>`;
 const TODAY = '2026-09-06';
 const CORP = 'https://www.core-ai.jp';
 const STUDIO = 'https://studio.core-ai.jp';
@@ -456,8 +459,8 @@ const offer = (name, price, url, extra = {}) => ({ '@type': 'Offer', name, price
 PAGES.push(
   {
     file: 'studio-film.html', theme: 'studioDark', url: `${STUDIO}/studio/film`,
-    title: 'AI動画制作・ショートドラマ制作代行 — CORE Studio',
-    description: '税別価格と税込総額（消費税10%）を併記。ショートドラマ、ブランドムービー、SNS縦型動画、CMまで。企画・脚本・映像制作・編集・字幕・SNS最適化までを一貫制作するAIクリエイティブスタジオ。15秒1本は通常¥89,800（税別・税込 ¥98,780）、初めてのお取引にかぎり¥49,800（税別・税込 ¥54,780）。撮影費・出演費・ロケ費・機材費は0円。初期費用0円・最低契約期間なし。神戸の株式会社COREが制作します。',
+    title: 'AI映像・実写PV制作 — CORE Studio',
+    description: 'AI映像制作と、撮影を伴う実写PV制作。実写PVは1作品50万・70万・100万円（税別／税込55万・77万・110万円）の制作予算。企画・撮影・ヘアメイク・条件付きドローン空撮・編集をまとめてご相談いただけます。ロケ地使用料などの実費は別途。継続制作にも対応。',
     keywords: 'AI動画制作,AI動画生成,AIショートドラマ,ショート動画制作,ブランドムービー制作,TikTok動画制作,Instagram Reels制作,AI CM制作,縦型動画,採用動画,CORE Studio,神戸',
     og: `${STUDIO}/og-studio-film-v5.png`,
     ld: [
@@ -475,16 +478,18 @@ PAGES.push(
       sCrumb('film', '映像制作'),
       faq(`${STUDIO}/studio/film`, [
         ['AI動画制作はいくらからですか。', '商品・サービス紹介（15秒・3〜5カット）が通常¥89,800（税別・税込 ¥98,780）、初めてのお取引にかぎり¥49,800（税別・税込 ¥54,780）です。採用・会社紹介とイベント告知が¥128,000（税別・税込 ¥140,800）、ブランドフィルム（60秒・ASK）が298,000円〜（税別・税込 ¥327,800〜・個別見積もり）、SNSの継続発信とショートドラマは月¥74,800（税別・税込 ¥82,280）からです。税別価格と消費税10%を含む税込総額を併記しています。'],
-        ['撮影費や出演費は別にかかりますか。', 'かかりません。撮影費・出演費・ロケ費・機材費は0円です。初期費用も0円です。'],
+        ['AI映像制作に撮影費や出演費は別にかかりますか。', 'AI映像制作ではかかりません。撮影費・出演費・ロケ費・機材費は0円です。初期費用も0円です。'],
         ['納品までどれくらいですか。', 'どのメニューも初稿のお渡しまで約1週間です。'],
-        ['修正は何回までですか。', '全プラン共通で無償の修正は1回です。2回目以降は1回¥5,500（税別・税込 ¥6,050）で承ります。1回は「いただいたご指示をまとめて1回」と数えるため、1通のご連絡に10箇所のご指摘が含まれていても1回です。'],
+        ['修正は何回までですか。', 'AI映像制作の全プラン共通で無償の修正は1回です。2回目以降は1回¥5,500（税別・税込 ¥6,050）で承ります。1回は「いただいたご指示をまとめて1回」と数えるため、1通のご連絡に10箇所のご指摘が含まれていても1回です。'],
         ['納品した映像の権利はどうなりますか。', '貴社へ譲渡します。広告への二次利用もSTANDARD以上は込みです。'],
         ['本当に撮影せずに作れるのですか。', 'はい。掲載している映像はすべてAIで制作しており、撮影はしていません。企画・脚本・ディレクション・仕上げまで当社が一貫して担当します。'],
       ]),
     ],
     body: `
           <p class="k">FILM &amp; MOTION</p>
-          <h1>撮影せずに、広告に出せる映像を。</h1>
+          <h1>AI映像制作と、実写PV制作。</h1>
+          ${realFilmHtml}
+          <h2>AI映像制作 — 撮影せずに、広告に出せる映像を。</h2>
           <p class="lead">企画・脚本・ディレクション・仕上げまで、株式会社CORE（CORE Studio）が一貫して制作します。掲載している映像は<strong>すべてAIで制作しており、撮影はしていません</strong>。15秒1本 ¥89,800（税別・税込 ¥98,780）（初めてのお取引は ¥49,800（税別・税込 ¥54,780））、初稿のお渡しまで約1週間。</p>
 
           <section>
@@ -505,7 +510,7 @@ PAGES.push(
           </section>
 
           <section>
-            <h2>どの金額にも共通して含まれるもの</h2>
+            <h2>AI映像制作の各プランに共通して含まれるもの</h2>
             <ul>
               <li>撮影費・出演費・ロケ費 … <strong>0円</strong></li>
               <li>初期費用 … <strong>0円</strong></li>
