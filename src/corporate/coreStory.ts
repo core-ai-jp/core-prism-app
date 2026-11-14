@@ -174,14 +174,6 @@ export const ASHITAKA_PAGE = {
       { k: 'FIELD RECORDINGS', v: '海上（GAUCHE plays in the SEA）／高原（GAUCHE plays on the PLATEAU）' },
       { k: 'ROLE IN PROJECT', v: '演奏と映像制作の当事者であり、REGIONAL OS の設計責任者' },
     ],
-    /** 標準調弦（A=440Hz）。演奏者の「計器」として描く。 */
-    strings: [
-      { n: 'C', hz: 65.41 },
-      { n: 'G', hz: 98.0 },
-      { n: 'D', hz: 146.83 },
-      { n: 'A', hz: 220.0 },
-    ],
-    stringsLabel: 'STANDARD TUNING — A = 440 Hz',
     venues: {
       label: '演奏実績（抜粋）',
       domestic: ['リッツ・カールトン', 'エクシブ', 'リーガロイヤル', 'アルカイックホール'],

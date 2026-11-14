@@ -5,7 +5,7 @@
 //   演奏者（代表本人）は「AIの会社が演奏者を仕様書のように記述する」切り口で、他社との差として作り込む。
 //   構想段階であることを「いまの段階」と FAQ で必ず言う（03_FACT_EVIDENCE_MAP D）。写真は実写のみ。
 // ============================================================
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FONT_JA, FONT_EN, LINE, ctaHero, ctaGhost, sectionH2, sectionLead, reveal } from './corpTheme';
 import { Kick } from './roai/HomeRoaiSections';
@@ -15,59 +15,10 @@ import { ASHITAKA, ASHITAKA_PAGE, STATUS_LABEL } from './coreStory';
 import { Chain, StatusNote, PageHead, Lines, type AnchorHandler } from './StorySections';
 import { rememberIntent } from './corpIntent';
 
-/** 動きを減らす設定なら、弦の揺れ（SMIL）を描かない。 */
-function useReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const on = () => setReduced(mq.matches);
-    on();
-    mq.addEventListener?.('change', on);
-    return () => mq.removeEventListener?.('change', on);
-  }, []);
-  return reduced;
-}
-
-/** 演奏者の計器 — 標準調弦の4弦。低い弦ほど大きくゆっくり揺れる。 */
-function Strings({ strings, label, reduced }: { strings: readonly { n: string; hz: number }[]; label: string; reduced: boolean }) {
-  const W = 640, H = 120;
-  const rows = strings.map((s, i) => {
-    const y = 18 + i * 28;
-    const amp = 7 - i * 1.5;                 // C=7 G=5.5 D=4 A=2.5
-    const dur = (1.9 - i * 0.35).toFixed(2); // C=1.90s … A=0.85s
-    const up = `M0,${y} Q${W / 2},${y - amp} ${W},${y}`;
-    const flat = `M0,${y} Q${W / 2},${y} ${W},${y}`;
-    const down = `M0,${y} Q${W / 2},${y + amp} ${W},${y}`;
-    return { ...s, y, up, flat, down, dur, thick: 2.4 - i * 0.4 };
-  });
-  return (
-    <figure className="cs-strings" aria-label={label}>
-      <figcaption style={{ fontFamily: FONT_EN }}>{label}</figcaption>
-      <div className="cs-strings-body">
-        <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden focusable="false">
-          {rows.map(r => (
-            <g key={r.n}>
-              <path d={r.flat} className="cs-string-ghost" />
-              <path d={r.flat} className="cs-string" style={{ strokeWidth: r.thick }}>
-                {!reduced && <animate attributeName="d" values={`${r.up};${r.flat};${r.down};${r.flat};${r.up}`} dur={`${r.dur}s`} repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" />}
-              </path>
-            </g>
-          ))}
-        </svg>
-        <ol className="cs-strings-scale" style={{ fontFamily: FONT_EN }}>
-          {rows.map(r => <li key={r.n}><b>{r.n}</b><span>{r.hz.toFixed(2)} Hz</span></li>)}
-        </ol>
-      </div>
-    </figure>
-  );
-}
-
 /** 演奏者 — 実写の現場（海／高原）を切り替える。 */
 function Performer() {
   const P = ASHITAKA_PAGE.performer;
   const [field, setField] = useState<(typeof P.fields)[number]['id']>(P.fields[0].id);
-  const reduced = useReducedMotion();
   const active = P.fields.find(f => f.id === field) ?? P.fields[0];
   return (
     <section id="ashitaka-performer" className="lp-section-pad cs-perf" style={{ padding: '7rem 1.5rem', background: "var(--corp-surface-soft, #0B0F17)", scrollMarginTop: 70 }} aria-labelledby="ashitaka-performer-h">
@@ -97,11 +48,11 @@ function Performer() {
 
           {/* 仕様書 */}
           <motion.div {...reveal} transition={{ ...reveal.transition, delay: 0.1 }} className="cs-perf-sheet" style={{ fontFamily: FONT_JA }}>
-            <header className="cs-perf-name">
+            <div className="cs-perf-name">
               <p className="cs-perf-en" style={{ fontFamily: FONT_EN }}>{P.name}</p>
               <p className="cs-perf-ja">{P.nameJa}</p>
               <p className="cs-perf-title">{P.title}</p>
-            </header>
+            </div>
             <dl className="cs-perf-spec">
               {P.spec.map(r => (
                 <div key={r.k}>
@@ -110,7 +61,6 @@ function Performer() {
                 </div>
               ))}
             </dl>
-            <Strings strings={P.strings} label={P.stringsLabel} reduced={reduced} />
             <div className="cs-perf-venues">
               <p className="cs-perf-venues-label" style={{ fontFamily: FONT_EN }}>{P.venues.label}</p>
               <div className="cs-perf-venue-row"><span style={{ fontFamily: FONT_EN }}>JP</span><ul>{P.venues.domestic.map(v => <li key={v}>{v}</li>)}</ul></div>

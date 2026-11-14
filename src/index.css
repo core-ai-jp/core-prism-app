@@ -5033,15 +5033,6 @@ header .lp-tab.is-on { color: var(--corp-text, #fff); border-bottom-color: var(-
 .cs-perf-spec > div { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 0.8rem; padding: 0.7rem 0; border-bottom: 1px solid var(--corp-line, rgba(148,163,184,0.14)); }
 .cs-perf-spec dt { margin: 0; font-size: 0.64rem; letter-spacing: 0.22em; font-weight: 700; color: var(--corp-accent, #7DD3FC); padding-top: 0.25rem; }
 .cs-perf-spec dd { margin: 0; font-size: 0.92rem; line-height: 1.75; color: var(--corp-body, rgba(240,245,252,0.92)); font-weight: 600; }
-.cs-strings { margin: 1.2rem 0 0; }
-.cs-strings figcaption { font-size: 0.62rem; letter-spacing: 0.26em; font-weight: 700; color: var(--corp-muted, rgba(226,232,240,0.6)); margin-bottom: 0.4rem; }
-.cs-strings-body { display: grid; grid-template-columns: minmax(0, 1fr) 96px; gap: 0.8rem; align-items: stretch; border: 1px solid var(--corp-line, rgba(148,163,184,0.18)); border-radius: 14px; padding: 0.8rem 0.9rem; background: rgba(var(--corp-surface-rgb, 7,10,16), 0.5); }
-.cs-strings svg { width: 100%; height: 120px; display: block; }
-.cs-string-ghost { fill: none; stroke: rgba(148,163,184,0.16); stroke-width: 1; }
-.cs-string { fill: none; stroke: var(--corp-accent, #BAE6FD); stroke-linecap: round; filter: drop-shadow(0 0 4px rgba(56,189,248,0.45)); }
-.cs-strings-scale { list-style: none; margin: 0; padding: 0; display: grid; grid-template-rows: repeat(4, 1fr); }
-.cs-strings-scale li { display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; font-size: 0.66rem; letter-spacing: 0.06em; color: var(--corp-body, rgba(226,232,240,0.7)); }
-.cs-strings-scale b { color: var(--corp-text, #E0F2FE); font-size: 0.9rem; }
 .cs-perf-venues { margin-top: 1.2rem; }
 .cs-perf-venues-label { margin: 0 0 0.5rem; font-size: 0.62rem; letter-spacing: 0.26em; font-weight: 700; color: var(--corp-muted, rgba(226,232,240,0.6)); }
 .cs-perf-venue-row { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 0.6rem; align-items: start; padding: 0.4rem 0; }
@@ -5164,7 +5155,7 @@ header .lp-tab.is-on { color: var(--corp-text, #fff); border-bottom-color: var(-
 /* 本編のヒーロー見出しは 12〜13 字の一行が 1440px で折れないよう一段小さく。CTA 帯の見出しは電話で 1.72rem。 */
 .cs-page-hero .cs-bleed-h { font-size: clamp(2.1rem, 4.4vw, 4rem); }
 @media (max-width: 640px) { .cs-bleed-inner h2 { font-size: 1.72rem !important; } .cs-page-hero .cs-bleed-h { font-size: 2.05rem; } }
-@media (max-width: 640px) { .cs-program { grid-template-columns: minmax(0, 1fr); } .cs-strings-body { grid-template-columns: minmax(0, 1fr); } .cs-strings-scale { grid-template-rows: none; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; } .cs-strings-scale li { flex-direction: column; align-items: flex-start; gap: 0; } }
+@media (max-width: 640px) { .cs-program { grid-template-columns: minmax(0, 1fr); } }
 
 /* Keep the requested product pair visible and tappable on mobile. */
 .corp-product-nav .corp-product-link { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
