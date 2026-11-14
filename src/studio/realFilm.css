@@ -24,3 +24,8 @@
 @media(max-width:900px){.pv-quality{min-height:0;font-size:16px}}
 
 .pv-phrase{display:inline-block}
+
+.pv-image{display:block;width:calc(100% + 44px);max-width:none;height:auto;aspect-ratio:1672/941;object-fit:contain;margin:-26px -22px 24px;border-radius:13px 13px 0 0}
+.pv-included{font-size:14px;font-weight:600;color:var(--pv-gold);margin:16px 0 0}
+.pv-image-note{font-size:13px;line-height:1.8;color:var(--pv-body);margin:20px 0 0}
+@media(max-width:900px){.pv-image{width:calc(100% + 48px);margin:-24px -24px 24px}}

@@ -31,9 +31,11 @@ export function RealFilmPlans() {
       </div>
       <div className="pv-grid">
         {content.plans.map(plan => <article className="pv-plan" key={plan.id}>
+          <img className="pv-image" src={plan.image} alt={plan.imageAlt} width={1672} height={941} loading="lazy" decoding="async" />
           <p className="pv-name">{plan.name}</p>
           <h3>{plan.headline}</h3>
           <p className="pv-price"><strong>{plan.price / 10000}</strong><span>万円<small>税別 / 1作品</small></span></p>
+          <p className="pv-included">{content.includedLabel}</p>
           <p className="pv-inclusive">税込 {money(Math.round(plan.price * 1.1))}</p>
           <p className="pv-for">{plan.for}</p>
           <p className="pv-quality">{plan.quality}</p>
@@ -50,6 +52,7 @@ export function RealFilmPlans() {
           <a className="pv-cta st-btn" href={CONTACT.lineUrl} target="_blank" rel="noopener noreferrer" onClick={() => track('studio_film_pricing_cta', { plan: `live-${plan.id}`, to: 'line' })}>このプランを相談する<ArrowRight size={17} aria-hidden="true" /></a>
         </article>)}
       </div>
+      <p className="pv-image-note">{content.imageNote}</p>
       <p className="pv-contact-note">{content.contactNote}</p>
       <details className="pv-conditions"><summary>含まれるもの・撮影条件<ChevronDown size={18} aria-hidden="true" /></summary>
         <div className="pv-common">{content.common.map(item => <div key={item.title}><h3>{item.title}</h3><p>{item.body}</p></div>)}</div>

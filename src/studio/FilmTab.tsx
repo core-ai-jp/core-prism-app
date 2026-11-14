@@ -155,6 +155,25 @@ export default function FilmTab() {
         @media (min-width: 640px) { .fm-decision-grid { grid-template-columns: repeat(2, 1fr); } }
         .fm-works-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
         @media (min-width: 700px) { .fm-works-grid { grid-template-columns: repeat(3, 1fr); } }
+        .fm-work-inner { max-width:1120px!important; }
+        .fm-work-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 24px;align-items:start; }
+        .fm-work-card { min-width:0; }
+        .fm-work-card .fm-frame { max-height:360px;background:#111113; }
+        .fm-work-card .fm-frame video,.fm-work-card .fm-frame img { object-fit:contain; }
+        .fm-work-card .fm-frame::after { display:none; }
+        .fm-work-copy { padding-top:16px; }
+        .fm-work-title { color:${D.ink};font-size:19px;line-height:1.6;margin:6px 0; }
+        .fm-work-detail { color:${D.body};font-size:14px;line-height:1.9; }
+        .fm-work-detail summary { cursor:pointer;min-height:44px;padding:9px 0;color:${D.gold}; }
+        .fm-work-detail p { margin:6px 0 12px; }
+        .fm-work-detail a { display:inline-flex;align-items:center;gap:6px;min-height:44px;color:${D.gold}; }
+        .fm-work-card button:focus-visible,.fm-work-detail summary:focus-visible { outline:2px solid ${D.gold};outline-offset:4px; }
+        @media(max-width:760px) {
+          .fm-work-grid { grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 14px; }
+          .fm-work-card .fm-frame { max-height:320px; }
+          .fm-work-title { font-size:16px; }
+          .fm-work-detail { font-size:13px; }
+        }
         .fm-faq-item { border-top: 1px solid ${C.line}; }
         .fm-faq-btn { width: 100%; min-height: 52px; background: none; border: none; cursor: pointer; text-align: left;
           padding: 14px 2px; font-size: 14px; font-weight: 600; color: ${C.ink}; font-family: ${SANS};
@@ -1592,43 +1611,11 @@ function useWorkVideo(id: string) {
   return { videoRef, playing, play, pause, toggle };
 }
 
-// ---- 代表実績 (先頭の1件) ----
-function FlagshipWork({ w }: { w: (typeof FILM_WORKS)[number] }) {
-  const { videoRef, playing, play, pause, toggle } = useWorkVideo(w.id);
-
-  return (
-    <article className="fm-flag">
-      <div className="fm-flag-media">
-        <button type="button" onClick={toggle} onMouseEnter={play} onMouseLeave={pause}
-          aria-label={`${w.client} の制作事例を${playing ? '止める' : '再生する'}`}
-          style={{ display: 'block', width: '100%', padding: 0, border: 'none', background: 'none', cursor: 'pointer' }}>
-          <div className="fm-frame" style={{ aspectRatio: '9 / 16' }}>
-            {w.videoUrl && <video ref={videoRef} src={w.videoUrl} poster={w.poster} muted loop playsInline preload="metadata" aria-hidden />}
-            <PlayBadge playing={playing} />
-          </div>
-        </button>
-      </div>
-      <div>
-        <span className="fm-flag-badge">代表実績</span>
-        <h3 className="st-serif fm-flag-client">{w.client}</h3>
-        <div className="fm-flag-cat">{w.category}</div>
-        <p className="fm-flag-body">{w.purpose}</p>
-        {w.result && <p className="fm-flag-body" style={{ color: D.gold, fontWeight: 600 }}>{w.result}</p>}
-        {w.url && (
-          <a className="fm-flag-link" href={w.url} target="_blank" rel="noopener noreferrer">
-            {w.client} 公式サイト <IconArrow color={D.gold} />
-          </a>
-        )}
-      </div>
-    </article>
-  );
-}
-
 function WorkCard({ w }: { w: (typeof FILM_WORKS)[number] }) {
   const { videoRef, playing, play, pause, toggle } = useWorkVideo(w.id);
 
   return (
-    <article className="fm-shot">
+    <article className="fm-work-card" data-work-id={w.id}>
       {w.videoUrl ? (
         <button type="button" onClick={toggle} onMouseEnter={play} onMouseLeave={pause}
           aria-label={`${w.client} の制作事例を${playing ? '止める' : '再生する'}`}
@@ -1641,49 +1628,31 @@ function WorkCard({ w }: { w: (typeof FILM_WORKS)[number] }) {
       ) : w.poster ? (
         <div className="fm-frame" style={{ aspectRatio: '9 / 16' }}><img src={w.poster} alt={`${w.client} の制作事例`} loading="lazy" /></div>
       ) : null}
-      <div style={{ marginTop: 12 }}>
-        <div className="st-label" style={{ fontSize: 10, marginBottom: 4, color: D.gold }}>{w.category}</div>
-        <div style={{ fontSize: 13.5, fontWeight: 700, color: D.ink }}>{w.client}</div>
-        <p style={{ fontSize: 12.5, lineHeight: 1.8, color: D.body, margin: '6px 0 0' }}>{w.purpose}</p>
-        {w.result && <p style={{ fontSize: 12.5, lineHeight: 1.8, color: D.gold, margin: '4px 0 0', fontWeight: 600 }}>{w.result}</p>}
-        {w.url && (
-          <a href={w.url} target="_blank" rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44, fontSize: 11.5, color: D.mute, textDecoration: 'underline', textUnderlineOffset: 2 }}>
-            {w.client} 公式サイト ↗
-          </a>
-        )}
+      <div className="fm-work-copy">
+        <div className="st-label" style={{ fontSize: 11, color: D.gold }}>{w.category}</div>
+        <h3 className="st-serif fm-work-title">{w.client}</h3>
+        <details className="fm-work-detail">
+          <summary>制作内容を見る</summary>
+          <p>{w.purpose}</p>
+          {w.result && <p style={{ color: D.gold }}>{w.result}</p>}
+          {w.url && <a href={w.url} target="_blank" rel="noopener noreferrer">公式サイト <IconArrow color={D.gold} /></a>}
+        </details>
       </div>
     </article>
   );
 }
 
-// 9:16 の縦型を1列で積むとスマホで3本 = 約2,300px を占めるため、ショーケースと同じ横スクロールに揃える。
-// 2026-08-27: 先頭にあったイベントブランディングの説明 (1段落) は撤去した。
-// 同じ内容を「作れるもの」の1行に畳んであり、ここに残すと同じ話を2度読ませることになる。
+// 代表実績の掲載順を保ち、全作品を同じグリッドで見渡せるようにする。
 function FilmWorks() {
-  const rest = OTHER_FILM_WORKS;
+  const works = [...FEATURED_FILM_WORKS, ...OTHER_FILM_WORKS];
   return (
     <section id="film-works" style={{ background: D.bg, padding: '10px 0 60px', scrollMarginTop: 96 }}>
-      <div className="st-inner">
+      <div className="st-inner fm-work-inner">
         <Reveal><H2 dark en="Works" sub="すべて当社が制作し、実際に納品した映像です。掲載は貴社の許可をいただいたもののみで、非公開のご希望があれば一切掲載しません。">制作実績</H2></Reveal>
-        <div style={{ display: 'grid', gap: 56 }}>
-          {FEATURED_FILM_WORKS.map(w => (
-            <Reveal key={w.id}><FlagshipWork w={w} /></Reveal>
-          ))}
+        <div className="fm-work-grid">
+          {works.map(w => <WorkCard key={w.id} w={w} />)}
         </div>
       </div>
-      {rest.length > 0 && (
-        <Reveal delay={90}>
-          <div style={{ marginTop: 34 }}>
-            <div className="st-inner" style={{ marginBottom: 12 }}>
-              <div className="st-label" style={{ color: D.mute, fontSize: 10.5 }}>ほかの制作実績</div>
-            </div>
-            <div className="fm-scroller">
-              {rest.map(w => <WorkCard key={w.id} w={w} />)}
-            </div>
-          </div>
-        </Reveal>
-      )}
     </section>
   );
 }
