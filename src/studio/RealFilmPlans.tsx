@@ -26,7 +26,7 @@ export function RealFilmPlans() {
     '--pv-dark': D.bg, '--pv-sans': SANS, '--pv-serif': SERIF } as CSSProperties}>
     <Band id="film-live" flat wide pad="64px 0">
       <div className="pv-heading">
-        <H2 en="LIVE ACTION" sub="人・商品・空間を、長尺のPVに。実際の撮影をご希望の方へ。">実写の撮影も、CORE Studioで。</H2>
+        <H2 en="LIVE ACTION" sub={content.lead}>実写の撮影も、<span className="pv-phrase">CORE Studioで。</span></H2>
         <p className="pv-unit">{content.unit}</p>
       </div>
       <div className="pv-grid">
@@ -36,20 +36,21 @@ export function RealFilmPlans() {
           <p className="pv-price"><strong>{plan.price / 10000}</strong><span>万円<small>税別 / 1作品</small></span></p>
           <p className="pv-inclusive">税込 {money(Math.round(plan.price * 1.1))}</p>
           <p className="pv-for">{plan.for}</p>
+          <p className="pv-quality">{plan.quality}</p>
           <dl className="pv-summary">
             <div><dt>撮影</dt><dd>{plan.days}</dd></div>
-            <div><dt>体制</dt><dd>{plan.crew}</dd></div>
-            <div><dt>本編</dt><dd>{plan.mainFilm}</dd></div>
-            <div><dt>SNS</dt><dd>{plan.shorts}</dd></div>
+            <div><dt>体制</dt><dd>{plan.crew.split('＋').map((part, i) => <span className="pv-phrase" key={part}>{i > 0 ? '＋' : ''}{part}</span>)}</dd></div>
+            <div><dt>メイク</dt><dd>{plan.makeup}</dd></div>
+            <div><dt>納品</dt><dd>{plan.mainFilm}のみ</dd></div>
           </dl>
           <details className="pv-detail">
             <summary>制作内容を詳しく見る<ChevronDown size={17} aria-hidden="true" /></summary>
-            <dl>{content.rows.filter(([,key]) => !['days','crew','mainFilm','shorts'].includes(key)).map(([label,key]) => <div key={key}><dt>{label}</dt><dd>{String(plan[key as keyof typeof plan])}</dd></div>)}</dl>
+            <dl>{content.rows.filter(([,key]) => !['days','crew','makeup','mainFilm'].includes(key)).map(([label,key]) => <div key={key}><dt>{label}</dt><dd>{String(plan[key as keyof typeof plan])}</dd></div>)}</dl>
           </details>
           <a className="pv-cta st-btn" href={CONTACT.lineUrl} target="_blank" rel="noopener noreferrer" onClick={() => track('studio_film_pricing_cta', { plan: `live-${plan.id}`, to: 'line' })}>このプランを相談する<ArrowRight size={17} aria-hidden="true" /></a>
         </article>)}
       </div>
-      <p className="pv-contact-note">ヘアメイク・基本機材・条件付きドローン空撮・編集を含みます。ロケ地代等は別途お見積もり。相談ボタンからLINEが開きます。</p>
+      <p className="pv-contact-note">{content.contactNote}</p>
       <details className="pv-conditions"><summary>含まれるもの・撮影条件<ChevronDown size={18} aria-hidden="true" /></summary>
         <div className="pv-common">{content.common.map(item => <div key={item.title}><h3>{item.title}</h3><p>{item.body}</p></div>)}</div>
         <dl className="pv-terms">{content.terms.map(item => <div key={item.title}><dt>{item.title}</dt><dd>{item.body}</dd></div>)}</dl>
