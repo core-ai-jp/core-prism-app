@@ -43,7 +43,7 @@ export function RealFilmPlans() {
             <div><dt>撮影</dt><dd>{plan.days}</dd></div>
             <div><dt>体制</dt><dd>{plan.crew.split('＋').map((part, i) => <span className="pv-phrase" key={part}>{i > 0 ? '＋' : ''}{part}</span>)}</dd></div>
             <div><dt>メイク</dt><dd>{plan.makeup}</dd></div>
-            <div><dt>納品</dt><dd>{plan.mainFilm}のみ</dd></div>
+            <div><dt>納品</dt><dd>{plan.mainFilm}</dd></div>
           </dl>
           <details className="pv-detail">
             <summary>制作内容を詳しく見る<ChevronDown size={17} aria-hidden="true" /></summary>
