@@ -21,6 +21,7 @@ export default function CorpStickyCta() {
   // 2026-09-03: 診断（/roai-score）の中では出さない。質問の選択肢と結果の CTA を覆うだけで、
   // 「診断を受ける」を診断中の人に勧めることになる。
   if (tab === 'score') return null;
+  if (tab === 'robots') return <div className="corp-light corp-sticky-light"><LpStickyCta title="CORE Robots" sub="構想・研究開発準備" cta="実証・協業の相談" href="#robots-contact" accent1="#111827" accent2="#111827" ctaColor="#FFFFFF" /></div>;
 
   // 部品は1つのまま props だけ差し替える（作り直すと出現アニメが巻き戻るため）。
   return (

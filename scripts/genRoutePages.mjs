@@ -1,3 +1,4 @@
+import { robotsRoutePage } from './robotsRoutePage.mjs';
 // ============================================================================
 // genRoutePages.mjs — ルートごとの入口HTMLを作る（SEO / LLMO）
 //
@@ -876,6 +877,8 @@ for (const d of divisions) PAGES.push({
   footer: '<a href="/corp">CORE ホーム</a> · <a href="/corp#contact">初回無料相談</a>',
 });
 
+PAGES.push(robotsRoutePage);
+
 // ──────────────────────────────── 書き出し ────────────────────────────────
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -885,7 +888,7 @@ function render(page) {
   const graph = [
     { '@type': 'WebPage', '@id': page.url + '#page', url: page.url, name: page.title,
       isPartOf: { '@id': (page.theme === 'corp' ? `${CORP}/#site` : `${STUDIO}/#site`) },
-      inLanguage: 'ja', dateModified: TODAY, primaryImageOfPage: page.og,
+      inLanguage: 'ja', dateModified: page.updatedAt ?? TODAY, primaryImageOfPage: page.og,
       publisher: { '@id': ORG } },
     ...page.ld,
   ];

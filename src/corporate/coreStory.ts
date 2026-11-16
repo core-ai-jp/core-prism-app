@@ -52,8 +52,8 @@ export const PROCESS = {
 } as const;
 
 export const ONE_CORE = {
-  kicker: 'One CORE — Four Layers',
-  h2: '四つの事業ではなく、\n一つの変革。',
+  kicker: 'One CORE',
+  h2: '事業をつなぎ、\n一つの変革へ。',
   lead: 'COREの事業は、同じ思想を、社会の異なる層で実行したものです。企業から地域へ、地域からエネルギーへ。変革は、境界で止まりません。',
   layers: [
     { no: '01', en: 'AI TRANSFORMATION', ja: '企業を、変える。', status: 'NOW' as LayerStatus, body: 'AI前提で会社を再設計し、投資をROAIで測る。COREの現在の中心です。', href: '#services' },

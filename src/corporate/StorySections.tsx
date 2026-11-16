@@ -1,3 +1,5 @@
+import { RobotsHome } from './RobotsPage';
+import robotsData from './robotsContent.json';
 // ============================================================
 // StorySections — CORE WEB 2035（2026-09-06）ホームの新しい章。
 //
@@ -182,6 +184,7 @@ export function OneCore({ onAnchor }: { onAnchor: AnchorHandler }) {
             </motion.li>
           ))}
         </ol>
+        <RobotsHome onAnchor={onAnchor} />
       </div>
     </section>
   );
@@ -442,6 +445,7 @@ export function Core2035() {
           ))}
         </ol>
         <motion.p {...reveal} className="cs-stance" style={{ fontFamily: FONT_JA }}>{VISION.stance}</motion.p>
+        <p className="robots-note">研究開発構想：<a href="/corp/robots">CORE Robots</a> — {robotsData.stage}。{robotsData.home.body}</p>
       </div>
     </section>
   );

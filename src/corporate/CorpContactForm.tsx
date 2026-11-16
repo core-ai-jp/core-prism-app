@@ -101,7 +101,7 @@ export default function CorpContactForm({ advisor = false }: { advisor?: boolean
     return it && CONTACT_INTERESTS.includes(it.interest) ? [it.interest] : [];
   });
   const [budget, setBudget] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(() => peekIntent()?.message ?? '');
   const [phase, setPhase] = useState<Phase>('idle');
   const [err, setErr] = useState<string | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);

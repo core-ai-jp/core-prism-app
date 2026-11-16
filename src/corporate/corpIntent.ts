@@ -5,16 +5,16 @@
 // ============================================================
 export const INTENT_KEY = 'core_corp_intent';
 
-export function rememberIntent(interest: string, id: string) {
-  try { sessionStorage.setItem(INTENT_KEY, JSON.stringify({ interest, id })); } catch { /* */ }
+export function rememberIntent(interest: string, id: string, message?: string) {
+  try { sessionStorage.setItem(INTENT_KEY, JSON.stringify({ interest, id, message })); } catch { /* */ }
 }
 
-export function peekIntent(): { interest: string; id: string } | null {
+export function peekIntent(): { interest: string; id: string; message?: string } | null {
   try {
     const raw = sessionStorage.getItem(INTENT_KEY);
     if (!raw) return null;
-    const v = JSON.parse(raw) as { interest?: unknown; id?: unknown };
+    const v = JSON.parse(raw) as { interest?: unknown; id?: unknown; message?: unknown };
     if (typeof v.interest !== 'string' || typeof v.id !== 'string') return null;
-    return { interest: v.interest, id: v.id };
+    return { interest: v.interest, id: v.id, message: typeof v.message === 'string' ? v.message.slice(0, 3000) : undefined };
   } catch { return null; }
 }

@@ -53,6 +53,8 @@ import { setCorpTab } from './corpRouteStore';
 import { TheChange, ProcessContrast, OneCore, StudioSection, NeriSection, Bridge, AshitakaHome, EnergyHome, Connection, Core2035, Invitation } from './StorySections';
 import AshitakaPage from './AshitakaPage';
 import EnergyPage from './EnergyPage';
+import RobotsPage from './RobotsPage';
+import robotsData from './robotsContent.json';
 import DivisionPage from './DivisionPage';
 import divisionData from './divisions.json';
 import AiAdvisorTab from './AiAdvisorTab';
@@ -137,15 +139,15 @@ function jumpToHash(e: ReactMouseEvent<HTMLAnchorElement>, href: string) {
 //      SECTION_TAB でどの章がどのタブに載っているかを引き、
 //      必要ならタブを切り替えてからその章へ送る。
 // ============================================================
-export type CoreTabKey = 'home' | 'roai' | 'score' | 'os' | 'services' | 'products' | 'ashitaka' | 'energy' | 'company' | 'contact' | 'advisor' | 'advisory' | 'intelligence' | 'academy' | 'studio' | 'ventures';
+export type CoreTabKey = 'home' | 'roai' | 'score' | 'os' | 'services' | 'products' | 'ashitaka' | 'energy' | 'company' | 'contact' | 'advisor' | 'advisory' | 'intelligence' | 'academy' | 'studio' | 'ventures' | 'robots';
 
 /**
  * 2026-09-03 MASTER PROMPT: Return on AI と CORE ROAI SCORE は中心的な知的資産なので、
  * ハッシュではなく独立したパスを持つ（検索・共有・AI検索のため）。中身は同じ CoreSite のタブ。
  */
 /** 2026-09-06 CORE WEB 2035: ASHITAKA PROJECT と CORE Energy も独立パス（検索・共有のため）。 */
-const TAB_PATH: Partial<Record<CoreTabKey, string>> = { ...Object.fromEntries(divisionData.map(d => [d.id, `/corp/${d.id}`])), roai: '/return-on-ai', score: '/roai-score', ashitaka: '/ashitaka', energy: '/energy' };
-const PATH_TAB: Record<string, CoreTabKey> = { ...Object.fromEntries(divisionData.flatMap(d => [[`/corp/${d.id}`, d.id as CoreTabKey], [`/corp-${d.id}`, d.id as CoreTabKey]])), '/return-on-ai': 'roai', '/roai-score': 'score', '/ashitaka': 'ashitaka', '/energy': 'energy' };
+const TAB_PATH: Partial<Record<CoreTabKey, string>> = { ...Object.fromEntries(divisionData.map(d => [d.id, `/corp/${d.id}`])), robots: '/corp/robots', roai: '/return-on-ai', score: '/roai-score', ashitaka: '/ashitaka', energy: '/energy' };
+const PATH_TAB: Record<string, CoreTabKey> = { ...Object.fromEntries(divisionData.flatMap(d => [[`/corp/${d.id}`, d.id as CoreTabKey], [`/corp-${d.id}`, d.id as CoreTabKey]])), '/corp/robots': 'robots', '/corp-robots': 'robots', '/return-on-ai': 'roai', '/roai-score': 'score', '/ashitaka': 'ashitaka', '/energy': 'energy' };
 function tabFromPath(): CoreTabKey | null {
   if (typeof window === 'undefined') return null;
   // `/ashitaka.html` のように入口ファイル名で直接開かれても同じタブへ（vite preview・共有URLの取り違え対策）
@@ -156,6 +158,7 @@ function tabFromPath(): CoreTabKey | null {
 /** タブごとの title / description / canonical（SEO・AI検索向け） */
 const TAB_META: Record<CoreTabKey, { title: string; desc: string; path: string }> = {
   ...Object.fromEntries(divisionData.map(d => [d.id, { title: `CORE ${d.name} | 株式会社CORE`, desc: d.summary, path: `/corp/${d.id}` }])) as Record<'advisory' | 'intelligence' | 'academy' | 'studio' | 'ventures', { title: string; desc: string; path: string }>,
+  robots: { title: robotsData.seo.title, desc: robotsData.seo.description, path: robotsData.seo.path },
   home: { title: '株式会社CORE | いつの時代も、変わらない核を。— AI Transformation Company', desc: 'いつの時代も、変わらない核を。AI前提で、企業・地域・社会の仕組みを再設計する神戸のAI Transformation Company。AI投資を経営成果（Return on AI）へ。企業から地域へ、地域からエネルギーへ。', path: '/corp' },
   roai: { title: 'Return on AI とは | 株式会社CORE', desc: 'AI投資は目的ではない。AIが何を返したかを、売上・コスト・時間・リスク・新しい価値で測る。CORE ROAI MODEL・ROAIの計算・損失回避・投資余力の逆算・Transformation Loop。', path: '/return-on-ai' },
   score: { title: 'CORE ROAI SCORE — 約2分のAI投資優先順位診断 | 株式会社CORE', desc: '約2分で、あなたの会社の次にAI投資すべき場所・削減できる時間・経済価値の概算・AI Readiness・投資余力の目安を可視化。連絡先不要、算定根拠つき。', path: '/roai-score' },
@@ -186,6 +189,7 @@ const CORE_TABS: { key: CoreTabKey; label: string; short: string; sub: string }[
   { key: 'advisor', label: 'AI顧問', short: 'AI顧問', sub: 'AI ADVISORY' },
   { key: 'ashitaka', label: 'ASHITAKA', short: '地域', sub: 'REGION' },
   { key: 'energy', label: 'ENERGY', short: 'ENERGY', sub: 'FUTURE' },
+  { key: 'robots', label: 'ROBOTS', short: 'Robots', sub: 'R&D CONCEPT' },
   { key: 'company', label: '会社について', short: '会社', sub: 'COMPANY' },
   { key: 'contact', label: 'ご相談', short: '相談', sub: 'CONTACT' },
 ];
@@ -316,7 +320,7 @@ export default function CoreSite() {
     const chip = bar.querySelector<HTMLElement>(`[data-tab="${tab}"]`);
     if (!chip) return;
     const target = chip.offsetLeft - bar.clientWidth / 2 + chip.clientWidth / 2;
-    bar.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+    bar.scrollTo({ left: Math.max(0, target), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }, [tab]);
 
   /**
@@ -621,6 +625,7 @@ export default function CoreSite() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       {tab === 'ashitaka' && <AshitakaPage onAnchor={handleAnchor} />}
       {tab === 'energy' && <EnergyPage onAnchor={handleAnchor} />}
+      {tab === 'robots' && <RobotsPage onAnchor={handleAnchor} />}
       {divisionData.some(d => d.id === tab) && <DivisionPage id={tab} />}
       {tab === 'advisor' && <AiAdvisorTab onAnchor={handleAnchor} />}
 
@@ -2042,6 +2047,7 @@ export default function CoreSite() {
           <div>
             <p style={footHead}>サービス</p>
             <a href="#whatwedo" onClick={e => handleAnchor(e, '#whatwedo')} style={footLink} className="lp-tap-link">事業内容</a>
+            <a href="/corp/robots" onClick={e => handleAnchor(e, '/corp/robots')} style={footLink} className="lp-tap-link">CORE Robots（構想・準備中）</a>
             <a href="/return-on-ai" onClick={e => handleAnchor(e, '/return-on-ai')} style={footLink} className="lp-tap-link">Return on AI</a>
             <a href="/roai-score" onClick={e => handleAnchor(e, '/roai-score')} style={footLink} className="lp-tap-link">CORE ROAI SCORE</a>
             <a href="/ashitaka" onClick={e => handleAnchor(e, '/ashitaka')} style={footLink} className="lp-tap-link">ASHITAKA PROJECT</a>
