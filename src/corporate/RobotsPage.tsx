@@ -35,7 +35,10 @@ export default function RobotsPage({ onAnchor }: { onAnchor: AnchorHandler }) {
       <figure className="robots-figure robots-wrap">
         <div className="robots-scene-top"><span>{data.scene.title}</span><span>{data.scene.label} / CONCEPT</span></div>
         <div className="robots-scene-shell">
-          <img className="robots-poster" src="/corp/robots/sorter-concept.png" width="1200" height="720" alt="卓上仕分けの構想図。左の投入トレー、中央のロボットアームと上方カメラ、右の仕分けトレー。" />
+          <picture>
+            <source media="(max-width: 860px)" srcSet={show3d ? '/corp/robots/sorter-concept-v2-mobile.jpg' : '/corp/robots/sorter-workcell-v2.jpg'} />
+            <img className="robots-poster" src={show3d ? '/corp/robots/sorter-concept-v2.jpg' : '/corp/robots/sorter-workcell-v2.jpg'} width="1280" height="1113" alt={show3d ? 'ロボットアームの詳細構想図。曲面の外装、金属の関節、配線と平行グリッパー。' : '工程全体の構想図。投入トレー、上方カメラ、ロボットアーム、仕分けトレー。'} />
+          </picture>
           {show3d && <SceneBoundary><Suspense fallback={null}><SorterScene /></Suspense></SceneBoundary>}
         </div>
         <div className="robots-media-switch"><button type="button" aria-pressed={!show3d} onClick={() => setShow3d(!show3d)}>{show3d ? data.scene.still : data.scene.interactive}</button></div>

@@ -8,7 +8,7 @@ export const robotsRoutePage = {
   og:`https://www.core-ai.jp${data.seo.og}`,updatedAt:data.updatedAt,
   ld:[{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'CORE',item:'https://www.core-ai.jp/corp'},{'@type':'ListItem',position:2,name:data.name,item:`https://www.core-ai.jp${data.seo.path}`}]}],
   body:`<p class="k">${data.hero.kicker}</p><h1>${data.hero.title.map(esc).join('')}</h1>${p(data.stage)}${p(data.hero.lead)}
-    <figure><img src="/corp/robots/sorter-concept.png" width="1200" height="720" alt="CORE Sorter 01の静止構想図。投入トレー、上方カメラ、アーム、仕分けトレー。" style="width:100%;height:auto" /><figcaption>${data.scene.label} — ${esc(data.scene.caption)} ${esc(data.scene.disclaimer)}</figcaption></figure>
+    <figure><img src="/corp/robots/sorter-workcell-v2.jpg" width="1280" height="1113" alt="CORE Sorter 01の静止構想図。投入トレー、上方カメラ、アーム、仕分けトレー。" style="width:100%;height:auto" /><figcaption>${data.scene.label} — ${esc(data.scene.caption)} ${esc(data.scene.disclaimer)}</figcaption></figure>
     <ol>${data.scene.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol><a href="#robots-contact">${data.hero.primary}</a>
     ${section(data.field,data.field.examples.map(x=>`<h3>${esc(x.title)}</h3>${p(x.body)}`).join('')+p(data.field.note))}
     ${section(data.sim,data.sim.phases.map(x=>`<h3>${esc(x.name)}</h3>${p(x.status)}${p(x.body)}`).join(''))}
