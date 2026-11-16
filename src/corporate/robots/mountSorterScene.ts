@@ -125,9 +125,9 @@ export function mountSorterScene(container: HTMLDivElement, events: Events): Sor
     const keys = [
       [0, .32, .18, .16, .068], [2.2, -.445, .24, .235, .068],
       [3.8, -.445, .026, .235, .068], [4.5, -.445, .026, .235, .054],
-      [6.2, -.445, .24, .235, .054], [9.0, .445, .24, .235, .054],
-      [10.5, .445, .026, .235, .054], [11.2, .445, .026, .235, .068],
-      [12.7, .445, .24, .235, .068], [15.5, .32, .18, .16, .068],
+      [6.2, -.445, .24, .235, .054], [9.0, .405, .24, .19, .054],
+      [10.5, .405, .026, .19, .054], [11.2, .405, .026, .19, .068],
+      [12.7, .405, .24, .19, .068], [15.5, .32, .18, .16, .068],
     ];
     function animatePose(t: number) {
       let i = 0; while (i < keys.length - 2 && t > keys[i + 1][0]) i++;
@@ -137,7 +137,7 @@ export function mountSorterScene(container: HTMLDivElement, events: Events): Sor
       pose(target, THREE.MathUtils.lerp(a[4], b[4], u));
       if (t < 4.2) carried.position.copy(startPart);
       else if (t <= 10.9) carried.position.set(target.x, target.y - .016, target.z);
-      else carried.position.set(.445, .01, .235);
+      else carried.position.set(.405, .01, .19);
     }
     function stop() { running = false; cancelAnimationFrame(frameId); events.onStop(); }
     function frame(time: number) {
