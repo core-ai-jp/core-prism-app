@@ -342,7 +342,7 @@ export const INDUSTRY_NEXT: string[] = ['医療', '美容', '不動産', '教育
 
 // ── 問い合わせフォームの選択肢 ─────────────────────
 export const CONTACT_INTERESTS: string[] = [
-  'AI導入', '業務効率化', 'システム開発', '新規事業', 'AI顧問', '地域・自治体（Ashitaka）', 'エネルギー', 'パートナー提携', 'その他',
+  'AI導入', '業務効率化', 'システム開発', '新規事業', 'AI顧問', '地域・自治体（Ashitaka）', 'エネルギー', 'ロボティクス共同実証', 'ロボティクス技術協業', 'パートナー提携', 'その他',
 ];
 
 export const CONTACT_BUDGETS: string[] = [

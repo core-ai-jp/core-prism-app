@@ -486,6 +486,14 @@
       "destination": "/corp-sier.html"
     },
     {
+      "source": "/corp/robots",
+      "destination": "/corp-robots.html"
+    },
+    {
+      "source": "/corp/robots/",
+      "destination": "/corp-robots.html"
+    },
+    {
       "source": "/corp",
       "destination": "/corp.html"
     },

@@ -20,6 +20,7 @@ export default defineConfig({
         intelligence: resolve(__dirname, 'intelligence.html'),
         iris: resolve(__dirname, 'iris.html'),
         corp: resolve(__dirname, 'corp.html'),
+        corpRobots: resolve(__dirname, 'corp-robots.html'),
         corpAdvisory: resolve(__dirname, 'corp-advisory.html'),
         corpIntelligence: resolve(__dirname, 'corp-intelligence.html'),
         corpAcademy: resolve(__dirname, 'corp-academy.html'),
