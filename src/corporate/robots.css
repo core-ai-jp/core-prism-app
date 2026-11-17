@@ -81,3 +81,8 @@
  .robots-hero-primary{grid-row:6;margin:24px 24px 0;justify-self:start}
  .robots-hero-bottom{grid-row:7;width:100%;margin-top:30px}
 }
+/* Keep the equipment prominent and the model controls within one mobile row. */
+.robots-control-short{display:none}
+.robots-controls{gap:6px}
+.robots-controls button{padding:8px 10px}
+@media(max-width:860px){.robots-control-long{display:none}.robots-control-short{display:inline}.robots-controls{left:8px;right:8px;gap:4px}.robots-controls button{padding:6px 8px}}
