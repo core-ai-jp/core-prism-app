@@ -2006,19 +2006,19 @@ export default function CoreSite() {
           <div>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, lineHeight: 1 }}>
               <img
-                src="/og-core-logo-white-v9.png"
+                src={tab === 'robots' ? '/core-logo-mark-v3.png' : '/og-core-logo-white-v9.png'}
                 alt="CORE"
                 width={1254}
                 height={1254}
                 style={{ height: 44, width: 44, flexShrink: 0 }}
               />
-              <img
+              {tab === 'robots' ? <span className="robots-company-wordmark">株式会社CORE</span> : <img
                 src="/core-company-wordmark-card-20261008.png"
                 alt="株式会社CORE"
                 width={494}
                 height={71}
                 style={{ width: 156, height: 'auto', display: 'block' }}
-              />
+              />}
             </span>
             <p
               style={{
