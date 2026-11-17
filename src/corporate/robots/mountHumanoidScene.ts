@@ -1,6 +1,5 @@
 import * as T from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { createHumanoid, disposeHumanoid } from './createHumanoid';
 
 export interface HumanoidController { play:(on:boolean)=>boolean;reset:()=>void;rotate:(direction:number)=>void;view:(close:boolean)=>void;dispose:()=>void }
@@ -14,30 +13,37 @@ export function mountHumanoidScene(container:HTMLDivElement,events:Events):Human
   const renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'low-power',preserveDrawingBuffer:true});
   cleanup.push(()=>renderer.dispose(),()=>renderer.domElement.remove());
   renderer.setPixelRatio(Math.min(devicePixelRatio,innerWidth<700?1.5:1.75));renderer.outputColorSpace=T.SRGBColorSpace;
-  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02;
+  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   renderer.domElement.setAttribute('aria-hidden','true');container.appendChild(renderer.domElement);
-  const scene=new T.Scene();scene.background=new T.Color('#edf0f1');
+  const scene=new T.Scene();scene.background=new T.Color('#08090b');scene.fog=new T.Fog('#08090b',5,14);
   cleanup.push(()=>disposeHumanoid(scene));
   const camera=new T.PerspectiveCamera(34,1,.02,30);
   const controls=new OrbitControls(camera,renderer.domElement);controls.enableZoom=false;controls.enablePan=false;controls.enableDamping=false;
   cleanup.push(()=>controls.dispose());
   controls.minPolarAngle=.65;controls.maxPolarAngle=1.65;controls.touches.ONE=T.TOUCH.PAN;controls.touches.TWO=T.TOUCH.DOLLY_ROTATE;renderer.domElement.style.touchAction='pan-y';
   const pmrem=new T.PMREMGenerator(renderer);cleanup.push(()=>pmrem.dispose());
-  const room=new RoomEnvironment();let env:T.WebGLRenderTarget;
-  try{env=pmrem.fromScene(room,.04);}finally{room.dispose();}
-  cleanup.push(()=>env.dispose());scene.environment=env.texture;scene.environmentIntensity=.75;
-  const key=new T.DirectionalLight('#fffaf2',3.2);key.position.set(-2,4,3);key.castShadow=true;key.shadow.mapSize.set(1024,1024);
+  // Studio softboxes create long, readable reflections rather than points of glare.
+  const studio=new T.Scene();studio.background=new T.Color('#15171b');
+  function softbox(width:number,height:number,position:number[],intensity:number){
+    const card=new T.Mesh(new T.PlaneGeometry(width,height),new T.MeshBasicMaterial({color:new T.Color('#ffffff').multiplyScalar(intensity),side:T.DoubleSide}));
+    card.position.set(position[0],position[1],position[2]);card.lookAt(0,1,0);studio.add(card);
+  }
+  softbox(1.1,5,[-2.5,2.7,3],5);softbox(.5,4,[2.3,2.2,1.8],3.5);softbox(3,2,[0,5,-1],4);softbox(.65,4,[1.4,2,-3],5);
+  let env:T.WebGLRenderTarget;
+  try{env=pmrem.fromScene(studio,.025);}finally{disposeHumanoid(studio);}
+  cleanup.push(()=>env.dispose());scene.environment=env.texture;scene.environmentIntensity=.72;
+  const key=new T.DirectionalLight('#fffaf5',3.4);key.position.set(-3,6,4);key.castShadow=true;key.shadow.mapSize.set(2048,2048);
   cleanup.push(()=>key.shadow.dispose());
   Object.assign(key.shadow.camera,{left:-1.2,right:1.2,top:2.3,bottom:-.5,near:.1,far:10});key.shadow.normalBias=.012;key.shadow.bias=-.0002;key.shadow.radius=4;scene.add(key);
-  const fill=new T.DirectionalLight('#d9e9f3',1.2);fill.position.set(3,2,-2);scene.add(fill);
-  const floor=new T.Mesh(new T.PlaneGeometry(200,200),new T.MeshStandardMaterial({color:'#edf0f1',roughness:.84}));floor.rotation.x=-Math.PI/2;floor.position.y=.040;floor.receiveShadow=true;scene.add(floor);
+  const fill=new T.DirectionalLight('#e0e7ef',1.6);fill.position.set(3,3,-2);scene.add(fill);
+  const floor=new T.Mesh(new T.PlaneGeometry(200,200),new T.MeshPhysicalMaterial({color:'#141519',metalness:.18,roughness:.38,clearcoat:.2,envMapIntensity:.28}));floor.rotation.x=-Math.PI/2;floor.position.y=.040;floor.receiveShadow=true;scene.add(floor);
   let ready=false,visible=true,running=false,frame=0,elapsed=0,last=0,close=false,root:T.Group|undefined;
   cleanup.push(()=>{running=false;cancelAnimationFrame(frame);});
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   function render(){if(!disposed)renderer.render(scene,camera);}
   function pose(t:number){if(!root)return;const wave=Math.sin(Math.min(t/7,1)*Math.PI);const arm=root.getObjectByName('shoulder_right');const elbow=root.getObjectByName('elbow_right');if(arm)arm.rotation.x=-wave*.82;if(elbow)elbow.rotation.x=-.16-wave*.45;}
-  function setView(){const mobile=container.clientWidth<500;controls.target.set(0,close?1.44:.98,0);camera.position.set(close?.86:1.9,close?1.64:1.45,close?1.40:mobile?3.8:3.5);camera.fov=close?33:34;camera.updateProjectionMatrix();controls.update();render();}
+  function setView(){const mobile=container.clientWidth<500;controls.target.set(0,close?1.51:.98,0);camera.position.set(close?.86:1.9,close?1.70:1.45,close?1.72:mobile?3.8:3.5);camera.fov=close?33:34;camera.updateProjectionMatrix();controls.update();render();}
   function resize(){if(disposed)return;const w=container.clientWidth,h=container.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;setView();}
   function stop(){running=false;cancelAnimationFrame(frame);events.onStop();}
   function tick(time:number){if(!running||disposed||!visible)return;if(!last)last=time;elapsed+=Math.min((time-last)/1000,.06);last=time;pose(elapsed);render();if(elapsed>=7){stop();return;}frame=requestAnimationFrame(tick);}
