@@ -4,7 +4,7 @@ import data from './robotsContent.json';
 import { rememberIntent } from './corpIntent';
 import './robots.css';
 
-const SorterScene = lazy(() => import('./robots/SorterScene'));
+const HumanoidScene = lazy(() => import('./robots/HumanoidScene'));
 type AnchorHandler = (e: MouseEvent<HTMLAnchorElement>, href: string) => void;
 
 class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
@@ -36,20 +36,25 @@ export default function RobotsPage({ onAnchor }: { onAnchor: AnchorHandler }) {
         <div className="robots-scene-top"><span>{data.scene.title}</span><span>{data.scene.label} / CONCEPT</span></div>
         <div className="robots-scene-shell">
           <picture>
-            <source media="(max-width: 860px)" srcSet={show3d ? '/corp/robots/sorter-concept-v2-mobile.jpg' : '/corp/robots/sorter-workcell-v2.jpg'} />
-            <img className="robots-poster" src={show3d ? '/corp/robots/sorter-concept-v2.jpg' : '/corp/robots/sorter-workcell-v2.jpg'} width="1280" height="1113" alt={show3d ? 'ロボットアームの詳細構想図。曲面の外装、金属の関節、配線と平行グリッパー。' : '工程全体の構想図。投入トレー、上方カメラ、ロボットアーム、仕分けトレー。'} />
+            <source media="(max-width: 860px)" srcSet="/corp/robots/humanoid-concept-mobile-v1.png" />
+            <img className="robots-poster" src={show3d ? '/corp/robots/humanoid-concept-v1.png' : '/corp/robots/humanoid-concept-v1.png'} width="1100" height="1200" alt={show3d ? 'COREの文字と正式ロゴを胸部に配した、白い外装のヒューマノイドの全身3D構想モデル。' : '白い躯体、双腕と手指、二本の脚を持つCOREヒューマノイドの外観構想。'} />
           </picture>
-          {show3d && <SceneBoundary><Suspense fallback={null}><SorterScene /></Suspense></SceneBoundary>}
+          {show3d && <SceneBoundary><Suspense fallback={null}><HumanoidScene /></Suspense></SceneBoundary>}
         </div>
         <div className="robots-media-switch"><button type="button" aria-pressed={!show3d} onClick={() => setShow3d(!show3d)}>{show3d ? data.scene.still : data.scene.interactive}</button></div>
         <figcaption><strong>{data.scene.caption}</strong><span>{data.scene.disclaimer}</span></figcaption>
       </figure>
       <div className="robots-wrap robots-hero-bottom"><ol className="robots-flow">{data.scene.steps.map((step, i) => <li key={step}><span>{String(i + 1).padStart(2, '0')}</span>{step}{i < 3 && <ArrowRight size={18} aria-hidden="true" />}</li>)}</ol>
-        <a className="robots-text-link" href="#robots-areas">{data.hero.secondary}<ArrowRight size={19} aria-hidden="true" /></a></div>
+        <a className="robots-text-link" href="#robots-platform">{data.hero.secondary}<ArrowRight size={19} aria-hidden="true" /></a></div>
+    </section>
+
+    <section id="robots-platform" className="robots-section robots-wrap" aria-labelledby="robots-platform-title">
+      <p className="robots-kicker">{data.platform.kicker}</p><div className="robots-split"><h2 id="robots-platform-title">{data.platform.title}</h2><p className="robots-lead">{data.platform.lead}</p></div>
+      <div className="robots-platform">{data.platform.items.map((item,i)=><article key={item.en}><span className="robots-index">0{i+1} / {item.en}</span><h3>{item.name}</h3><p>{item.body}</p><p className="robots-status">{item.status}</p></article>)}</div>
     </section>
 
     <section id={data.field.id} className="robots-section robots-wrap" aria-labelledby="robots-field-title">
-      <p className="robots-kicker">{data.field.kicker}</p><div className="robots-split"><h2 id="robots-field-title">{data.field.title}</h2><div><p className="robots-lead">{data.field.lead}</p><a className="robots-text-link" href="#robots-areas">{data.hero.secondary}<ArrowRight size={18} aria-hidden="true" /></a></div></div>
+      <p className="robots-kicker">{data.field.kicker}</p><div className="robots-split"><h2 id="robots-field-title">{data.field.title}</h2><div><p className="robots-lead">{data.field.lead}</p><a className="robots-text-link" href="#robots-platform">{data.hero.secondary}<ArrowRight size={18} aria-hidden="true" /></a></div></div>
       <div className="robots-field-grid">{data.field.examples.map((item, i) => <article key={item.title}><span className="robots-index">0{i + 1}</span><h3>{item.title}</h3><p>{item.body}</p></article>)}</div><p className="robots-note">{data.field.note}</p>
     </section>
 
