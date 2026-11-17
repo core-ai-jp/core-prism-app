@@ -53,7 +53,50 @@
     "playShort": "動作",
     "pauseShort": "停止",
     "detailHint": "全身 / 左右ボタンで回転",
-    "overviewHint": "胸部 / 左右ボタンで回転"
+    "overviewHint": "胸部 / 左右ボタンで回転",
+    "booting": "起動演出中",
+    "online": "ONLINE",
+    "hudLabel": "CONCEPT VISUAL",
+    "gestureHint": "ドラッグで回転 / 光る点で各部を解説",
+    "greet": "あいさつを見る",
+    "greetShort": "あいさつ",
+    "replay": "起動演出をもう一度",
+    "focusLabel": "見る部位",
+    "close": "全身に戻る",
+    "parts": [
+      {
+        "id": "full",
+        "label": "全身",
+        "short": "全身",
+        "kicker": "FULL BODY",
+        "title": "COREヒューマノイド",
+        "body": "白い躯体に、関節と顔の輪郭を光で示す外観構想です。光は装飾ではなく、いま機体がどこを動かし、何に注意を向けているかを人に伝える表示として検討しています。"
+      },
+      {
+        "id": "face",
+        "label": "顔・センサー",
+        "short": "顔",
+        "kicker": "SENSOR VISOR",
+        "title": "光る輪郭で、意図を伝える顔",
+        "body": "顔全体を覆う曲面バイザーに視覚センサーを収める構想です。輪郭と目元の光で「起動している」「こちらを見ている」を示し、そばで働く人が機体の状態を読み取れる表示を研究します。"
+      },
+      {
+        "id": "core",
+        "label": "胸・AIコア",
+        "short": "胸",
+        "kicker": "AI CORE",
+        "title": "COREの作業AIを載せる胸部",
+        "body": "胸部はCOREの作業AIと運用ソフトを搭載する想定の中心部です。外装の光の線は、知能が稼働していることを示す表示案です。"
+      },
+      {
+        "id": "hand",
+        "label": "手指",
+        "short": "手",
+        "kicker": "DEXTEROUS HAND",
+        "title": "現場の一工程を担う手指",
+        "body": "4本の指と親指をもつ手の外観案です。部品や箱をつかむといった一工程から、人の介入と組み合わせて検証する方針です。"
+      }
+    ]
   },
   "field": {
     "id": "robots-field",

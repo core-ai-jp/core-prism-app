@@ -143,3 +143,57 @@
 .robots-page .robots-controls button:hover{background:#292d34;border-color:#a0a5af;color:#fff}
 .robots-page .robots-scene-hint{background:rgba(8,9,11,.82);color:#b8bec8}
 .robots-page .robots-controls button:focus-visible{outline-color:#bae6fd}
+
+/* Humanoid v5: a lit stage with a boot sequence, hotspots and a part card. */
+.robots-page .robots-scene-shell{background:radial-gradient(120% 80% at 50% 78%,#0b1a22 0%,#040608 62%);box-shadow:0 30px 80px -40px rgba(30,170,230,.55),0 0 0 1px rgba(70,214,255,.10) inset;isolation:isolate}
+.robots-canvas canvas{position:absolute;inset:0;z-index:0}
+.robots-hud{position:absolute;inset:14px;pointer-events:none;z-index:2}
+.robots-hud i{position:absolute;width:22px;height:22px;border:1.5px solid rgba(120,225,255,.7);animation:robots-hud-in .9s cubic-bezier(.2,.8,.2,1) both}
+.robots-hud i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}.robots-hud i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.robots-hud i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}.robots-hud i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+@keyframes robots-hud-in{from{opacity:0;transform:scale(1.6)}to{opacity:1;transform:none}}
+.robots-status-pill{position:absolute;z-index:3;left:28px;top:26px;display:inline-flex;align-items:center;gap:9px;margin:0!important;padding:5px 12px;border-radius:99px;background:rgba(6,14,19,.72);border:1px solid rgba(70,214,255,.35);color:#bfefff!important;font:600 11px/1.6 "Inter","Noto Sans JP",sans-serif;letter-spacing:.14em;backdrop-filter:blur(6px)}
+.robots-status-pill span{width:7px;height:7px;border-radius:50%;background:#46d6ff;box-shadow:0 0 10px #46d6ff}
+.robots-status-pill[data-phase=boot] span{animation:robots-blink .5s steps(2) infinite}
+@keyframes robots-blink{50%{opacity:.15}}
+.robots-gesture-hint{position:absolute;z-index:3;left:50%;bottom:84px;transform:translateX(-50%);margin:0!important;padding:6px 14px;border-radius:99px;background:rgba(6,14,19,.7);color:#d6f3ff!important;font-size:12.5px!important;line-height:1.6;white-space:nowrap;pointer-events:none;animation:robots-fade-up .8s .3s both}
+@keyframes robots-fade-up{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+/* Hotspots are positioned every frame from the 3D anchor (see mountHumanoidScene). */
+.robots-spot{position:absolute;left:0;top:0;z-index:2;display:flex;align-items:center;gap:8px;margin:-22px 0 0 -22px;padding:0 10px 0 0;min-height:44px;min-width:44px;border:0;background:none;color:#e9f9ff;cursor:pointer;transition:opacity .35s;will-change:transform}
+.robots-spot[data-show=false]{opacity:0;pointer-events:none}
+.robots-spot-dot{position:relative;width:44px;height:44px;flex:none}
+.robots-spot-dot::before,.robots-spot-dot::after{content:"";position:absolute;left:50%;top:50%;border-radius:50%;transform:translate(-50%,-50%)}
+.robots-spot-dot::before{width:12px;height:12px;background:#46d6ff;box-shadow:0 0 0 3px rgba(4,6,8,.55),0 0 14px 2px #46d6ff}
+.robots-spot-dot::after{width:12px;height:12px;border:1.5px solid #46d6ff;animation:robots-ping 2s cubic-bezier(.2,.6,.3,1) infinite}
+@keyframes robots-ping{from{width:12px;height:12px;opacity:1}to{width:40px;height:40px;opacity:0}}
+.robots-spot-label{margin-left:-10px;padding:2px 10px;border-radius:99px;background:rgba(6,14,19,.78);border:1px solid rgba(70,214,255,.4);font:600 12px/1.6 "Noto Sans JP",sans-serif;letter-spacing:.04em}
+.robots-spot:hover .robots-spot-label,.robots-spot:focus-visible .robots-spot-label{background:#46d6ff;color:#041016;border-color:#46d6ff}
+.robots-spot:focus-visible{outline:none}.robots-spot:focus-visible .robots-spot-dot::before{box-shadow:0 0 0 3px #fff,0 0 14px 2px #46d6ff}
+/* Part card */
+.robots-part-card{position:absolute;z-index:3;right:28px;top:26px;width:min(320px,calc(100% - 56px));padding:18px 44px 18px 18px;background:linear-gradient(160deg,rgba(14,30,40,.88),rgba(6,10,14,.9));border:1px solid rgba(70,214,255,.35);border-radius:6px;color:#e6f6fc;backdrop-filter:blur(10px);box-shadow:0 18px 40px -20px rgba(0,0,0,.8);animation:robots-card-in .5s cubic-bezier(.2,.8,.2,1) both}
+.robots-part-card::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:2px;background:#46d6ff;box-shadow:0 0 12px #46d6ff}
+@keyframes robots-card-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.robots-page .robots-part-card .robots-part-kicker{font:600 11px/1.6 "Inter",sans-serif;letter-spacing:.16em;color:#46d6ff}
+.robots-page .robots-part-card h3{margin:6px 0 8px;font-size:17px;line-height:1.6;color:#fff}
+.robots-page .robots-part-card p:not(.robots-part-kicker){font-size:13.5px;line-height:1.85;color:#b9cdd7}
+.robots-part-card button{position:absolute;right:6px;top:6px;width:36px;height:36px;display:grid;place-items:center;border:0;border-radius:4px;background:transparent;color:#9fb6c2;cursor:pointer}
+.robots-part-card button:hover{color:#fff;background:rgba(255,255,255,.08)}
+/* Controls: one segmented focus switch and two actions. */
+.robots-page .robots-controls{z-index:3;align-items:center;left:16px;right:16px;bottom:16px;gap:8px;justify-content:center;flex-wrap:nowrap}
+.robots-focus{display:flex;padding:3px;border-radius:6px;background:rgba(6,12,16,.78);border:1px solid rgba(120,160,180,.3);backdrop-filter:blur(8px)}
+.robots-page .robots-controls .robots-focus button{min-height:40px;border:0;background:transparent;color:#b6c4cc;border-radius:4px;padding:6px 14px}
+.robots-page .robots-controls .robots-focus button[aria-pressed=true]{background:#46d6ff;color:#041016;font-weight:700;box-shadow:0 0 18px -2px rgba(70,214,255,.75)}
+.robots-page .robots-controls .robots-focus button:hover:not([aria-pressed=true]){color:#fff;background:rgba(255,255,255,.07)}
+.robots-page .robots-controls .robots-action{min-height:46px;background:rgba(6,12,16,.78);backdrop-filter:blur(8px)}
+@media(max-width:860px){
+ .robots-hud{inset:10px}.robots-hud i{width:16px;height:16px}
+ .robots-status-pill{left:20px;top:18px;font-size:10px;padding:4px 10px}
+ .robots-part-card{left:12px;right:12px;top:auto;bottom:70px;width:auto;padding:14px 40px 14px 16px}
+ .robots-page .robots-part-card h3{font-size:15.5px;margin:4px 0 6px}.robots-page .robots-part-card p:not(.robots-part-kicker){font-size:12.5px;line-height:1.75}
+ .robots-gesture-hint{bottom:72px;font-size:11.5px!important}
+ .robots-page .robots-controls{left:8px;right:8px;bottom:10px;gap:5px}
+ .robots-page .robots-controls .robots-focus button{padding:6px 11px;min-height:38px}
+ .robots-page .robots-controls .robots-action{padding:6px 10px;min-height:44px}
+ .robots-spot-label{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.robots-spot-dot::after{display:none}.robots-page .robots-controls button:last-child{display:inline-flex}}
