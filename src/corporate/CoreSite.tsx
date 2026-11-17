@@ -508,20 +508,20 @@ export default function CoreSite() {
           >
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12, lineHeight: 1 }}>
               <img
-                src={tab === 'robots' ? '/core-logo-mark-v3.png' : '/og-core-logo-white-v9.png'}
+                src="/og-core-logo-white-v9.png"
                 alt="株式会社CORE"
                 width={1254}
                 height={1254}
                 style={{ height: 48, width: 48, flexShrink: 0 }}
               />
-              {tab === 'robots' ? <span className="robots-company-wordmark">株式会社CORE</span> : <img
+              <img
                 src="/core-company-wordmark-card-20261008.png"
                 alt=""
                 aria-hidden="true"
                 width={494}
                 height={71}
                 style={{ width: 156, height: 'auto', display: 'block', flexShrink: 0 }}
-              />}
+              />
             </span>
           </a>
           {/* 別ページ（タブでは切り替わらない別ルート）だけをここに残す */}
@@ -2006,19 +2006,19 @@ export default function CoreSite() {
           <div>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, lineHeight: 1 }}>
               <img
-                src={tab === 'robots' ? '/core-logo-mark-v3.png' : '/og-core-logo-white-v9.png'}
+                src="/og-core-logo-white-v9.png"
                 alt="CORE"
                 width={1254}
                 height={1254}
                 style={{ height: 44, width: 44, flexShrink: 0 }}
               />
-              {tab === 'robots' ? <span className="robots-company-wordmark">株式会社CORE</span> : <img
+              <img
                 src="/core-company-wordmark-card-20261008.png"
                 alt="株式会社CORE"
                 width={494}
                 height={71}
                 style={{ width: 156, height: 'auto', display: 'block' }}
-              />}
+              />
             </span>
             <p
               style={{

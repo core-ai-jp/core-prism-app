@@ -14,7 +14,7 @@ export function mountHumanoidScene(container:HTMLDivElement,events:Events):Human
   cleanup.push(()=>renderer.dispose(),()=>renderer.domElement.remove());
   renderer.setPixelRatio(Math.min(devicePixelRatio,innerWidth<700?1.5:1.75));renderer.outputColorSpace=T.SRGBColorSpace;
   renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;
-  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;
   renderer.domElement.setAttribute('aria-hidden','true');container.appendChild(renderer.domElement);
   const scene=new T.Scene();scene.background=new T.Color('#08090b');scene.fog=new T.Fog('#08090b',5,14);
   cleanup.push(()=>disposeHumanoid(scene));
@@ -33,9 +33,9 @@ export function mountHumanoidScene(container:HTMLDivElement,events:Events):Human
   let env:T.WebGLRenderTarget;
   try{env=pmrem.fromScene(studio,.025);}finally{disposeHumanoid(studio);}
   cleanup.push(()=>env.dispose());scene.environment=env.texture;scene.environmentIntensity=.72;
-  const key=new T.DirectionalLight('#fffaf5',3.4);key.position.set(-3,6,4);key.castShadow=true;key.shadow.mapSize.set(2048,2048);
+  const key=new T.DirectionalLight('#fffaf5',3.4);key.position.set(-3,6,4);key.castShadow=true;key.shadow.mapSize.set(1024,1024);
   cleanup.push(()=>key.shadow.dispose());
-  Object.assign(key.shadow.camera,{left:-1.2,right:1.2,top:2.3,bottom:-.5,near:.1,far:10});key.shadow.normalBias=.012;key.shadow.bias=-.0002;key.shadow.radius=4;scene.add(key);
+  Object.assign(key.shadow.camera,{left:-1.2,right:1.2,top:2.3,bottom:-.5,near:.1,far:10});key.shadow.normalBias=.012;key.shadow.bias=-.0002;key.shadow.radius=6;scene.add(key);
   const fill=new T.DirectionalLight('#e0e7ef',1.6);fill.position.set(3,3,-2);scene.add(fill);
   const floor=new T.Mesh(new T.PlaneGeometry(200,200),new T.MeshPhysicalMaterial({color:'#141519',metalness:.18,roughness:.38,clearcoat:.2,envMapIntensity:.28}));floor.rotation.x=-Math.PI/2;floor.position.y=.040;floor.receiveShadow=true;scene.add(floor);
   let ready=false,visible=true,running=false,frame=0,elapsed=0,last=0,close=false,root:T.Group|undefined;
@@ -43,7 +43,7 @@ export function mountHumanoidScene(container:HTMLDivElement,events:Events):Human
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   function render(){if(!disposed)renderer.render(scene,camera);}
   function pose(t:number){if(!root)return;const wave=Math.sin(Math.min(t/7,1)*Math.PI);const arm=root.getObjectByName('shoulder_right');const elbow=root.getObjectByName('elbow_right');if(arm)arm.rotation.x=-wave*.82;if(elbow)elbow.rotation.x=-.16-wave*.45;}
-  function setView(){const mobile=container.clientWidth<500;controls.target.set(0,close?1.51:.98,0);camera.position.set(close?.86:1.9,close?1.70:1.45,close?1.72:mobile?3.8:3.5);camera.fov=close?33:34;camera.updateProjectionMatrix();controls.update();render();}
+  function setView(){const mobile=container.clientWidth<500;controls.target.set(0,close?1.57:1.03,0);camera.position.set(close?.86:1.9,close?1.76:1.50,close?1.72:mobile?3.8:3.5);camera.fov=close?33:34;camera.updateProjectionMatrix();controls.update();render();}
   function resize(){if(disposed)return;const w=container.clientWidth,h=container.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;setView();}
   function stop(){running=false;cancelAnimationFrame(frame);events.onStop();}
   function tick(time:number){if(!running||disposed||!visible)return;if(!last)last=time;elapsed+=Math.min((time-last)/1000,.06);last=time;pose(elapsed);render();if(elapsed>=7){stop();return;}frame=requestAnimationFrame(tick);}

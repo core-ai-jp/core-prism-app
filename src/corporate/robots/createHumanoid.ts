@@ -12,6 +12,8 @@ export async function createHumanoid(): Promise<T.Group> {
   const elastomer = new T.MeshStandardMaterial({ color: '#101315', roughness: .72 });
   const titanium = new T.MeshStandardMaterial({ color: '#91979d', metalness: .95, roughness: .17 });
   const visor = new T.MeshPhysicalMaterial({ color: '#040507', metalness: .55, roughness: .065, clearcoat: 1, clearcoatRoughness: .045, ior: 1.52 });
+  const headCowl = new T.MeshPhysicalMaterial({ color: '#171a1e', metalness: .32, roughness: .26, clearcoat: .55, clearcoatRoughness: .16 });
+  const panelSeam = new T.MeshStandardMaterial({ color: '#647078', metalness: .65, roughness: .32 });
 
   function mesh(parent: T.Object3D, name: string, geometry: T.BufferGeometry, material: T.Material, position: number[] = [0, 0, 0]) {
     const item = new T.Mesh(geometry, material);
@@ -73,67 +75,71 @@ export async function createHumanoid(): Promise<T.Group> {
     return item;
   }
 
-  // Broad shoulders, a tapered rib cage and a compact dark waist establish human proportions.
-  shell(root, 'thoracic_chassis', [[1.24,.115,.082],[1.37,.164,.106],[1.55,.205,.113],[1.65,.205,.094],[1.68,.125,.077]], graphite);
-  shell(root, 'ceramic_chest', [[1.275,.120,.044,.054],[1.31,.141,.058,.054],[1.45,.173,.079,.052],[1.56,.211,.083,.046],[1.625,.213,.060,.040],[1.65,.170,.043,.034]], ceramic, [0,0,.009], .64);
-  shell(root, 'abdominal_core', [[1.085,.108,.075],[1.13,.117,.082],[1.22,.114,.086],[1.30,.127,.084]], elastomer);
-  for (let i = 0; i < 5; i++) {
-    shell(root, `waist_flexure_${i}`, [[1.133+i*.024,.114,.080],[1.139+i*.024,.117,.084],[1.145+i*.024,.114,.080]], graphite);
+  // One long torso line replaces the stacked chest, ribbed waist and ball-like hips.
+  shell(root, 'thoracic_chassis', [[1.20,.085,.066],[1.37,.136,.086],[1.55,.175,.094],[1.665,.177,.077],[1.70,.122,.058]], graphite);
+  const chest=shell(root, 'ceramic_chest', [[1.035,.050,.025,.043],[1.08,.110,.044,.043],[1.145,.132,.053,.040],[1.255,.125,.058,.041],[1.37,.140,.065,.040],[1.49,.171,.074,.038],[1.59,.190,.067,.032],[1.64,.172,.046,.023],[1.665,.128,.027,.016]], ceramic, [0,0,.012], .88);
+  shell(root, 'abdominal_core', [[1.10,.091,.063],[1.19,.094,.070],[1.29,.096,.074]], graphite);
+  shell(root, 'pelvic_chassis', [[1.005,.056,.047],[1.055,.093,.060],[1.12,.105,.062],[1.155,.088,.057]], graphite);
+  shell(root, 'spinal_cover', [[1.29,.068,.018],[1.43,.092,.027],[1.58,.108,.024],[1.65,.076,.013]], ceramic, [0,0,-.104], .84);
+  for (let i = 0; i < 4; i++) box(root, 'rear_cooling_slot', [.086,.0025,.003], [0,1.44+i*.013,-.132], elastomer, .001);
+  root.updateMatrixWorld(true);
+  for(const side of [-1,1]){
+    const guide=new T.CatmullRomCurve3([new T.Vector3(side*.155,1.605,0),new T.Vector3(side*.129,1.54,0),new T.Vector3(side*.121,1.465,0)]);
+    const points=guide.getPoints(40).map(p=>{
+      const hit=new T.Raycaster(new T.Vector3(p.x,p.y,1),new T.Vector3(0,0,-1)).intersectObject(chest)[0];
+      return hit?.face?hit.point.addScaledVector(hit.face.normal,.0004):p;
+    });
+    mesh(root,'chest_panel_joint',new T.TubeGeometry(new T.CatmullRomCurve3(points),48,.00065,6,false),panelSeam).castShadow=false;
   }
-  shell(root, 'pelvic_chassis', [[.985,.095,.067],[1.025,.153,.088],[1.09,.159,.095],[1.132,.120,.083]], graphite);
-  shell(root, 'spinal_cover', [[1.30,.096,.020],[1.44,.122,.034],[1.58,.132,.027],[1.62,.100,.016]], ceramic, [0,0,-.121]);
-  for (let i = 0; i < 5; i++) box(root, 'rear_cooling_slot', [.12,.004,.004], [0,1.415+i*.017,-.157], elastomer, .001);
 
   for (const side of [-1, 1]) {
     const leg = new T.Group();
     leg.name = side < 0 ? 'leg_left' : 'leg_right';
-    leg.position.set(side*.116,1.035,0);
-    leg.rotation.z = -side*.022;
+    leg.position.set(side*.097,1.085,side<0?.012:-.006);
+    leg.rotation.z = -side*.018;
     root.add(leg);
-    ellipsoid(leg, 'hip_flexure', [.078,.096,.084], [0,-.012,0], elastomer);
-    axle(leg, 'hip_bearing', .048,.117,[0,-.008,0]);
-    shell(leg, 'thigh_chassis', [[-.43,.018,.018],[-.25,.022,.022],[-.06,.025,.025]], graphite);
-    shell(leg, 'sculpted_thigh', [[-.405,.040,.043,.011],[-.38,.051,.056,.010],[-.22,.073,.079,.008],[-.10,.080,.078,0],[-.048,.066,.058,-.003]], ceramic);
-    ellipsoid(leg, 'knee_flexure', [.058,.065,.059], [0,-.443,.002], elastomer);
-    axle(leg, 'recessed_knee_pin', .026,.117,[0,-.443,-.005]);
-    ellipsoid(leg, 'patella_shell', [.049,.052,.024], [0,-.441,.048], ceramic);
-    shell(leg, 'calf_chassis', [[-.883,.016,.016],[-.69,.020,.020],[-.49,.022,.022]], graphite);
-    shell(leg, 'sculpted_shin', [[-.868,.029,.031,.009],[-.82,.034,.039,.011],[-.65,.052,.058,.012],[-.527,.056,.063,.009],[-.49,.045,.047,.010]], ceramic);
+    ellipsoid(leg, 'hip_flexure', [.046,.055,.051], [0,-.010,-.008], elastomer);
+    axle(leg, 'hip_bearing', .035,.088,[0,-.008,0]);
+    shell(leg, 'thigh_chassis', [[-.445,.016,.018],[-.25,.020,.023],[-.02,.023,.024]], graphite);
+    shell(leg, 'sculpted_thigh', [[-.432,.033,.033,.014],[-.388,.042,.044,.015],[-.23,.062,.062,.010],[-.105,.069,.067,0],[.018,.051,.050,-.003]], ceramic, [0,0,0], .88);
+    ellipsoid(leg, 'knee_flexure', [.039,.040,.041], [0,-.457,.002], elastomer);
+    axle(leg, 'recessed_knee_pin', .021,.080,[0,-.457,-.008]);
+    shell(leg, 'calf_chassis', [[-.946,.014,.014],[-.69,.018,.018],[-.49,.019,.019]], graphite);
+    shell(leg, 'sculpted_shin', [[-.947,.023,.024,.007],[-.89,.027,.032,.009],[-.72,.043,.048,.003],[-.575,.047,.050,0],[-.488,.034,.033,.008],[-.439,.025,.021,.028]], ceramic, [0,0,0], .85);
     // Calf hardware is recessed at the back, keeping the front contour uninterrupted.
-    const piston = mesh(leg, 'calf_link', new T.CylinderGeometry(.008,.008,.24,16), titanium, [0,-.681,-.060]);
+    const piston = mesh(leg, 'calf_link', new T.CylinderGeometry(.006,.006,.26,16), titanium, [0,-.72,-.048]);
     piston.rotation.x = -.06;
-    ellipsoid(leg, 'ankle_flexure', [.035,.045,.038], [0,-.883,.002], elastomer);
-    shell(leg, 'instep', [[-.960,.052,.110,.038],[-.940,.058,.129,.044],[-.905,.050,.103,.027],[-.879,.032,.040,-.003]], graphite);
-    box(leg, 'foot_sole', [.121,.024,.262], [0,-.972,.044], elastomer, .011);
-    box(leg, 'heel_insert', [.071,.014,.058], [0,-.951,-.056], titanium, .005);
+    ellipsoid(leg, 'ankle_flexure', [.027,.030,.029], [0,-.962,.002], elastomer);
+    shell(leg, 'instep', [[-1.021,.042,.090,.034],[-1.003,.047,.104,.037],[-.977,.039,.075,.022],[-.949,.024,.026,-.002]], ceramic, [0,0,0], .72);
+    box(leg, 'foot_sole', [.099,.015,.218], [0,-1.032,.036], elastomer, .007);
+    box(leg, 'heel_insert', [.056,.009,.040], [0,-1.018,-.041], titanium, .004);
 
     const arm = new T.Group();
     arm.name = side < 0 ? 'shoulder_left' : 'shoulder_right';
-    arm.position.set(side*.244,1.595,0);
-    arm.rotation.z = side*.075;
+    arm.position.set(side*.223,1.625,0);
+    arm.rotation.z = side*.050;
     root.add(arm);
-    ellipsoid(arm, 'shoulder_flexure', [.078,.089,.079], [side*.012,0,0], graphite);
-    ellipsoid(arm, 'deltoid_shell', [.076,.098,.086], [side*.027,.005,.003], ceramic);
-    shell(arm, 'upper_arm_core', [[-.29,.025,.026],[-.13,.030,.031],[-.02,.035,.036]], elastomer, [side*.025,0,0]);
-    shell(arm, 'upper_arm_shell', [[-.278,.034,.040],[-.255,.043,.049],[-.13,.058,.061],[-.05,.059,.060],[-.02,.046,.045]], ceramic, [side*.027,0,.006]);
+    ellipsoid(arm, 'shoulder_flexure', [.050,.059,.056], [0,.008,0], graphite);
+    shell(arm, 'upper_arm_core', [[-.30,.022,.024],[-.13,.025,.028],[.028,.031,.032]], elastomer, [side*.010,0,0]);
+    shell(arm, 'shoulder_to_upper_arm', [[-.293,.026,.029],[-.24,.035,.039],[-.14,.046,.050],[-.045,.062,.063],[.028,.052,.051],[.060,.024,.023]], ceramic, [side*.012,0,.006], .90);
     const elbow = new T.Group();
     elbow.name = side < 0 ? 'elbow_left' : 'elbow_right';
-    elbow.position.set(side*.027,-.32,0);
-    elbow.rotation.x = -.10;
+    elbow.position.set(side*.012,-.324,0);
+    elbow.rotation.x = -.08;
     arm.add(elbow);
-    ellipsoid(elbow, 'elbow_flexure', [.044,.051,.049], [0,0,0], elastomer);
-    axle(elbow, 'elbow_pin', .022,.084,[0,0,0]);
-    shell(elbow, 'forearm_core', [[-.276,.020,.021],[-.14,.027,.029],[-.035,.029,.030]], graphite);
-    shell(elbow, 'forearm_shell', [[-.253,.029,.030],[-.22,.034,.038],[-.11,.052,.055],[-.05,.048,.050],[-.032,.036,.037]], ceramic, [0,0,.006]);
-    mesh(elbow, 'wrist_coupling', new T.CylinderGeometry(.027,.029,.041,32), titanium, [0,-.279,0]);
+    ellipsoid(elbow, 'elbow_flexure', [.032,.035,.034], [0,0,0], elastomer);
+    axle(elbow, 'elbow_pin', .018,.063,[0,0,0]);
+    shell(elbow, 'forearm_core', [[-.288,.016,.017],[-.14,.022,.025],[-.028,.024,.025]], graphite);
+    shell(elbow, 'forearm_shell', [[-.275,.020,.023],[-.23,.026,.030],[-.12,.040,.045],[-.055,.037,.039],[-.028,.025,.026]], ceramic, [0,0,.006], .88);
+    mesh(elbow, 'wrist_coupling', new T.CylinderGeometry(.021,.023,.032,32), titanium, [0,-.293,0]);
     const hand = new T.Group();
     hand.name = side < 0 ? 'hand_left' : 'hand_right';
-    hand.position.set(0,-.318,.007);
+    hand.position.set(0,-.322,.007);
     hand.rotation.y = side*.10;
-    hand.scale.setScalar(1.15);
+    hand.scale.setScalar(1.04);
     elbow.add(hand);
-    box(hand, 'palm_chassis', [.073,.084,.035], [0,-.016,0], graphite, .013);
-    box(hand, 'metacarpal_plate', [.064,.065,.014], [0,-.014,.022], ceramic, .010);
+    shell(hand, 'palm_chassis', [[-.058,.031,.014],[-.02,.035,.018],[.024,.023,.014]], graphite, [0,0,0], .76);
+    shell(hand, 'metacarpal_plate', [[-.049,.026,.005],[-.018,.030,.009],[.018,.019,.006]], ceramic, [0,0,.018], .82);
     for (let finger = 0; finger < 4; finger++) {
       const x = (finger-1.5)*.018, length = [.032,.039,.036,.027][finger];
       const digit = new T.Group();
@@ -158,26 +164,53 @@ export async function createHumanoid(): Promise<T.Group> {
     box(thumb, 'thumb_distal', [.017,.028,.019], [0,-.048,.010], ceramic, .006);
   }
 
-  // An uninterrupted dark face and a slim rear cowl replace the small face window.
-  shell(root, 'neck', [[1.64,.113,.067],[1.67,.074,.052],[1.71,.047,.044],[1.755,.054,.052]], graphite);
+  // A narrow, swept-back sensor head grows out of a continuous dark neck.
+  shell(root, 'neck', [[1.65,.115,.060],[1.69,.071,.049],[1.735,.045,.040],[1.80,.049,.047]], elastomer, [0,0,-.009], .90);
   const head = new T.Group();
   head.name = 'sensor_head';
-  head.position.set(0,1.838,.008);
+  head.position.set(0,1.870,.008);
   head.rotation.x = -.025;
   root.add(head);
-  shell(head, 'rear_head_cowl', [[-.116,.039,.041,-.015],[-.086,.073,.069,-.015],[0,.093,.079,-.015],[.088,.074,.064,-.015],[.128,.032,.033,-.012],[.132,.003,.003,-.010]], visor, [0,0,0], .93);
-  shell(head, 'full_face_visor', [[-.119,.025,.017,.047],[-.105,.053,.026,.060],[-.054,.079,.038,.070],[.035,.087,.045,.067],[.093,.068,.037,.055],[.127,.030,.018,.035],[.131,.003,.003,.030]], visor, [0,0,.006], .93);
+  const headProfile:Section[]=[[-.115,.029,.037,-.012],[-.077,.058,.065,-.020],[.025,.079,.076,-.020],[.085,.073,.065,-.016],[.120,.043,.040,-.012],[.133,.003,.003,-.008]];
+  shell(head, 'rear_head_cowl', headProfile, headCowl, [0,0,0], .77);
+  // The glass is an open patch on the same helmet surface, not a second overlapping head.
+  const headOutline=new T.CatmullRomCurve3(headProfile.map(s=>new T.Vector3(s[1],s[0],s[2])),false,'centripetal');
+  const headOffset=new T.CatmullRomCurve3(headProfile.map(s=>new T.Vector3(0,s[0],s[3]??0)),false,'centripetal');
+  const glassVertices:number[]=[],glassIndices:number[]=[],edgeLeft:T.Vector3[]=[],edgeRight:T.Vector3[]=[];
+  const rows=40,columns=40;
+  for(let j=0;j<=rows;j++){
+    const v=j/rows,t=.13+v*.79,p=headOutline.getPoint(t),o=headOffset.getPoint(t);
+    const span=.67+.49*Math.pow(Math.sin(v*Math.PI),.65);
+    for(let i=0;i<=columns;i++){
+      const a=(i/columns*2-1)*span,s=Math.sin(a),c=Math.cos(a);
+      const point=new T.Vector3(Math.sign(s)*Math.pow(Math.abs(s),.77)*(p.x+.0016),p.y,Math.pow(c,.77)*(p.z+.0016)+o.z);
+      glassVertices.push(point.x,point.y,point.z);
+      if(i===0)edgeLeft.push(point);if(i===columns)edgeRight.push(point);
+    }
+  }
+  for(let j=0;j<rows;j++)for(let i=0;i<columns;i++){const a=j*(columns+1)+i,b=a+columns+1;glassIndices.push(a,a+1,b,b,a+1,b+1);}
+  const glassGeometry=new T.BufferGeometry();glassGeometry.setAttribute('position',new T.Float32BufferAttribute(glassVertices,3));glassGeometry.setIndex(glassIndices);glassGeometry.computeVertexNormals();
+  mesh(head,'full_face_visor',glassGeometry,visor).receiveShadow=false;
+  for(const edge of [edgeLeft,edgeRight])mesh(head,'visor_gasket',new T.TubeGeometry(new T.CatmullRomCurve3(edge),48,.0009,6,false),graphite).castShadow=false;
   // No animated eyes or light strips: the face reads through its curved reflections.
   for (const side of [-1,1]) {
-    ellipsoid(head, 'recessed_audio_port', [.005,.022,.019], [side*.089,-.018,-.018], graphite);
+    ellipsoid(head, 'recessed_audio_port', [.003,.015,.013], [side*.078,-.010,-.020], graphite);
   }
 
   try {
     const logo = await new T.TextureLoader().loadAsync('/core-logo-mark-v3.png');
     logo.colorSpace = T.SRGBColorSpace;
     logo.anisotropy = 4;
-    const badge = mesh(root, 'official_CORE_logo', new T.PlaneGeometry(.047,.051), new T.MeshBasicMaterial({ map: logo, transparent: true, depthWrite: false, toneMapped: false }), [-.044,1.535,.149]);
-    badge.castShadow = false;
+    root.updateMatrixWorld(true);
+    function chestPrint(name:string,width:number,height:number,x:number,material:T.Material){
+      const item=mesh(root,name,new T.PlaneGeometry(width,height),material,[x,1.55,0]);
+      const hit=new T.Raycaster(new T.Vector3(x,1.55,1),new T.Vector3(0,0,-1)).intersectObject(root.getObjectByName('ceramic_chest')!)[0];
+      if(!hit?.face)throw new Error('Chest branding surface unavailable');
+      item.position.copy(hit.point).addScaledVector(hit.face.normal,.0018);
+      item.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),hit.face.normal);
+      item.castShadow=false;return item;
+    }
+    chestPrint('official_CORE_logo',.042,.046,-.039,new T.MeshBasicMaterial({ map: logo, transparent: true, depthWrite: false, toneMapped: false }));
     const canvas = document.createElement('canvas');
     canvas.width = 1024; canvas.height = 256;
     const ctx = canvas.getContext('2d');
@@ -185,10 +218,9 @@ export async function createHumanoid(): Promise<T.Group> {
     ctx.fillStyle = '#26333c'; ctx.font = '500 140px Arial, sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('C O R E',512,137);
     const wordmark = new T.CanvasTexture(canvas); wordmark.colorSpace = T.SRGBColorSpace;
-    const lettering = mesh(root, 'CORE_chest_lettering', new T.PlaneGeometry(.089,.022), new T.MeshBasicMaterial({ map: wordmark, transparent: true, depthWrite: false, toneMapped: false }), [.031,1.534,.149]);
-    lettering.castShadow = false;
+    chestPrint('CORE_chest_lettering',.086,.021,.030,new T.MeshBasicMaterial({ map: wordmark, transparent: true, depthWrite: false, toneMapped: false }));
   } catch (error) { disposeHumanoid(root); throw error; }
-  root.userData = { status: 'CONCEPT', version: 3, description: 'Original CORE appearance concept; not a physical robot or engineering specification.' };
+  root.userData = { status: 'CONCEPT', version: 4, description: 'Original CORE appearance concept; not a physical robot or engineering specification.' };
   return root;
 }
 
