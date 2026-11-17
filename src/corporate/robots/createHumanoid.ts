@@ -13,7 +13,24 @@ export async function createHumanoid(): Promise<T.Group> {
   const titanium = new T.MeshStandardMaterial({ color: '#91979d', metalness: .95, roughness: .17 });
   const visor = new T.MeshPhysicalMaterial({ color: '#040507', metalness: .55, roughness: .065, clearcoat: 1, clearcoatRoughness: .045, ior: 1.52 });
   const headCowl = new T.MeshPhysicalMaterial({ color: '#171a1e', metalness: .32, roughness: .26, clearcoat: .55, clearcoatRoughness: .16 });
-  const panelSeam = new T.MeshStandardMaterial({ color: '#647078', metalness: .65, roughness: .32 });
+  // Light elements. HDR colours (>1) are picked up by the scene's bloom pass; each mesh owns its
+  // material so the boot sequence can ignite parts independently.
+  const glowColor = new T.Color('#46d6ff');
+  function glowMaterial(strength: number) {
+    const material = new T.MeshBasicMaterial({ color: glowColor.clone().multiplyScalar(strength), toneMapped: false, transparent: true });
+    material.userData.base = material.color.clone();
+    return material;
+  }
+  function glow(parent: T.Object3D, name: string, geometry: T.BufferGeometry, strength: number, position: number[] = [0, 0, 0]) {
+    const item = mesh(parent, name, geometry, glowMaterial(strength), position);
+    item.castShadow = false; item.receiveShadow = false;
+    return item;
+  }
+  function ring(parent: T.Object3D, radius: number, position: number[], depth = 1, strength = 4.5) {
+    const item = glow(parent, 'glow_ring', new T.TorusGeometry(radius, .0016, 8, 96), strength, position);
+    item.rotation.x = Math.PI / 2; item.scale.set(1, depth, 1);
+    return item;
+  }
 
   function mesh(parent: T.Object3D, name: string, geometry: T.BufferGeometry, material: T.Material, position: number[] = [0, 0, 0]) {
     const item = new T.Mesh(geometry, material);
@@ -89,7 +106,7 @@ export async function createHumanoid(): Promise<T.Group> {
       const hit=new T.Raycaster(new T.Vector3(p.x,p.y,1),new T.Vector3(0,0,-1)).intersectObject(chest)[0];
       return hit?.face?hit.point.addScaledVector(hit.face.normal,.0004):p;
     });
-    mesh(root,'chest_panel_joint',new T.TubeGeometry(new T.CatmullRomCurve3(points),48,.00065,6,false),panelSeam).castShadow=false;
+    glow(root,'glow_seam',new T.TubeGeometry(new T.CatmullRomCurve3(points),48,.0009,6,false),5);
   }
 
   for (const side of [-1, 1]) {
@@ -110,6 +127,7 @@ export async function createHumanoid(): Promise<T.Group> {
     const piston = mesh(leg, 'calf_link', new T.CylinderGeometry(.006,.006,.26,16), titanium, [0,-.72,-.048]);
     piston.rotation.x = -.06;
     ellipsoid(leg, 'ankle_flexure', [.027,.030,.029], [0,-.962,.002], elastomer);
+    ring(leg, .029, [0,-.948,.004], 1.05);
     shell(leg, 'instep', [[-1.021,.042,.090,.034],[-1.003,.047,.104,.037],[-.977,.039,.075,.022],[-.949,.024,.026,-.002]], ceramic, [0,0,0], .72);
     box(leg, 'foot_sole', [.099,.015,.218], [0,-1.032,.036], elastomer, .007);
     box(leg, 'heel_insert', [.056,.009,.040], [0,-1.018,-.041], titanium, .004);
@@ -132,6 +150,7 @@ export async function createHumanoid(): Promise<T.Group> {
     shell(elbow, 'forearm_core', [[-.288,.016,.017],[-.14,.022,.025],[-.028,.024,.025]], graphite);
     shell(elbow, 'forearm_shell', [[-.275,.020,.023],[-.23,.026,.030],[-.12,.040,.045],[-.055,.037,.039],[-.028,.025,.026]], ceramic, [0,0,.006], .88);
     mesh(elbow, 'wrist_coupling', new T.CylinderGeometry(.021,.023,.032,32), titanium, [0,-.293,0]);
+    ring(elbow, .0242, [0,-.284,0]);
     const hand = new T.Group();
     hand.name = side < 0 ? 'hand_left' : 'hand_right';
     hand.position.set(0,-.322,.007);
@@ -166,6 +185,8 @@ export async function createHumanoid(): Promise<T.Group> {
 
   // A narrow, swept-back sensor head grows out of a continuous dark neck.
   shell(root, 'neck', [[1.65,.115,.060],[1.69,.071,.049],[1.735,.045,.040],[1.80,.049,.047]], elastomer, [0,0,-.009], .90);
+  ring(root, .0505, [0,1.79,-.009], .95, 5);
+  ring(root, .0985, [0,1.172,0], .76, 3.5);
   const head = new T.Group();
   head.name = 'sensor_head';
   head.position.set(0,1.870,.008);
@@ -192,7 +213,22 @@ export async function createHumanoid(): Promise<T.Group> {
   const glassGeometry=new T.BufferGeometry();glassGeometry.setAttribute('position',new T.Float32BufferAttribute(glassVertices,3));glassGeometry.setIndex(glassIndices);glassGeometry.computeVertexNormals();
   mesh(head,'full_face_visor',glassGeometry,visor).receiveShadow=false;
   for(const edge of [edgeLeft,edgeRight])mesh(head,'visor_gasket',new T.TubeGeometry(new T.CatmullRomCurve3(edge),48,.0009,6,false),graphite).castShadow=false;
-  // No animated eyes or light strips: the face reads through its curved reflections.
+  // The face contour is traced in light: one closed loop around the visor's edge, lifted off the glass.
+  const glassNormals=glassGeometry.getAttribute('normal');
+  const lifted=(j:number,i:number,lift:number)=>{const k=j*(columns+1)+i;return new T.Vector3(glassVertices[k*3],glassVertices[k*3+1],glassVertices[k*3+2]).addScaledVector(new T.Vector3().fromBufferAttribute(glassNormals,k),lift);};
+  const contour:T.Vector3[]=[];
+  for(let i=0;i<=columns;i++)contour.push(lifted(0,i,.0016));
+  for(let j=1;j<=rows;j++)contour.push(lifted(j,columns,.0016));
+  for(let i=columns-1;i>=0;i--)contour.push(lifted(rows,i,.0016));
+  for(let j=rows-1;j>=1;j--)contour.push(lifted(j,0,.0016));
+  glow(head,'glow_face_outline',new T.TubeGeometry(new T.CatmullRomCurve3(contour,true,'centripetal'),360,.00125,6,true),7);
+  // Eye band: a sensor line across the visor, with a brighter focus point that follows the viewer.
+  const eyeRow=Math.round(rows*.47),eyePoints:T.Vector3[]=[];
+  for(let i=7;i<=columns-7;i++)eyePoints.push(lifted(eyeRow,i,.0022));
+  const eyeCurve=new T.CatmullRomCurve3(eyePoints,false,'centripetal');
+  glow(head,'glow_eye_bar',new T.TubeGeometry(eyeCurve,96,.0021,8,false),5.5);
+  const focus=glow(head,'glow_eye_focus',new T.SphereGeometry(.0042,16,12),14,eyeCurve.getPoint(.5).toArray());
+  focus.scale.set(2.4,1,1);focus.userData.curve=eyeCurve;
   for (const side of [-1,1]) {
     ellipsoid(head, 'recessed_audio_port', [.003,.015,.013], [side*.078,-.010,-.020], graphite);
   }
@@ -202,25 +238,30 @@ export async function createHumanoid(): Promise<T.Group> {
     logo.colorSpace = T.SRGBColorSpace;
     logo.anisotropy = 4;
     root.updateMatrixWorld(true);
-    function chestPrint(name:string,width:number,height:number,x:number,material:T.Material){
-      const item=mesh(root,name,new T.PlaneGeometry(width,height),material,[x,1.55,0]);
-      const hit=new T.Raycaster(new T.Vector3(x,1.55,1),new T.Vector3(0,0,-1)).intersectObject(root.getObjectByName('ceramic_chest')!)[0];
-      if(!hit?.face)throw new Error('Chest branding surface unavailable');
-      item.position.copy(hit.point).addScaledVector(hit.face.normal,.0018);
-      item.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),hit.face.normal);
-      item.castShadow=false;return item;
+    const chestSurface=root.getObjectByName('ceramic_chest')!;
+    // Prints wrap the curved chest like a decal: every vertex is projected onto the shell,
+    // so a larger mark stays crisp and never sinks into the surface at its edges.
+    function chestPrint(name:string,width:number,height:number,x:number,y:number,material:T.Material){
+      const geometry=new T.PlaneGeometry(width,height,24,6),pos=geometry.getAttribute('position');
+      for(let i=0;i<pos.count;i++){
+        const px=x+pos.getX(i),py=y+pos.getY(i);
+        const hit=new T.Raycaster(new T.Vector3(px,py,1),new T.Vector3(0,0,-1)).intersectObject(chestSurface)[0];
+        if(hit?.face){hit.point.addScaledVector(hit.face.normal,.0012);pos.setXYZ(i,hit.point.x,hit.point.y,hit.point.z);}
+        else pos.setXYZ(i,px,py,.1); // Transparent margin past the shell edge; never fail the model over it.
+      }
+      geometry.computeVertexNormals();
+      const item=mesh(root,name,geometry,material);item.castShadow=false;item.receiveShadow=false;item.renderOrder=2;
+      return item;
     }
-    chestPrint('official_CORE_logo',.042,.046,-.039,new T.MeshBasicMaterial({ map: logo, transparent: true, depthWrite: false, toneMapped: false }));
-    const canvas = document.createElement('canvas');
-    canvas.width = 1024; canvas.height = 256;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) throw new Error('Brand texture unavailable');
-    ctx.fillStyle = '#26333c'; ctx.font = '500 140px Arial, sans-serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('C O R E',512,137);
-    const wordmark = new T.CanvasTexture(canvas); wordmark.colorSpace = T.SRGBColorSpace;
-    chestPrint('CORE_chest_lettering',.086,.021,.030,new T.MeshBasicMaterial({ map: wordmark, transparent: true, depthWrite: false, toneMapped: false }));
+    const print=(map:T.Texture)=>new T.MeshBasicMaterial({ map, transparent: true, depthWrite: false, toneMapped: false, fog: false, polygonOffset: true, polygonOffsetFactor: -2 });
+    chestPrint('official_CORE_logo',.042,.046,-.062,1.548,print(logo));
+    // The CORE wordmark (cut from the brand logotype, white glyphs) tinted a quiet slate.
+    const wordmark = await new T.TextureLoader().loadAsync('/corp/robots/core-wordmark-v1.png');
+    wordmark.colorSpace = T.SRGBColorSpace; wordmark.anisotropy = 4;
+    const lettering = print(wordmark); lettering.color.set('#6a7681');
+    chestPrint('CORE_chest_lettering',.105,.0295,.0225,1.548,lettering);
   } catch (error) { disposeHumanoid(root); throw error; }
-  root.userData = { status: 'CONCEPT', version: 4, description: 'Original CORE appearance concept; not a physical robot or engineering specification.' };
+  root.userData = { status: 'CONCEPT', version: 5, description: 'Original CORE appearance concept; not a physical robot or engineering specification.' };
   return root;
 }
 
