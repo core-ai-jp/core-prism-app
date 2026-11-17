@@ -4,6 +4,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { createHumanoid, disposeHumanoid } from './createHumanoid';
 
 export type HumanoidFocus = 'full' | 'face' | 'core' | 'hand';
@@ -93,7 +94,7 @@ export function mountHumanoidScene(container: HTMLDivElement, events: Events): H
   for (let i = 0; i < dustCount; i++) { const a = Math.random() * Math.PI * 2, r = .35 + Math.random() * 1.5; dust[i * 3] = Math.cos(a) * r; dust[i * 3 + 1] = Math.random() * 2.6; dust[i * 3 + 2] = Math.sin(a) * r - .2; dustSeed[i] = Math.random(); }
   const dustGeometry = new T.BufferGeometry(); dustGeometry.setAttribute('position', new T.BufferAttribute(dust, 3));
   const dustMat = new T.PointsMaterial({ map: sprite, size: .028, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0, color: '#9fe8ff' });
-  scene.add(new T.Points(dustGeometry, dustMat));
+  const dustPoints = new T.Points(dustGeometry, dustMat); scene.add(dustPoints);
   // Boot scan: a ring of light with a soft curtain rises through the body.
   const curtainTexture = canvasTexture(64, (c, s) => { const g = c.createLinearGradient(0, s, 0, 0); g.addColorStop(0, 'rgba(70,214,255,0)'); g.addColorStop(.85, 'rgba(70,214,255,.55)'); g.addColorStop(1, 'rgba(200,245,255,1)'); c.fillStyle = g; c.fillRect(0, 0, s, s); });
   const scan = new T.Group(); scan.visible = false; scene.add(scan);
@@ -103,11 +104,34 @@ export function mountHumanoidScene(container: HTMLDivElement, events: Events): H
   const curtain = new T.Mesh(new T.CylinderGeometry(.36, .36, .22, 96, 1, true), curtainMat); curtain.position.y = -.11; scan.add(curtain);
 
   // Bloom is what turns the HDR glow materials into light; resolution is kept modest for phones.
+  // Selective bloom: only the light elements are rendered into the bloom buffer (everything else
+  // drawn black, so it still occludes), and that glow is added over the normal render. The white
+  // shell and the chest branding therefore stay crisp instead of being lifted by a haze.
+  const bloomComposer = new EffectComposer(renderer, new T.WebGLRenderTarget(1, 1, { type: T.HalfFloatType }));
+  bloomComposer.renderToScreen = false; cleanup.push(() => bloomComposer.dispose());
+  bloomComposer.addPass(new RenderPass(scene, camera));
+  const bloom = new UnrealBloomPass(new T.Vector2(256, 256), .9, .3, .2); bloomComposer.addPass(bloom); cleanup.push(() => bloom.dispose());
   const composer = new EffectComposer(renderer, new T.WebGLRenderTarget(1, 1, { type: T.HalfFloatType, samples: 4 }));
   cleanup.push(() => composer.dispose());
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new T.Vector2(256, 256), .9, .3, 2.4); composer.addPass(bloom); cleanup.push(() => bloom.dispose());
+  const mix = new ShaderPass(new T.ShaderMaterial({
+    uniforms: { baseTexture: { value: null }, bloomTexture: { value: bloomComposer.renderTarget2.texture } },
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+    fragmentShader: 'uniform sampler2D baseTexture; uniform sampler2D bloomTexture; varying vec2 vUv; void main(){ gl_FragColor = texture2D(baseTexture, vUv) + vec4(texture2D(bloomTexture, vUv).rgb, 0.0); }',
+  }), 'baseTexture');
+  composer.addPass(mix); cleanup.push(() => { mix.material.dispose(); mix.dispose(); });
   const output = new OutputPass(); composer.addPass(output); cleanup.push(() => output.dispose());
+  const black = new T.MeshBasicMaterial({ color: '#000000' }); cleanup.push(() => black.dispose());
+  const swapped = new Map<T.Mesh, T.Material | T.Material[]>();
+  const glows = new Set<T.Object3D>([scanRing, curtain]);
+  function renderBloom() {
+    scene.traverse(o => { if (o instanceof T.Mesh && !glows.has(o)) { swapped.set(o, o.material); o.material = black; } });
+    const background = scene.background, dustVisible = dustPoints.visible, stageVisible = stage.visible;
+    scene.background = null; dustPoints.visible = false; stage.visible = false; renderer.shadowMap.autoUpdate = false;
+    bloomComposer.render();
+    renderer.shadowMap.autoUpdate = true; scene.background = background; dustPoints.visible = dustVisible; stage.visible = stageVisible;
+    for (const [o, m] of swapped) o.material = m; swapped.clear();
+  }
 
   let root: T.Group | undefined, head: T.Object3D | undefined, armR: T.Object3D | undefined, elbowR: T.Object3D | undefined, armL: T.Object3D | undefined, handR: T.Object3D | undefined;
   let faceLine: T.Mesh | undefined, eyeBar: T.Mesh | undefined, eyeFocus: T.Mesh | undefined;
@@ -222,7 +246,7 @@ export function mountHumanoidScene(container: HTMLDivElement, events: Events): H
       el.dataset.show = show ? 'true' : 'false';
     }
   }
-  function render() { if (disposed) return; placeAnchors(); tuneBloom(); composer.render(); }
+  function render() { if (disposed) return; placeAnchors(); tuneBloom(); renderBloom(); composer.render(); }
   function step(dt: number) {
     clock += dt;
     if (bootT < BOOT) { bootT = Math.min(BOOT, bootT + dt); }
@@ -248,7 +272,7 @@ export function mountHumanoidScene(container: HTMLDivElement, events: Events): H
 
   function resize() {
     if (disposed) return; const w = container.clientWidth, h = container.clientHeight; if (!w || !h) return;
-    renderer.setSize(w, h, false); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(w, h);
+    renderer.setSize(w, h, false); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(w, h); bloomComposer.setPixelRatio(renderer.getPixelRatio()); bloomComposer.setSize(w, h);
     bloom.resolution.set(w / 2, h / 2);
     camera.aspect = w / h; camera.updateProjectionMatrix(); if (tween.t >= 1) moveTo(focus, true); still();
   }
@@ -284,6 +308,7 @@ export function mountHumanoidScene(container: HTMLDivElement, events: Events): H
     armL = model.getObjectByName('shoulder_left'); handR = model.getObjectByName('hand_right');
     model.traverse(o => {
       if (!(o instanceof T.Mesh)) return;
+      if (o.name.startsWith('glow_')) glows.add(o);
       if (o.name === 'glow_face_outline') faceLine = o; else if (o.name === 'glow_eye_bar') eyeBar = o; else if (o.name === 'glow_eye_focus') eyeFocus = o;
       else if (o.name === 'glow_seam') seams.push(o); else if (o.name === 'glow_ring') rings.push({ mesh: o, y: o.getWorldPosition(new T.Vector3()).y });
     });

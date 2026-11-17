@@ -238,23 +238,34 @@ export async function createHumanoid(): Promise<T.Group> {
     logo.colorSpace = T.SRGBColorSpace;
     logo.anisotropy = 4;
     root.updateMatrixWorld(true);
-    function chestPrint(name:string,width:number,height:number,x:number,material:T.Material){
-      const item=mesh(root,name,new T.PlaneGeometry(width,height),material,[x,1.55,0]);
-      const hit=new T.Raycaster(new T.Vector3(x,1.55,1),new T.Vector3(0,0,-1)).intersectObject(root.getObjectByName('ceramic_chest')!)[0];
-      if(!hit?.face)throw new Error('Chest branding surface unavailable');
-      item.position.copy(hit.point).addScaledVector(hit.face.normal,.0018);
-      item.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),hit.face.normal);
-      item.castShadow=false;return item;
+    const chestSurface=root.getObjectByName('ceramic_chest')!;
+    // Prints wrap the curved chest like a decal: every vertex is projected onto the shell,
+    // so a larger mark stays crisp and never sinks into the surface at its edges.
+    function chestPrint(name:string,width:number,height:number,x:number,y:number,material:T.Material){
+      const geometry=new T.PlaneGeometry(width,height,24,6),pos=geometry.getAttribute('position');
+      for(let i=0;i<pos.count;i++){
+        const px=x+pos.getX(i),py=y+pos.getY(i);
+        const hit=new T.Raycaster(new T.Vector3(px,py,1),new T.Vector3(0,0,-1)).intersectObject(chestSurface)[0];
+        if(hit?.face){hit.point.addScaledVector(hit.face.normal,.0012);pos.setXYZ(i,hit.point.x,hit.point.y,hit.point.z);}
+        else pos.setXYZ(i,px,py,.1); // Transparent margin past the shell edge; never fail the model over it.
+      }
+      geometry.computeVertexNormals();
+      const item=mesh(root,name,geometry,material);item.castShadow=false;item.receiveShadow=false;item.renderOrder=2;
+      return item;
     }
-    chestPrint('official_CORE_logo',.042,.046,-.039,new T.MeshBasicMaterial({ map: logo, transparent: true, depthWrite: false, toneMapped: false }));
+    const print=(map:T.Texture)=>new T.MeshBasicMaterial({ map, transparent: true, depthWrite: false, toneMapped: false, fog: false, polygonOffset: true, polygonOffsetFactor: -2 });
+    chestPrint('official_CORE_logo',.058,.064,-.097,1.545,print(logo));
     const canvas = document.createElement('canvas');
-    canvas.width = 1024; canvas.height = 256;
+    canvas.width = 1024; canvas.height = 300;
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Brand texture unavailable');
-    ctx.fillStyle = '#26333c'; ctx.font = '500 140px Arial, sans-serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('C O R E',512,137);
-    const wordmark = new T.CanvasTexture(canvas); wordmark.colorSpace = T.SRGBColorSpace;
-    chestPrint('CORE_chest_lettering',.086,.021,.030,new T.MeshBasicMaterial({ map: wordmark, transparent: true, depthWrite: false, toneMapped: false }));
+    ctx.fillStyle = '#0b1620'; ctx.font = '800 240px Inter, "Helvetica Neue", Arial, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    if ('letterSpacing' in ctx) (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = '12px';
+    ctx.fillText('CORE',512,158);
+    const wordmark = new T.CanvasTexture(canvas); wordmark.colorSpace = T.SRGBColorSpace; wordmark.anisotropy = 4;
+    // Lettering cap height is about two thirds of the logo mark, so the mark still leads.
+    chestPrint('CORE_chest_lettering',.25,.0733,.040,1.545,print(wordmark));
   } catch (error) { disposeHumanoid(root); throw error; }
   root.userData = { status: 'CONCEPT', version: 5, description: 'Original CORE appearance concept; not a physical robot or engineering specification.' };
   return root;
