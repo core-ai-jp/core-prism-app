@@ -254,18 +254,18 @@ export async function createHumanoid(): Promise<T.Group> {
       return item;
     }
     const print=(map:T.Texture)=>new T.MeshBasicMaterial({ map, transparent: true, depthWrite: false, toneMapped: false, fog: false, polygonOffset: true, polygonOffsetFactor: -2 });
-    chestPrint('official_CORE_logo',.058,.064,-.097,1.545,print(logo));
+    chestPrint('official_CORE_logo',.042,.046,-.062,1.548,print(logo));
     const canvas = document.createElement('canvas');
     canvas.width = 1024; canvas.height = 300;
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Brand texture unavailable');
-    ctx.fillStyle = '#0b1620'; ctx.font = '800 240px Inter, "Helvetica Neue", Arial, sans-serif';
+    ctx.fillStyle = '#6a7681'; ctx.font = '600 240px Inter, "Helvetica Neue", Arial, sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    if ('letterSpacing' in ctx) (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = '12px';
+    if ('letterSpacing' in ctx) (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = '22px';
     ctx.fillText('CORE',512,158);
     const wordmark = new T.CanvasTexture(canvas); wordmark.colorSpace = T.SRGBColorSpace; wordmark.anisotropy = 4;
-    // Lettering cap height is about two thirds of the logo mark, so the mark still leads.
-    chestPrint('CORE_chest_lettering',.25,.0733,.040,1.545,print(wordmark));
+    // Quiet lettering: soft slate, cap height about half the logo mark, so the mark still leads.
+    chestPrint('CORE_chest_lettering',.142,.0416,.027,1.547,print(wordmark));
   } catch (error) { disposeHumanoid(root); throw error; }
   root.userData = { status: 'CONCEPT', version: 5, description: 'Original CORE appearance concept; not a physical robot or engineering specification.' };
   return root;
