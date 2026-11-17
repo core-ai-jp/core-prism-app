@@ -27,7 +27,7 @@ export function mountHumanoidScene(container:HTMLDivElement,events:Events):Human
   const room=new RoomEnvironment();let env:T.WebGLRenderTarget;
   try{env=pmrem.fromScene(room,.04);}finally{room.dispose();}
   cleanup.push(()=>env.dispose());scene.environment=env.texture;scene.environmentIntensity=.75;
-  const key=new T.DirectionalLight('#fffaf2',3.2);key.position.set(-2,4,3);key.castShadow=true;key.shadow.mapSize.set(1024,1024);
+  const key=new T.DirectionalLight('#fffaf2',2.7);key.position.set(-3,6,4);key.castShadow=true;key.shadow.mapSize.set(2048,2048);
   cleanup.push(()=>key.shadow.dispose());
   Object.assign(key.shadow.camera,{left:-1.2,right:1.2,top:2.3,bottom:-.5,near:.1,far:10});key.shadow.normalBias=.012;key.shadow.bias=-.0002;key.shadow.radius=4;scene.add(key);
   const fill=new T.DirectionalLight('#d9e9f3',1.2);fill.position.set(3,2,-2);scene.add(fill);
