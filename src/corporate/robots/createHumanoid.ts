@@ -75,7 +75,7 @@ export async function createHumanoid(): Promise<T.Group> {
 
   // Broad shoulders, a tapered rib cage and a compact dark waist establish human proportions.
   shell(root, 'thoracic_chassis', [[1.24,.115,.082],[1.37,.164,.106],[1.55,.205,.113],[1.65,.205,.094],[1.68,.125,.077]], graphite);
-  shell(root, 'ceramic_chest', [[1.275,.120,.084,.014],[1.31,.141,.098,.014],[1.45,.173,.119,.012],[1.56,.211,.123,.006],[1.625,.213,.100,0],[1.65,.170,.083,-.006]], ceramic, [0,0,.009], .64);
+  shell(root, 'ceramic_chest', [[1.275,.120,.044,.054],[1.31,.141,.058,.054],[1.45,.173,.079,.052],[1.56,.211,.083,.046],[1.625,.213,.060,.040],[1.65,.170,.043,.034]], ceramic, [0,0,.009], .64);
   shell(root, 'abdominal_core', [[1.085,.108,.075],[1.13,.117,.082],[1.22,.114,.086],[1.30,.127,.084]], elastomer);
   for (let i = 0; i < 5; i++) {
     shell(root, `waist_flexure_${i}`, [[1.133+i*.024,.114,.080],[1.139+i*.024,.117,.084],[1.145+i*.024,.114,.080]], graphite);
@@ -92,12 +92,12 @@ export async function createHumanoid(): Promise<T.Group> {
     root.add(leg);
     ellipsoid(leg, 'hip_flexure', [.078,.096,.084], [0,-.012,0], elastomer);
     axle(leg, 'hip_bearing', .048,.117,[0,-.008,0]);
-    shell(leg, 'thigh_chassis', [[-.43,.030,.030],[-.25,.037,.041],[-.06,.044,.045]], graphite);
+    shell(leg, 'thigh_chassis', [[-.43,.018,.018],[-.25,.022,.022],[-.06,.025,.025]], graphite);
     shell(leg, 'sculpted_thigh', [[-.405,.040,.043,.011],[-.38,.051,.056,.010],[-.22,.073,.079,.008],[-.10,.080,.078,0],[-.048,.066,.058,-.003]], ceramic);
     ellipsoid(leg, 'knee_flexure', [.058,.065,.059], [0,-.443,.002], elastomer);
     axle(leg, 'recessed_knee_pin', .026,.117,[0,-.443,-.005]);
     ellipsoid(leg, 'patella_shell', [.049,.052,.024], [0,-.441,.048], ceramic);
-    shell(leg, 'calf_chassis', [[-.883,.023,.025],[-.69,.029,.032],[-.49,.032,.035]], graphite);
+    shell(leg, 'calf_chassis', [[-.883,.016,.016],[-.69,.020,.020],[-.49,.022,.022]], graphite);
     shell(leg, 'sculpted_shin', [[-.868,.029,.031,.009],[-.82,.034,.039,.011],[-.65,.052,.058,.012],[-.527,.056,.063,.009],[-.49,.045,.047,.010]], ceramic);
     // Calf hardware is recessed at the back, keeping the front contour uninterrupted.
     const piston = mesh(leg, 'calf_link', new T.CylinderGeometry(.008,.008,.24,16), titanium, [0,-.681,-.060]);
