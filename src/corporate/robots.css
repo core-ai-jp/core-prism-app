@@ -86,3 +86,53 @@
 .robots-controls{gap:6px}
 .robots-controls button{padding:8px 10px}
 @media(max-width:860px){.robots-control-long{display:none}.robots-control-short{display:inline}.robots-controls{left:8px;right:8px;gap:4px}.robots-controls button{padding:6px 8px}}
+
+/* Humanoid concept: an open product stage, with the full body as the first visual. */
+.robots-page{background:#fff}
+.robots-kicker{font-size:13px!important;letter-spacing:.15em;color:#09658a}
+.robots-hero{max-width:1440px;gap:24px 48px;padding-top:34px;padding-bottom:52px;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr)}
+.robots-hero-copy{padding-top:100px}
+.robots-hero h1{font-size:clamp(40px,4.1vw,61px);line-height:1.42;letter-spacing:-.055em}
+.robots-hero-lead{font-size:18px;max-width:415px;margin-top:32px!important}
+.robots-hero-primary{margin-top:30px}
+.robots-figure{position:relative}
+.robots-scene-top{border:0;padding:12px 0 20px;letter-spacing:.07em}
+.robots-scene-top span:first-child{font-size:17px;font-weight:650}
+.robots-scene-top span:last-child{font-size:12px;letter-spacing:.03em}
+.robots-scene-shell{aspect-ratio:.91;border-radius:2px;background:#edf0f1}
+.robots-controls{bottom:16px;left:16px;right:16px;justify-content:center;gap:6px}
+.robots-controls button{background:rgba(255,255,255,.94);border-color:#bec8ce;border-radius:3px;box-shadow:0 2px 6px #17232d08}
+.robots-scene-hint{font-size:12px;background:#ffffffdb;color:#536579;left:16px;top:14px;bottom:auto}
+.robots-figure figcaption{font-size:13px;line-height:1.9;margin-top:10px;max-width:100%}
+.robots-figure figcaption strong{color:#35495b}
+.robots-figure figcaption>span{margin-top:6px}
+.robots-media-switch{position:relative;margin-top:2px}
+.robots-media-switch button{font-size:13px;min-height:44px}
+.robots-hero-bottom{border-top:1px solid #d8e0e5;padding-top:28px;margin-top:20px}
+.robots-flow{font-size:14px;gap:16px}.robots-flow li>span{color:#09658a}
+.robots-platform{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:56px}
+.robots-platform article{border-top:2px solid #d8e0e5;padding-top:22px}
+.robots-platform h3{font-size:25px;margin:14px 0 20px}
+.robots-platform p{font-size:17px;line-height:1.95}
+.robots-platform .robots-index{font-size:12px;letter-spacing:.06em}
+.robots-platform .robots-status{font-size:13px}
+.robots-soft{background:#f3f5f6}
+.robots-button:focus-visible,.robots-controls button:focus-visible,.robots-media-switch button:focus-visible{outline:2px solid #09658a;outline-offset:4px}
+@media(prefers-reduced-motion:reduce){.robots-controls button:last-child{display:none}}
+@media(min-width:861px) and (max-width:1099px){.robots-hero{display:grid;padding:40px 28px}.robots-hero-copy,.robots-figure{padding:0}.robots-hero-head{display:block}.robots-hero-copy{padding-top:60px}.robots-hero h1{font-size:36px}.robots-hero-lead{font-size:17px}.robots-hero-bottom{grid-column:1/-1}}
+@media(max-width:860px){
+ .robots-hero{display:grid;grid-template-columns:1fr;padding:30px 0 40px;gap:0;max-width:none}
+ .robots-hero-copy{padding:0}.robots-hero h1{font-size:clamp(34px,8.5vw,50px);line-height:1.4}
+ .robots-hero-copy>.robots-kicker{margin:0 24px 18px!important;font-size:11px!important;letter-spacing:.12em}
+ .robots-hero-head .robots-stage{margin-top:18px;font-size:13px}
+ .robots-hero>.robots-figure{margin-top:24px!important;padding:0 16px}
+ .robots-scene-top{padding:8px 8px 14px;font-size:12px;gap:8px}.robots-scene-top span:first-child{font-size:15px}.robots-scene-top span:last-child{font-size:10px}
+ .robots-scene-shell{aspect-ratio:.72}
+ .robots-scene-hint{font-size:11px;left:12px;top:12px}
+ .robots-controls{left:8px;right:8px;bottom:12px;gap:4px}.robots-controls button{font-size:12px;padding:8px;min-height:44px}
+ .robots-figure figcaption{font-size:13px;margin:8px 8px 0}.robots-figure figcaption>span{margin-top:8px}
+ .robots-hero-lead{font-size:17.5px;margin:24px 24px 0!important}.robots-hero-primary{margin:24px 24px 0}
+ .robots-hero-bottom{margin:28px 24px 0;width:auto;padding:24px 0 0;gap:16px}
+ .robots-platform{grid-template-columns:1fr;gap:28px;margin-top:36px}.robots-platform article{padding-top:20px}.robots-platform h3{font-size:24px;margin:12px 0 16px}
+ .robots-section{padding-top:64px;padding-bottom:64px}
+}
