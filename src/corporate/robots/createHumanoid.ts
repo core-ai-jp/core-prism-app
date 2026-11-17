@@ -7,11 +7,11 @@ type Section = [y: number, halfWidth: number, halfDepth: number, centerZ?: numbe
 export async function createHumanoid(): Promise<T.Group> {
   const root = new T.Group();
   root.name = 'CORE_HUMANOID_CONCEPT';
-  const ceramic = new T.MeshPhysicalMaterial({ color: '#ebedec', metalness: .22, roughness: .24, clearcoat: .65, clearcoatRoughness: .22 });
-  const graphite = new T.MeshStandardMaterial({ color: '#15191c', metalness: .55, roughness: .32 });
+  const ceramic = new T.MeshPhysicalMaterial({ color: '#f4f5f4', metalness: .16, roughness: .17, clearcoat: 1, clearcoatRoughness: .075, ior: 1.48 });
+  const graphite = new T.MeshPhysicalMaterial({ color: '#111215', metalness: .68, roughness: .22, clearcoat: .8, clearcoatRoughness: .12 });
   const elastomer = new T.MeshStandardMaterial({ color: '#101315', roughness: .72 });
-  const titanium = new T.MeshStandardMaterial({ color: '#69747b', metalness: .9, roughness: .24 });
-  const visor = new T.MeshPhysicalMaterial({ color: '#05090d', metalness: .65, roughness: .115, clearcoat: 1, clearcoatRoughness: .09 });
+  const titanium = new T.MeshStandardMaterial({ color: '#91979d', metalness: .95, roughness: .17 });
+  const visor = new T.MeshPhysicalMaterial({ color: '#040507', metalness: .55, roughness: .065, clearcoat: 1, clearcoatRoughness: .045, ior: 1.52 });
 
   function mesh(parent: T.Object3D, name: string, geometry: T.BufferGeometry, material: T.Material, position: number[] = [0, 0, 0]) {
     const item = new T.Mesh(geometry, material);
@@ -159,13 +159,13 @@ export async function createHumanoid(): Promise<T.Group> {
   }
 
   // An uninterrupted dark face and a slim rear cowl replace the small face window.
-  shell(root, 'neck', [[1.64,.055,.048],[1.69,.047,.047],[1.74,.055,.052]], elastomer);
+  shell(root, 'neck', [[1.64,.113,.067],[1.67,.074,.052],[1.71,.047,.044],[1.755,.054,.052]], graphite);
   const head = new T.Group();
   head.name = 'sensor_head';
   head.position.set(0,1.838,.008);
   head.rotation.x = -.025;
   root.add(head);
-  shell(head, 'rear_head_cowl', [[-.116,.039,.041,-.015],[-.086,.073,.069,-.015],[0,.093,.079,-.015],[.088,.074,.064,-.015],[.128,.032,.033,-.012],[.132,.003,.003,-.010]], ceramic, [0,0,0], .93);
+  shell(head, 'rear_head_cowl', [[-.116,.039,.041,-.015],[-.086,.073,.069,-.015],[0,.093,.079,-.015],[.088,.074,.064,-.015],[.128,.032,.033,-.012],[.132,.003,.003,-.010]], visor, [0,0,0], .93);
   shell(head, 'full_face_visor', [[-.119,.025,.017,.047],[-.105,.053,.026,.060],[-.054,.079,.038,.070],[.035,.087,.045,.067],[.093,.068,.037,.055],[.127,.030,.018,.035],[.131,.003,.003,.030]], visor, [0,0,.006], .93);
   // No animated eyes or light strips: the face reads through its curved reflections.
   for (const side of [-1,1]) {
@@ -188,7 +188,7 @@ export async function createHumanoid(): Promise<T.Group> {
     const lettering = mesh(root, 'CORE_chest_lettering', new T.PlaneGeometry(.089,.022), new T.MeshBasicMaterial({ map: wordmark, transparent: true, depthWrite: false, toneMapped: false }), [.031,1.534,.149]);
     lettering.castShadow = false;
   } catch (error) { disposeHumanoid(root); throw error; }
-  root.userData = { status: 'CONCEPT', version: 2, description: 'Original CORE appearance concept; not a physical robot or engineering specification.' };
+  root.userData = { status: 'CONCEPT', version: 3, description: 'Original CORE appearance concept; not a physical robot or engineering specification.' };
   return root;
 }
 

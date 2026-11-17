@@ -8,7 +8,7 @@ export const robotsRoutePage = {
   og:`https://www.core-ai.jp${data.seo.og}`,updatedAt:data.updatedAt,
   ld:[{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'CORE',item:'https://www.core-ai.jp/corp'},{'@type':'ListItem',position:2,name:data.name,item:`https://www.core-ai.jp${data.seo.path}`}]}],
   body:`<p class="k">${data.hero.kicker}</p><h1>${data.hero.title.map(esc).join('')}</h1>${p(data.stage)}${p(data.hero.lead)}
-    <figure><img src="/corp/robots/humanoid-concept-v2.png" width="1100" height="1209" alt="ヒューマノイドの静止構想図。白い躯体にCORE文字と正式ロゴを配した外観構想。" style="width:100%;height:auto" /><figcaption>${data.scene.label} — ${esc(data.scene.caption)} ${esc(data.scene.disclaimer)}</figcaption></figure>
+    <figure><img src="/corp/robots/humanoid-concept-v3.png" width="1100" height="1209" alt="ヒューマノイドの静止構想図。白い躯体にCORE文字と正式ロゴを配した外観構想。" style="width:100%;height:auto" /><figcaption>${data.scene.label} — ${esc(data.scene.caption)} ${esc(data.scene.disclaimer)}</figcaption></figure>
     <ol>${data.scene.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol><a href="#robots-contact">${data.hero.primary}</a>
     <section id="robots-platform"><h2>${esc(data.platform.title)}</h2>${p(data.platform.lead)}${data.platform.items.map(x=>`<h3>${esc(x.name)}</h3>${p(x.body)}${p(x.status)}`).join('')}</section>
     ${section(data.field,data.field.examples.map(x=>`<h3>${esc(x.title)}</h3>${p(x.body)}`).join('')+p(data.field.note))}
