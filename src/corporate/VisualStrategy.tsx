@@ -16,17 +16,17 @@ const divisions = [
   { kind: 'academy', name: 'Academy', verb: '使える力を、組織に。', Icon: GraduationCap, text: 'AI教育から、定着・評価・ガバナンスへ。', tags: ['法人教育', '定着支援', '安全な活用'], price: '研修・教育は個別見積り', state: '教育相談・基盤構想', detail: '診断・教育・評価を統合する法人向け基盤は構想段階。正式な提供条件・教材構成は個別にご相談ください。', href: '/corp#contact', cta: '教育について相談' },
   { kind: 'studio', name: 'Studio', verb: '事業の価値を、伝える。', Icon: Film, text: '映像・広告・SNSで、心を動かす体験を。', tags: ['AI映像', 'クリエイティブ', 'マーケティング'], price: '内容・料金はStudioで', state: '制作のご相談受付中', detail: '映像制作・Web制作・受託開発から運用まで。現在の料金と制作実績はCORE Studioのページでご案内します。', href: '/studio', cta: '制作実績・料金へ' },
   { kind: 'ventures', name: 'Ventures', verb: '次の事業を、育てる。', Icon: Orbit, text: '顧客の課題から、新しい産業の可能性へ。', tags: ['業界SaaS', 'ロボティクス', '事業投資'], price: '協業・事業検証のご相談', state: '将来構想', detail: 'M&A・事業投資・ロボティクス等は将来構想です。事業性と実装可能性を検証し、未提供のサービスを販売中とは扱いません。', href: '/corp#contact', cta: '協業について相談' },
-] .map(d => { const current = divisionData.find(item => item.id === d.kind)!; return { ...d, text: current.summary, state: current.status, price: current.price, detail: current.note }; });
+] .map(d => { const current = divisionData.find(item => item.id === d.kind)!; return { ...d, text: current.summary, state: current.status, price: current.price, detail: current.note, services: current.services, example: current.example }; });
 
 export function VisualPortfolio({ onAnchor, home = false }: { onAnchor: Anchor; home?: boolean }) {
   return <section className="cv-section" id={home ? "divisions" : "services"} aria-labelledby="cv-portfolio">
     <div className="cv-heading"><div><p className="cv-kicker">CORE / FIVE BUSINESS FIELDS</p><h2 id="cv-portfolio">企業の変革を、<br /><span>ひとつながりに。</span></h2></div><div className="cv-intro"><p>戦略を決める。仕事を動かす。人を育てる。<br />5つの事業で、経営の次の一歩を支えます。</p><a className="cv-text-link" href="/corp#advisor" onClick={e=>onAnchor(e,'/corp#advisor')}>まずは無料でAI経営相談 <ArrowRight size={18}/></a></div></div>
-    <div className="cv-grid">{divisions.map(({kind,name,verb,Icon,text,tags,price,state,detail},i)=><article className={'cv-card cv-card-'+kind} key={kind}>
+    <div className="cv-grid">{divisions.map(({kind,name,verb,Icon,text,tags,price,state,detail,services,example},i)=><article className={'cv-card cv-card-'+kind} key={kind}>
       <div className="cv-card-top"><span className="cv-number">0{i+1}</span><span className="cv-status">{state}</span></div>
-      <ServiceArt kind={kind as ArtKind}/>
-      <div className="cv-card-body"><div className="cv-card-intro"><p className="cv-brand"><Icon size={17} aria-hidden="true"/> CORE {name}</p><h2>{verb}</h2><p className="cv-description">{text}</p></div><div className="cv-card-meta"><ul className="cv-tags">{tags.map(tag=><li key={tag}>{tag}</li>)}</ul><p className="cv-price">{price}</p>
+      {kind === 'studio' ? <div className="cv-studio-visual"><ServiceArt kind="studio"/><p><span>活用イメージ</span>{example}</p></div> : <ServiceArt kind={kind as ArtKind}/>}
+      <div className="cv-card-body"><div className="cv-card-intro"><p className="cv-brand"><Icon size={17} aria-hidden="true"/> CORE {name}</p><h2>{verb}</h2><p className="cv-description">{text}</p></div><div className="cv-card-meta">{kind === 'studio' ? <dl className="cv-studio-services">{services.map(([title, description]) => <div key={title}><dt>{title}</dt><dd>{description}</dd></div>)}</dl> : <ul className="cv-tags">{tags.map(tag=><li key={tag}>{tag}</li>)}</ul>}<p className="cv-price">{price}</p>
       <details className="cv-mini-details"><summary>提供内容・条件</summary><p>{detail}</p></details>
-      <a className="cv-card-link" href={`/corp/${kind}`} onClick={e=>onAnchor(e,`/corp/${kind}`)}>部門のサービスを見る<ArrowRight size={18} aria-hidden="true"/></a></div></div>
+      <a className="cv-card-link" href={`/corp/${kind}`} onClick={e=>onAnchor(e,`/corp/${kind}`)}>{kind === 'studio' ? '制作内容・実績・料金を見る' : '部門のサービスを見る'}<ArrowRight size={18} aria-hidden="true"/></a></div></div>
     </article>)}</div>
   </section>;
 }

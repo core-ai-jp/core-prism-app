@@ -30,12 +30,20 @@
 .cv-card-intro,.cv-card-meta{display:contents}
 .cv-card-studio{grid-column:span 2;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto 1fr;align-items:center;background:linear-gradient(115deg,#f5f8ff,#edf2ff)}
 .cv-card-studio .cv-card-top{grid-column:1/-1}
-.cv-card-studio .cv-art{grid-column:1;grid-row:3;max-height:240px}
+.cv-studio-visual{grid-column:1;grid-row:3;padding:20px 24px;align-self:start}
+.cv-card-studio .cv-art{max-height:240px}
+.cv-studio-visual p{font-size:13px;line-height:1.8;color:#526173;margin:16px 0 0}
+.cv-studio-visual p span{display:block;font-size:11px;font-weight:600;color:#2b4c63;margin-bottom:5px}
 .cv-card-studio .cv-card-body{display:contents}
 .cv-card-studio .cv-card-intro{display:block;grid-column:1/-1;grid-row:2;padding:24px 24px 0}
 .cv-card-studio h2{font-size:30px}
 .cv-card-studio .cv-description{max-width:580px;margin-bottom:0}
-.cv-card-studio .cv-card-meta{display:flex;flex-direction:column;align-self:stretch;padding:28px 24px 20px 12px}
+.cv-card-studio .cv-card-meta{display:flex;flex-direction:column;align-self:stretch;padding:24px 24px 20px 12px}
+.cv-studio-services{margin:0 0 20px;display:grid;gap:16px}
+.cv-studio-services dt{font-size:14px;font-weight:600;color:#23384b;margin-bottom:4px}
+.cv-studio-services dd{font-size:13px;line-height:1.75;color:#526173;margin:0}
+.cv-card-studio .cv-price{margin:0 0 7px}
+.cv-card-studio .cv-card-link{margin-top:auto}
 .cv-impact{border-top:1px solid #e2eaf0}
 .cv-transformation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;background:linear-gradient(140deg,#f6f8ff,#edf2ff 52%,#f8faff);border:1px solid #dce5fb;border-radius:20px;padding:12px 24px 26px}
 .cv-flow-step{position:relative;text-align:center;min-width:0}
@@ -91,6 +99,10 @@
  .cv-card-studio .cv-card-intro,.cv-card-studio .cv-card-meta{display:contents}
  .cv-card-studio h2{font-size:22px}
  .cv-card-studio .cv-description{margin-bottom:16px}
+ .cv-studio-visual{padding:4px 24px 20px}
+ .cv-studio-visual p{margin-top:8px}
+ .cv-studio-services{gap:14px;margin-bottom:18px}
+ .cv-card-studio .cv-card-link{margin-top:13px}
  .cv-card-ventures{grid-column:1/-1;display:grid;grid-template-columns:.75fr 1.25fr;align-items:center;background:linear-gradient(115deg,#f5f8ff,#edf2ff)}
  .cv-card-ventures .cv-card-top{grid-column:1/-1}
  .cv-card-ventures .cv-art{max-height:200px}
@@ -139,3 +151,5 @@
  .aa-page .aa-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
  .aa-page .aa-hero{padding-top:30px}
 }
+
+@media(max-width:600px){.cv-studio-visual .service-art{width:100%;max-width:100%;margin:0;padding:0;max-height:none}}
