@@ -24,9 +24,9 @@ export function VisualPortfolio({ onAnchor, home = false }: { onAnchor: Anchor; 
     <div className="cv-grid">{divisions.map(({kind,name,verb,Icon,text,tags,price,state,detail},i)=><article className={'cv-card cv-card-'+kind} key={kind}>
       <div className="cv-card-top"><span className="cv-number">0{i+1}</span><span className="cv-status">{state}</span></div>
       <ServiceArt kind={kind as ArtKind}/>
-      <div className="cv-card-body"><p className="cv-brand"><Icon size={17} aria-hidden="true"/> CORE {name}</p><h2>{verb}</h2><p className="cv-description">{text}</p><ul className="cv-tags">{tags.map(tag=><li key={tag}>{tag}</li>)}</ul><p className="cv-price">{price}</p>
+      <div className="cv-card-body"><div className="cv-card-intro"><p className="cv-brand"><Icon size={17} aria-hidden="true"/> CORE {name}</p><h2>{verb}</h2><p className="cv-description">{text}</p></div><div className="cv-card-meta"><ul className="cv-tags">{tags.map(tag=><li key={tag}>{tag}</li>)}</ul><p className="cv-price">{price}</p>
       <details className="cv-mini-details"><summary>提供内容・条件</summary><p>{detail}</p></details>
-      <a className="cv-card-link" href={`/corp/${kind}`} onClick={e=>onAnchor(e,`/corp/${kind}`)}>部門のサービスを見る<ArrowRight size={18} aria-hidden="true"/></a></div>
+      <a className="cv-card-link" href={`/corp/${kind}`} onClick={e=>onAnchor(e,`/corp/${kind}`)}>部門のサービスを見る<ArrowRight size={18} aria-hidden="true"/></a></div></div>
     </article>)}</div>
   </section>;
 }
