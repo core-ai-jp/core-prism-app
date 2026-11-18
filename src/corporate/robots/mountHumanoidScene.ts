@@ -232,7 +232,7 @@ export function mountHumanoidScene(container: HTMLDivElement, events: Events): H
     const w = container.clientWidth, h = container.clientHeight, b = reduced.matches ? BOOT : bootT;
     const entries: Array<[Exclude<HumanoidFocus, 'full'>, () => [T.Vector3, T.Vector3 | null]]> = [
       ['face', () => [head!.localToWorld(new T.Vector3(.05, .045, .075)), new T.Vector3(0, 0, 1).applyQuaternion(head!.getWorldQuaternion(new T.Quaternion()))]],
-      ['core', () => [new T.Vector3(.07, 1.43, .115), new T.Vector3(0, 0, 1)]],
+      ['core', () => [new T.Vector3(.07, 1.43, .152), new T.Vector3(0, 0, 1)]],
       ['hand', () => [handR!.localToWorld(new T.Vector3(0, -.05, .02)), null]],
     ];
     for (const [id, get] of entries) {
@@ -259,7 +259,7 @@ export function mountHumanoidScene(container: HTMLDivElement, events: Events): H
     controls.update(); apply(dt);
   }
   // Glow fills more of the frame in close-ups, so bloom eases off with camera distance.
-  function tuneBloom() { const d = camera.position.distanceTo(controls.target); bloom.strength = .25 + .65 * clamp((d - .8) / 2.6, 0, 1); bloom.radius = .12 + .2 * clamp((d - .8) / 2.6, 0, 1); }
+  function tuneBloom() { const d = camera.position.distanceTo(controls.target); bloom.strength = .22 + .48 * clamp((d - .8) / 2.6, 0, 1); bloom.radius = .12 + .2 * clamp((d - .8) / 2.6, 0, 1); }
   function tick(time: number) {
     frame = 0;
     if (disposed || !visible || document.hidden || reduced.matches) { last = 0; return; }

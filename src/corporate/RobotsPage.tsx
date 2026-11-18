@@ -36,8 +36,8 @@ export default function RobotsPage({ onAnchor }: { onAnchor: AnchorHandler }) {
         <div className="robots-scene-top"><span>{data.scene.title}</span><span>{data.scene.label} / CONCEPT</span></div>
         <div className="robots-scene-shell">
           <picture>
-            <source media="(max-width: 860px)" srcSet="/corp/robots/humanoid-concept-mobile-v5.png" />
-            <img className="robots-poster" src="/corp/robots/humanoid-concept-v5.png" width="1100" height="1209" alt={show3d ? 'COREの文字と正式ロゴを胸部に配した、白い外装のヒューマノイドの全身3D構想モデル。' : '白い躯体の顔の輪郭と関節が水色に光る、COREヒューマノイドの外観構想。'} />
+            <source media="(max-width: 860px)" srcSet="/corp/robots/humanoid-concept-mobile-v6.png" />
+            <img className="robots-poster" src="/corp/robots/humanoid-concept-v6.png" width="1100" height="1209" alt={show3d ? 'COREの文字と正式ロゴを胸部に配した、白い外装のヒューマノイドの全身3D構想モデル。' : '白い躯体の顔の輪郭と関節が水色に光る、COREヒューマノイドの外観構想。'} />
           </picture>
           {show3d && <SceneBoundary><Suspense fallback={null}><HumanoidScene /></Suspense></SceneBoundary>}
         </div>
