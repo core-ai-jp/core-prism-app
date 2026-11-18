@@ -66,11 +66,11 @@ export function mountHumanoidScene(container: HTMLDivElement, events: Events): H
   const key = new T.DirectionalLight('#fffaf5', 3.2); key.position.set(-3, 6, 4); key.castShadow = true; key.shadow.mapSize.set(1024, 1024);
   cleanup.push(() => key.shadow.dispose());
   Object.assign(key.shadow.camera, { left: -1.2, right: 1.2, top: 2.3, bottom: -.5, near: .1, far: 10 }); key.shadow.normalBias = .012; key.shadow.bias = -.0002; key.shadow.radius = 6; scene.add(key);
-  const fill = new T.DirectionalLight('#dfe8f2', 1.2); fill.position.set(3, 3, 2); scene.add(fill);
+  const fill = new T.DirectionalLight('#dfe8f2', .7); fill.position.set(3, 3, 2); scene.add(fill);
   // Cyan rim lights trace the silhouette from behind, so the body separates from the dark stage.
   const rimL = new T.DirectionalLight('#59d2ff', 4.2); rimL.position.set(-2.6, 2.6, -3.2); scene.add(rimL);
   const rimR = new T.DirectionalLight('#8fe3ff', 3.2); rimR.position.set(2.8, 2.2, -2.6); scene.add(rimR);
-  const lights: Array<[T.Light, number]> = [[key, 3.2], [fill, 1.2], [rimL, 4.2], [rimR, 3.2]];
+  const lights: Array<[T.Light, number]> = [[key, 3.2], [fill, .7], [rimL, 4.2], [rimR, 3.2]];
 
   // Stage: a matte floor that ignores the cyan environment light, a projected ring platform and faint drifting particles.
   const floor = new T.Mesh(new T.PlaneGeometry(200, 200), new T.MeshLambertMaterial({ color: '#0c0f13' }));
@@ -171,7 +171,7 @@ export function mountHumanoidScene(container: HTMLDivElement, events: Events): H
     const b = motion ? bootT : BOOT;
     const lit = ease(window01(b, .1, 1.7));
     for (const [light, max] of lights) light.intensity = max * (.08 + .92 * lit);
-    scene.environmentIntensity = .7 * (.15 + .85 * lit);
+    scene.environmentIntensity = .6 * (.15 + .85 * lit);
     stageMat.opacity = ease(window01(b, .2, 1.4)) * (.85 + (motion ? .15 * Math.sin(clock * 1.3) : .15));
     dustMat.opacity = .55 * ease(window01(b, 1.0, 2.6));
     // Scan rises from the floor to the crown, igniting rings as it passes.
@@ -232,7 +232,7 @@ export function mountHumanoidScene(container: HTMLDivElement, events: Events): H
     const w = container.clientWidth, h = container.clientHeight, b = reduced.matches ? BOOT : bootT;
     const entries: Array<[Exclude<HumanoidFocus, 'full'>, () => [T.Vector3, T.Vector3 | null]]> = [
       ['face', () => [head!.localToWorld(new T.Vector3(.05, .045, .075)), new T.Vector3(0, 0, 1).applyQuaternion(head!.getWorldQuaternion(new T.Quaternion()))]],
-      ['core', () => [new T.Vector3(.07, 1.43, .152), new T.Vector3(0, 0, 1)]],
+      ['core', () => [new T.Vector3(.085, 1.415, .165), new T.Vector3(0, 0, 1)]],
       ['hand', () => [handR!.localToWorld(new T.Vector3(0, -.05, .02)), null]],
     ];
     for (const [id, get] of entries) {
