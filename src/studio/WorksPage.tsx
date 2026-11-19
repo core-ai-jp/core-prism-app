@@ -104,7 +104,7 @@ const CLIENT_LOGOS = [
   { name: 'JRC 日本記録協会', src: '/studio/logos/jrc.png', h: 56 },
   { name: '朝日館（Asahikan）', src: '/studio/logos/asahikan.png', h: 48 },
   { name: '株式会社プリンシパル', src: '/studio/logos/principal.png', h: 34 },
-  { name: 'ROUGH LABO', src: '/studio/logos/roughlabo.svg', h: 32 },
+  { name: 'ROUGH LABO（北野メディウム邸「真珠の館」）', src: '/studio/logos/roughlabo.svg', h: 32 },
   { name: '神河町', src: '/studio/logos/kamikawa.png', h: 52 },
   { name: '和田興産株式会社', src: '/studio/logos/wada.png', h: 44 },
 ] as const;
