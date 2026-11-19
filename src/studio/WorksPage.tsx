@@ -95,15 +95,18 @@ export default function WorksPage({ go }: { go: Go }) {
 }
 
 // ---- ご依頼いただいた企業のロゴ (2026-11-19 追加) ----
-// 白地の札に各社の公式ロゴを並べる。載せてよいのは、この実績ページに既に出ている企業のうち
-// ロゴを公式サイトから取得できたものだけ。契約済で未納品の企業は「納品した映像」という
-// このページの文言と食い違うので載せない。
+// 白地の札に各社の公式ロゴを並べる。ロゴは各社の公式サイトから取得。
+// プリンシパル・ROUGH LABO・神河町・和田興産は、オーナーが2026-11-19に掲載を指示 (許諾の確認は別途)。
 const CLIENT_LOGOS = [
   { name: '株式会社Stemlink', src: '/studio/logos/stemlink.png', h: 40 },
   { name: 'Laguna Beauté（ラグナボーテ）', src: '/studio/logos/laguna-beaute.png', h: 34 },
   { name: '株式会社TOAI（ジャンカラ）', src: '/studio/logos/jankara.png', h: 44 },
   { name: 'JRC 日本記録協会', src: '/studio/logos/jrc.png', h: 56 },
   { name: '朝日館（Asahikan）', src: '/studio/logos/asahikan.png', h: 48 },
+  { name: '株式会社プリンシパル', src: '/studio/logos/principal.png', h: 34 },
+  { name: 'ROUGH LABO', src: '/studio/logos/roughlabo.svg', h: 32 },
+  { name: '神河町', src: '/studio/logos/kamikawa.png', h: 52 },
+  { name: '和田興産株式会社', src: '/studio/logos/wada.png', h: 44 },
 ] as const;
 
 function ClientLogosBand() {
