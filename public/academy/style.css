@@ -76,3 +76,5 @@
 .academy-member-faq summary{padding:15px 0;cursor:pointer;font-weight:600;font-size:14px}
 .academy-member-faq details p{color:#536780;font-size:13px}
 @media(max-width:760px){.academy-personal-metrics>div{padding:12px 6px}.academy-personal-metrics span{font-size:9px}.academy-member-faq h3{font-size:18px}}
+
+.academy-hero-banner{background:#030d1d}.academy-hero-banner img{display:block;width:100%;max-width:1672px;height:auto;margin-inline:auto}
