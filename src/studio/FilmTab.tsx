@@ -1620,13 +1620,13 @@ function WorkCard({ w }: { w: (typeof FILM_WORKS)[number] }) {
         <button type="button" onClick={toggle} onMouseEnter={play} onMouseLeave={pause}
           aria-label={`${w.client} の制作事例を${playing ? '止める' : '再生する'}`}
           style={{ display: 'block', width: '100%', padding: 0, border: 'none', background: 'none', cursor: 'pointer' }}>
-          <div className="fm-frame" style={{ aspectRatio: '9 / 16' }}>
+          <div className="fm-frame" style={{ aspectRatio: w.aspect ?? '9 / 16' }}>
             <video ref={videoRef} src={w.videoUrl} poster={w.poster} muted loop playsInline preload="none" aria-hidden />
             <PlayBadge playing={playing} />
           </div>
         </button>
       ) : w.poster ? (
-        <div className="fm-frame" style={{ aspectRatio: '9 / 16' }}><img src={w.poster} alt={`${w.client} の制作事例`} loading="lazy" /></div>
+        <div className="fm-frame" style={{ aspectRatio: w.aspect ?? '9 / 16' }}><img src={w.poster} alt={`${w.client} の制作事例`} loading="lazy" /></div>
       ) : null}
       <div className="fm-work-copy">
         <div className="st-label" style={{ fontSize: 11, color: D.gold }}>{w.category}</div>

@@ -35,6 +35,8 @@ export type FilmWork = {
   videoUrl?: string;
   /** 公開先URL (あれば) */
   url?: string;
+  /** 横型など 9:16 以外の映像の枠比率。省略時は縦型 (9 / 16) */
+  aspect?: string;
 };
 
 export const FILM_WORKS: FilmWork[] = [
@@ -117,6 +119,17 @@ export const FILM_WORKS: FilmWork[] = [
     poster: '/studio/film/short-drama.jpg',
     videoUrl: '/studio/film/short-drama.mp4',
     url: 'https://www.instagram.com/gauche_cellist/',
+  },
+  // 2026-11-19 追加: 株式会社Stemlink（再生医療・細胞培養の自動化・バイオ製造）のブランドフィルム。横型・約17秒・撮影なしのAI制作。
+  //   成果の数字は確認できていないため書かない。社名掲載の許諾はオーナー確認待ち。
+  {
+    id: 'work-stemlink-01',
+    client: '株式会社Stemlink',
+    category: 'BRAND FILM',
+    purpose: '再生医療・細胞培養の自動化・バイオ製造の現場を伝える横型のブランドフィルム（約17秒）。撮影を行わず、AIで制作しました。',
+    poster: '/studio/film/stemlink.jpg',
+    videoUrl: '/studio/film/stemlink.mp4',
+    aspect: '16 / 9',
   },
 ];
 
