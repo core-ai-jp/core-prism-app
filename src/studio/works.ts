@@ -52,7 +52,7 @@ export const FILM_WORKS: FilmWork[] = [
   },
   {
     id: 'work-kitano-medium-pearl-01',
-    client: '北野メディウム邸「真珠の館」',
+    client: 'ROUGH LABO｜北野メディウム邸「真珠の館」',
     category: 'BRAND FILM',
     purpose: '北野メディウム邸「真珠の館」の世界観を伝える縦型映像を制作しました。',
     result: '公式で使用されている制作映像です。',
