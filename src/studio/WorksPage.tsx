@@ -112,7 +112,7 @@ const CLIENT_LOGOS = [
 function ClientLogosBand() {
   return (
     <Band wide pad="clamp(44px, 5vw, 72px) 0">
-      <H2 en="Clients" sub="CORE Studio にご依頼いただいた企業・ブランドです。">ご依頼いただいた企業</H2>
+      <H2 en="Partners" sub="映像・制作・開発を通じて、ともに歩んでいる企業・団体の一部です。">ともに歩む企業・団体</H2>
       <ul style={{ listStyle: 'none', margin: '8px 0 0', padding: 0, display: 'grid', gap: 14,
         gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))' }}>
         {CLIENT_LOGOS.map(c => (
