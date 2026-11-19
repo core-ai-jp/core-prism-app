@@ -721,8 +721,8 @@ PAGES.push(
   },
   {
     file: 'studio-works.html', theme: 'studio', url: `${STUDIO}/studio/works`,
-    title: '制作実績 — 映像・ウェブ・システム 16件（すべて公開中） | CORE Studio',
-    description: 'CORE Studio が制作し、実際に公開されている実績の一覧。映像は株式会社TOAIのジャンカラ Bal Utao、北野メディウム邸「真珠の館」、Laguna Beauté（商品広告）、株式会社CORE（ブランドフィルム）、ライブイベント告知、株式会社グローバルジョイントコミットメント、JRC 日本記録協会。ウェブ・システムはヘッドスパ「天国」、株式会社クロスオーバー、GAUCHEチェロ音楽教室、朝日館、RAD HOOKAH、ANIMA、SOMA、モデル個人サイト。',
+    title: '制作実績 — 映像・ウェブ・システム 17件（すべて公開中） | CORE Studio',
+    description: 'CORE Studio が制作し、実際に公開されている実績の一覧。映像は株式会社TOAIのジャンカラ Bal Utao、北野メディウム邸「真珠の館」、Laguna Beauté（商品広告）、株式会社CORE（ブランドフィルム）、ライブイベント告知、株式会社グローバルジョイントコミットメント、JRC 日本記録協会、株式会社Stemlink。ウェブ・システムはヘッドスパ「天国」、株式会社クロスオーバー、GAUCHEチェロ音楽教室、朝日館、RAD HOOKAH、ANIMA、SOMA、モデル個人サイト。',
     keywords: '制作実績,ホームページ制作 事例,動画制作 事例,ウェブ制作 実績,システム開発 実績,CORE Studio,神戸',
     og: `${STUDIO}/og-studio-v4.png`,
     ld: [
