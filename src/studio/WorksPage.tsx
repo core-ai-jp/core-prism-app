@@ -55,6 +55,7 @@ export default function WorksPage({ go }: { go: Go }) {
 
       {/* 映像の実績 — ヒーローの黒地をそのまま続ける */}
       <FilmWorksBand go={go} />
+      <ClientLogosBand />
 
       {/* Webの実績 — plansページの「規模の近い実例」と同じ sp-ex カードで統一 */}
       <Band wide pad="clamp(56px, 6vw, 88px) 0">
@@ -90,6 +91,39 @@ export default function WorksPage({ go }: { go: Go }) {
         </ClosingCta>
       </Band>
     </div>
+  );
+}
+
+// ---- ご依頼いただいた企業のロゴ (2026-11-19 追加) ----
+// 白地の札に各社の公式ロゴを並べる。載せてよいのは、この実績ページに既に出ている企業のうち
+// ロゴを公式サイトから取得できたものだけ。契約済で未納品の企業は「納品した映像」という
+// このページの文言と食い違うので載せない。
+const CLIENT_LOGOS = [
+  { name: '株式会社Stemlink', src: '/studio/logos/stemlink.png', h: 40 },
+  { name: 'Laguna Beauté（ラグナボーテ）', src: '/studio/logos/laguna-beaute.png', h: 34 },
+  { name: '株式会社TOAI（ジャンカラ）', src: '/studio/logos/jankara.png', h: 44 },
+  { name: 'JRC 日本記録協会', src: '/studio/logos/jrc.png', h: 56 },
+  { name: '朝日館（Asahikan）', src: '/studio/logos/asahikan.png', h: 48 },
+] as const;
+
+function ClientLogosBand() {
+  return (
+    <Band wide pad="clamp(44px, 5vw, 72px) 0">
+      <H2 en="Clients" sub="CORE Studio にご依頼いただいた企業・ブランドです。">ご依頼いただいた企業</H2>
+      <ul style={{ listStyle: 'none', margin: '8px 0 0', padding: 0, display: 'grid', gap: 14,
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))' }}>
+        {CLIENT_LOGOS.map(c => (
+          <li key={c.name} style={{ background: '#fff', border: `1px solid ${C.line}`, borderRadius: 12,
+            padding: '20px 16px 14px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+            <span style={{ height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src={c.src} alt={c.name} loading="lazy" style={{ maxHeight: c.h, maxWidth: '100%', objectFit: 'contain' }} />
+            </span>
+            <span style={{ fontSize: 13, color: C.body, textAlign: 'center', lineHeight: 1.5 }}>{c.name}</span>
+          </li>
+        ))}
+      </ul>
+      <p style={{ fontSize: 12, color: C.mute, marginTop: 14, lineHeight: 1.7 }}>社名・ロゴは各社の商標または登録商標です。</p>
+    </Band>
   );
 }
 
