@@ -28,6 +28,7 @@ import { COMPANY_INFO } from '../data/companyInfo';
 import { rememberSource, track } from './roai/track';
 import { SIZES_CARD, SIZES_FULL, photoSrcSet } from './photoSet';
 import { HERO, FOUNDER } from './coreStory';
+import { PARTNER_LOGOS } from '../data/partnerLogos';
 
 type AnchorHandler = (e: ReactMouseEvent<HTMLAnchorElement>, href: string) => void;
 
@@ -166,6 +167,46 @@ export function ProofStrip({ onAnchor }: { onAnchor: AnchorHandler }) {
         </ul>
         <a href="#products" onClick={e => onAnchor(e, '#products')} className="ch-textlink">プロダクトを見る →</a>
       </div>
+    </section>
+  );
+}
+
+// ============================================================
+//  PARTNERS — ともに歩む企業・団体（ロゴが横に流れる帯）
+//  2026-11-21: 「会社について」に掲載。データは src/data/partnerLogos.ts。
+//  同じ列を2回並べて -50% 動かし、継ぎ目なく流す。2回目は読み上げ対象外。
+//  動きを減らす設定の人には流さず、折り返して全件を並べる。
+// ============================================================
+export function PartnerLogoMarquee() {
+  const row = (dup: boolean) => (
+    <ul className="ch-marquee-row" aria-hidden={dup || undefined} style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+      {PARTNER_LOGOS.map(c => (
+        <li key={c.name} className="ch-marquee-item">
+          <img src={c.src} alt={dup ? '' : c.name} title={c.name} loading="lazy" decoding="async"
+            style={{ maxHeight: c.h, maxWidth: 168, objectFit: 'contain' }} />
+        </li>
+      ))}
+    </ul>
+  );
+  return (
+    <section id="partners" aria-labelledby="partners-h" className="lp-section-pad"
+      style={{ background: "var(--corp-surface, #070A10)", padding: '5rem 0', borderTop: `1px solid ${LINE}` }}>
+      <div className="ch-wrap" style={{ textAlign: 'center', marginBottom: '2.4rem' }}>
+        <Kick center>Partners</Kick>
+        <h2 id="partners-h" style={{ ...sectionH2, textAlign: 'center' }}>ともに歩む企業・団体</h2>
+        <p style={{ ...sectionLead, textAlign: 'center', margin: '0 auto' }}>
+          映像・制作・開発を通じて、ともに歩んでいる企業・団体の一部です。
+        </p>
+      </div>
+      <div className="ch-marquee">
+        <div className="ch-marquee-track">
+          {row(false)}
+          {row(true)}
+        </div>
+      </div>
+      <p className="ch-wrap" style={{ fontFamily: FONT_JA, fontSize: '0.72rem', color: "var(--corp-muted, rgba(226,232,240,0.62))", textAlign: 'center', marginTop: '1.6rem' }}>
+        社名・ロゴは各社の商標または登録商標です。
+      </p>
     </section>
   );
 }

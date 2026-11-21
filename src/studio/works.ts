@@ -52,7 +52,7 @@ export const FILM_WORKS: FilmWork[] = [
   },
   {
     id: 'work-kitano-medium-pearl-01',
-    client: 'ROUGH LABO｜北野メディウム邸「真珠の館」',
+    client: '株式会社ROUGHLABO｜北野メディウム邸「真珠の館」',
     category: 'BRAND FILM',
     purpose: '北野メディウム邸「真珠の館」の世界観を伝える縦型映像を制作しました。',
     result: '公式で使用されている制作映像です。',
@@ -64,7 +64,7 @@ export const FILM_WORKS: FilmWork[] = [
   // 大きく1件だけ出す枠 (flagship) に入るので、並べ替える時はこの順序の意味に注意する。
   {
     id: 'work-laguna-beaute-01',
-    client: 'Laguna Beauté（ラグナボーテ）',
+    client: 'ラグナボーテ株式会社（Laguna Beauté）',
     category: 'PRODUCT',
     purpose: '百貨店の化粧品売場に店舗を構える神戸のエイジングケアブランド様の商品広告。化粧水「LAGUNA DERMA WATER」の透明感と水の質感を軸に、ブランドの世界観を保ったまま縦型1本に収めました。',
     poster: '/studio/film/laguna-beaute.jpg',

@@ -42,7 +42,7 @@ import { ContactSection } from './CorpContactForm';
 import WorkflowScan from './WorkflowScan';
 import {
   HomeHero, ProofStrip, WhyCore, ServicesEditorial, ProductsProof,
-  ApproachSection, FounderMessage, CompanyOverview, FinalCta,
+  ApproachSection, FounderMessage, CompanyOverview, FinalCta, PartnerLogoMarquee,
 } from './HomeSections';
 import { Manifesto, Values, PeopleMosaic, CreedBand } from './HomeManifesto';
 import { COMPANY_INFO } from '../data/companyInfo';
@@ -1804,6 +1804,11 @@ export default function CoreSite() {
         </div>
       </section>
       )}
+
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
+      {/*  PARTNERS (ともに歩む企業・団体) */}
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
+      {tab === 'company' && <PartnerLogoMarquee />}
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━ */}
       {/*  EXECUTIVE WELL-BEING PACKAGE */}
